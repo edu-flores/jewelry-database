@@ -109,6 +109,49 @@ BEGIN
     INNER JOIN product ON purchase_detail.product_code = product.product_code
     WHERE purchase.purchase_id = id;
 END;
+
+CREATE PROCEDURE CreatePurchase(
+    IN first_name VARCHAR(255),
+    IN last_name VARCHAR(255),
+    IN email VARCHAR(255),
+    IN receiver VARCHAR(255),
+    IN shipping_street VARCHAR(255),
+    IN shipping_city VARCHAR(255),
+    IN shipping_country VARCHAR(255),
+    IN shipping_postal_code VARCHAR(255),
+    IN billing_street VARCHAR(255),
+    IN billing_city VARCHAR(255),
+    IN billing_country VARCHAR(255),
+    IN billing_postal_code VARCHAR(255),
+    IN comments VARCHAR(255),
+    IN product_code VARCHAR(255),
+    IN quantity INT
+)
+BEGIN
+    DECLARE client_id INT;
+    DECLARE shipping_address_id INT;
+    DECLARE billing_address_id INT;
+    DECLARE product_price INT;
+
+    INSERT INTO client (first_name, last_name, email, password) 
+    VALUES (first_name, last_name, email, "");
+    SET client_id = LAST_INSERT_ID();
+
+    INSERT INTO address (street, city, country, postal_code)
+    VALUES (shipping_street, shipping_city, shipping_country, shipping_postal_code);
+    SET shipping_address_id = LAST_INSERT_ID();
+
+    INSERT INTO address (street, city, country, postal_code)
+    VALUES (billing_street, billing_city, billing_country, billing_postal_code);
+    SET billing_address_id = LAST_INSERT_ID();
+
+    SELECT price INTO product_price FROM product WHERE product_code = product_code LIMIT 1;
+    INSERT INTO purchase (purchase_date, client_id, shipping_address_id, billing_address_id, status, receiver, comments, total)
+    VALUES (NOW(), client_id, shipping_address_id, billing_address_id, "Processing", receiver, comments, product_price * quantity);
+
+    INSERT INTO purchase_detail (purchase_id, product_code, quantity, subtotal)
+    VALUES (LAST_INSERT_ID(), product_code, quantity, product_price * quantity);
+END;
 //
 
 DELIMITER ;

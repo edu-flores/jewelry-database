@@ -1,4 +1,4 @@
-from flask import Flask, Response, request, render_template
+from flask import Flask, Response, request, render_template, redirect, url_for
 from flask_mysqldb import MySQL
 import xml.etree.ElementTree as ET
 from lxml import etree
@@ -18,12 +18,37 @@ mysql = MySQL(app)
 # Flask routes
 @app.route("/")
 def home():
-    return render_template("index.html", product_count=3)
+    one = request.args.get("one") or ""
+    two = request.args.get("two") or ""
+    return render_template("index.html", one=one, two=two)
 
 
 @app.route("/new-purchase", methods=['POST'])
 def new_purchase():
-    return ""
+    first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
+    email = request.form.get("email")
+    receiver = request.form.get("receiver")
+    shipping_street = request.form.get("shipping_street")
+    shipping_city = request.form.get("shipping_city")
+    shipping_country = request.form.get("shipping_country")
+    shipping_postal_code = request.form.get("shipping_postal_code")
+    billing_street = request.form.get("billing_street")
+    billing_city = request.form.get("billing_city")
+    billing_country = request.form.get("billing_country")
+    billing_postal_code = request.form.get("billing_postal_code")
+    comments = request.form.get("comments")
+    product_code = request.form.get("product_1")
+    quantity = request.form.get("quantity_1")
+
+    cursor = mysql.connection.cursor()
+    cursor.execute("CALL CreatePurchase(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+                  (first_name, last_name, email, receiver, shipping_street, shipping_city, shipping_country, 
+                  shipping_postal_code, billing_street, billing_city, billing_country, billing_postal_code, 
+                  comments, product_code, quantity))
+    mysql.connection.commit()
+
+    return redirect(url_for("home", one="Orden creada."))
 
 
 @app.route("/show-purchase/", methods=['GET'])
@@ -41,7 +66,7 @@ def show_purchase():
     
     # Error
     if not details or not products:
-        return f'<h3 style="text-align: center; margin-top: 2rem">Error - No existe una orden con el id #{id}</h3>'
+        return redirect(url_for("home", two="No se encontró la orden."))
 
     tree = purchase_to_xml(details, products)
     xml = ET.tostring(tree.getroot(), encoding="UTF-8")
