@@ -18,7 +18,7 @@ mysql = MySQL(app)
 # Flask routes
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html", product_count=3)
 
 
 @app.route("/new-purchase", methods=['POST'])
@@ -28,7 +28,7 @@ def new_purchase():
 
 @app.route("/show-purchase/", methods=['GET'])
 def show_purchase():
-    id = request.args.get("id")
+    id = request.args.get("id") or 0
     cursor = mysql.connection.cursor()
 
     # Details
@@ -41,7 +41,7 @@ def show_purchase():
     
     # Error
     if not details or not products:
-        return f"Error - No existing purchase order with id #{id}"
+        return f'<h3 style="text-align: center; margin-top: 2rem">Error - No existe una orden con el id #{id}</h3>'
 
     tree = purchase_to_xml(details, products)
     xml = ET.tostring(tree.getroot(), encoding="UTF-8")

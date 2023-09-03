@@ -1,5 +1,3 @@
-<!-- purchase.xsl -->
-
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:template match="purchase">
     <html>
@@ -83,7 +81,7 @@
             <td><xsl:value-of select="details/addresses/shipping/country"/></td>
           </tr>
           <tr>
-            <th>Código postal</th>
+            <th>Código Postal</th>
             <td><xsl:value-of select="details/addresses/shipping/postalCode"/></td>
           </tr>
           <!-- Billing -->
@@ -109,13 +107,13 @@
         </table>
         </div>
         <!-- List of Products -->
-        <h2>Products (<xsl:value-of select="count(products/product)"/>)</h2>
+        <h2>Productos (<xsl:value-of select="count(products/product)"/>)</h2>
         <table>
           <tr>
-            <th>Code</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Quantity</th>
+            <th>Código</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
             <th>Subtotal</th>
           </tr>
           <xsl:for-each select="products/product">

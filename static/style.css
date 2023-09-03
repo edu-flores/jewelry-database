@@ -4,22 +4,40 @@ body {
 }
 
 button {
-    border: 1px solid #dddddd;
+    background-color: #000000;
+    color: white;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
     cursor: pointer;
+    width: 50%;
 }
 
 button:active {
     filter: brightness(0.95);
 }
 
-.container {
-    display: flex;
-    gap: 2rem;
+input, textarea, select {
+    background-color: black;
+    color: white;
 }
 
 .form-div {
     border: 1px solid black;
     padding: 1rem 2rem;
+    margin: 2rem 0;
+}
+
+.input-container {
+    gap: 4rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: left;
+}
+
+.flex {
+    display: flex;
+}
+
+.text-center {
+    text-align: center;
 }
