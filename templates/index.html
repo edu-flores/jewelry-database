@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joyería Fina</title>
+  <link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+  <h1>Joyería Fina</h1>
+  <p>¡Bienvenido a nuestra joyería! Ofrecemos envíos internacionales a precios inigualables.</p>
+  <!-- New Purchase -->
+  <div class="container">
+    <div class="form-div">
+      <form action="/new-purchase" method="POST">
+  
+        <button type="button">Ordenar</button>
+      </form>    
+    </div>
+    <!-- View Purchase -->
+    <div class="form-div">
+      <form action="/show-purchase/{{ purchase_id }}" method="GET">
+        <label for="id">Buscar una orden por su ID: </label>
+        <input name="id" type="number" />
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
