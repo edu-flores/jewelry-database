@@ -9,14 +9,15 @@
   <body>
     <h1><i>Joyería Fina</i></h1>
     <p>¡Bienvenido a nuestra joyería! Ofrecemos envíos internacionales a precios inigualables.</p>
+    <!-- Notification -->
+    {% if msg|length > 0 %}
+    <div id="notification" class="text-center">
+      <h4>{{ msg }}</h4>
+    </div>
+    {% endif %}
     <!-- New Purchase -->
     <div class="container">
       <div class="form-div text-center">
-        {% if one|length > 0 %}
-        <div id="success-notification">
-          <h4>{{ one }}</h4>
-        </div>
-        {% endif %}
         <h2>¡Ordena aquí!</h2>
         <form action="/new-purchase" method="POST">
           <div class="input-container flex">
@@ -81,8 +82,8 @@
           <!-- Products -->
           <div class="text-center">
             <h3>Productos</h3>
-            <label for="product_count">Cantidad de Productos:</label>
-            <input type="number" name="product_count" min="1" max="5" value="1" required><br><br>
+            <!-- <label for="product_count">Cantidad de Productos:</label>
+            <input type="number" name="product_count" min="1" max="5" value="1" required><br><br> -->
           </div>
           <div class="input-container flex">
             <div>
@@ -106,11 +107,6 @@
       </div>
       <!-- View Purchase -->
       <div class="form-div text-center">
-        {% if two|length > 0 %}
-        <div id="danger-notification">
-          <h4>{{ two }}</h4>
-        </div>
-        {% endif %}
         <h2>Consulta una orden</h2>
         <form action="/show-purchase/{{ purchase_id }}" method="GET">
           <label for="id">Buscar una orden por su ID: </label>

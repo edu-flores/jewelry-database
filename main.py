@@ -18,9 +18,8 @@ mysql = MySQL(app)
 # Flask routes
 @app.route("/")
 def home():
-    one = request.args.get("one") or ""
-    two = request.args.get("two") or ""
-    return render_template("index.html", one=one, two=two)
+    msg = request.args.get("msg") or ""
+    return render_template("index.html", msg=msg)
 
 
 @app.route("/new-purchase", methods=['POST'])
@@ -48,7 +47,7 @@ def new_purchase():
                   comments, product_code, quantity))
     mysql.connection.commit()
 
-    return redirect(url_for("home", one="Orden creada."))
+    return redirect(url_for("home", msg="Orden creada."))
 
 
 @app.route("/show-purchase/", methods=['GET'])
@@ -66,7 +65,7 @@ def show_purchase():
     
     # Error
     if not details or not products:
-        return redirect(url_for("home", two="No se encontró la orden."))
+        return redirect(url_for("home", msg="No se encontró la orden."))
 
     tree = purchase_to_xml(details, products)
     xml = ET.tostring(tree.getroot(), encoding="UTF-8")

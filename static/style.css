@@ -42,20 +42,11 @@ input, textarea, select {
     text-align: center;
 }
 
-#success-notification {
+#notification {
     border-radius: 0.5rem;
-    border: 1px solid darkgreen;
-    background-color: lightgreen;
-    color: darkgreen;
-    width: 30%;
-    margin: auto;
-}
-
-#danger-notification {
-    border-radius: 0.5rem;
-    border: 1px solid darkred;
-    background-color: rgb(251, 170, 170);
-    color: darkred;
+    border: 1px solid darkgoldenrod;
+    background-color: goldenrod;
+    color: black;
     width: 30%;
     margin: auto;
 }
