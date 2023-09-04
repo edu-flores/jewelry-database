@@ -125,7 +125,8 @@ CREATE PROCEDURE CreatePurchase(
     IN billing_postal_code VARCHAR(255),
     IN comments VARCHAR(255),
     IN product_code VARCHAR(255),
-    IN quantity INT
+    IN quantity INT,
+    OUT purchase_id INT
 )
 BEGIN
     DECLARE client_id INT;
@@ -148,6 +149,7 @@ BEGIN
     SELECT price INTO product_price FROM product WHERE product_code = product_code LIMIT 1;
     INSERT INTO purchase (purchase_date, client_id, shipping_address_id, billing_address_id, status, receiver, comments, total)
     VALUES (NOW(), client_id, shipping_address_id, billing_address_id, "Processing", receiver, comments, product_price * quantity);
+    SET purchase_id = LAST_INSERT_ID();
 
     INSERT INTO purchase_detail (purchase_id, product_code, quantity, subtotal)
     VALUES (LAST_INSERT_ID(), product_code, quantity, product_price * quantity);

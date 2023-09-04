@@ -41,13 +41,33 @@ def new_purchase():
     quantity = request.form.get("quantity_1")
 
     cursor = mysql.connection.cursor()
-    cursor.execute("CALL CreatePurchase(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-                  (first_name, last_name, email, receiver, shipping_street, shipping_city, shipping_country, 
-                  shipping_postal_code, billing_street, billing_city, billing_country, billing_postal_code, 
-                  comments, product_code, quantity))
+    cursor.callproc("CreatePurchase", (
+        first_name,
+        last_name,
+        email,
+        receiver,
+        shipping_street,
+        shipping_city,
+        shipping_country,
+        shipping_postal_code,
+        billing_street,
+        billing_city,
+        billing_country,
+        billing_postal_code,
+        comments,
+        product_code,
+        quantity,
+        0
+    ))
+
+    # Get purchase_id
+    cursor.execute("SELECT @_CreatePurchase_16")
+    result = cursor.fetchone()
+    purchase_id = result[0]
+
     mysql.connection.commit()
 
-    return redirect(url_for("home", msg="Orden creada."))
+    return redirect(url_for("home", msg=f"Orden #{purchase_id} creada exitosamente."))
 
 
 @app.route("/show-purchase/", methods=['GET'])
