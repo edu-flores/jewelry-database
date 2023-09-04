@@ -4,9 +4,10 @@ body {
 }
 
 button {
-    background-color: #000000;
-    color: white;
+    background-color: goldenrod;
+    color: black;
     border-radius: 0.5rem;
+    border: 0;
     padding: 0.5rem 1rem;
     cursor: pointer;
     width: 50%;
@@ -19,6 +20,7 @@ button:active {
 input, textarea, select {
     background-color: black;
     color: white;
+    border: 0;
 }
 
 .form-div {
