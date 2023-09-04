@@ -152,7 +152,7 @@ BEGIN
     SET purchase_id = LAST_INSERT_ID();
 
     INSERT INTO purchase_detail (purchase_id, product_code, quantity, subtotal)
-    VALUES (LAST_INSERT_ID(), product_code, quantity, product_price * quantity);
+    VALUES (purchase_id, product_code, quantity, product_price * quantity);
 END;
 //
 

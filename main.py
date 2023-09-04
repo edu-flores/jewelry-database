@@ -41,7 +41,7 @@ def new_purchase():
     quantity = request.form.get("quantity_1")
 
     cursor = mysql.connection.cursor()
-    cursor.callproc("CreatePurchase", (
+    cursor.execute("CALL CreatePurchase(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, @purchase_id)", (
         first_name,
         last_name,
         email,
@@ -56,12 +56,11 @@ def new_purchase():
         billing_postal_code,
         comments,
         product_code,
-        quantity,
-        0
+        quantity
     ))
 
     # Get purchase_id
-    cursor.execute("SELECT @_CreatePurchase_16")
+    cursor.execute("SELECT @purchase_id")
     result = cursor.fetchone()
     purchase_id = result[0]
 
