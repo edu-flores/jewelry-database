@@ -39,7 +39,7 @@ def services():
         return redirect(url_for("show_purchase", id=purchase_id))
 
 # Create a new purchase order service
-@app.route("/new-purchase", methods=['POST'])
+@app.route("/new-purchase")
 def new_purchase():
     # Get all inputs
     first_name = request.form.get("first_name")
@@ -86,10 +86,10 @@ def new_purchase():
     # Save changes
     mysql.connection.commit()
 
-    return redirect(url_for("home", msg=f"Orden #{purchase_id} creada exitosamente."))
+    return redirect(url_for("index", msg=f"Orden #{purchase_id} creada exitosamente."))
 
 # Show a previously created purchase order with an id
-@app.route("/show-purchase/<int:id>", methods=['GET'])
+@app.route("/show-purchase/<int:id>")
 def show_purchase(id):
     cursor = mysql.connection.cursor()
 
