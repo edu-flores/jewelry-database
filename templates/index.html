@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="container">
-      <h1><i>Joyería Fina</i></h1>
+      <h1>✧ ✦&nbsp;<i>Joyería Fina</i>&nbsp;✦ ✧</h1>
       <p>
         ¡Bienvenido a nuestra joyería! Ofrecemos envíos internacionales a
         precios inigualables.
@@ -29,63 +29,67 @@
 
       <!-- New Purchase -->
       <div class="form-div">
-        <h2 class="text-center">O R D E N A</h2>
+        <h2 class="text-center">ORDENA</h2>
+        <p>
+          ¿Quiere realizar un pedido? Llene los siguientes campos
+          para colocar una nueva orden a su nombre:
+        </p>
         <form action="/new-purchase" method="POST">
           <div class="flex">
             <!-- Client -->
             <div>
-              <h3>c l i e n t e</h3>
-              <label for="first_name">Nombre:</label><br />
+              <h3>Cliente</h3>
+              <label for="first_name" class="required">Nombre</label><br />
               <input type="text" name="first_name" required />
               <br /><br />
 
-              <label for="last_name">Apellido:</label><br />
+              <label for="last_name" class="required">Apellido</label><br />
               <input type="text" name="last_name" required />
               <br /><br />
 
-              <label for="email">Email:</label><br />
+              <label for="email" class="required">Email</label><br />
               <input type="email" name="email" required />
               <br /><br />
 
-              <label for="receiver">Destinatario:</label><br />
+              <label for="receiver" class="required">Destinatario</label><br />
               <input type="text" name="receiver" required />
               <br /><br />
             </div>
             <!-- Shipping -->
             <div>
-              <h3>e n v í o</h3>
-              <label for="shipping_street">Calle:</label><br />
+              <h3>Envío</h3>
+              <label for="shipping_street" class="required">Calle</label><br />
               <input type="text" name="shipping_street" required />
               <br /><br />
 
-              <label for="shipping_city">Ciudad:</label><br />
+              <label for="shipping_city" class="required">Ciudad</label><br />
               <input type="text" name="shipping_city" required />
               <br /><br />
 
-              <label for="shipping_country">País:</label><br />
+              <label for="shipping_country" class="required">País</label><br />
               <input type="text" name="shipping_country" required />
               <br /><br />
 
-              <label for="shipping_postal_code">CP:</label><br />
+              <label for="shipping_postal_code" class="required">CP</label><br />
               <input type="text" name="shipping_postal_code" required />
               <br /><br />
             </div>
             <!-- Billing -->
             <div>
-              <h3>f a c t u r a</h3>
-              <label for="billing_street">Calle:</label><br />
+              <h3>Factura</h3>
+              <label for="billing_street" class="required">Calle</label><br />
               <input type="text" name="billing_street" required />
               <br /><br />
 
-              <label for="billing_city">Ciudad:</label><br />
+              <label for="billing_city" class="required">Ciudad</label><br />
               <input type="text" name="billing_city" required />
               <br /><br />
 
-              <label for="billing_country">País:</label><br />
+              <label for="billing_country" class="required">País</label><br />
               <input type="text" name="billing_country" required />
               <br /><br />
 
-              <label for="billing_postal_code">CP:</label><br />
+              <label for="billing_postal_code" class="required">CP</label><br />
               <input type="text" name="billing_postal_code" required />
               <br /><br />
             </div>
@@ -98,14 +102,14 @@
           <!-- Products -->
           <div class="flex">
             <div>
-              <label for="product_1">Producto 1:</label><br />
+              <label for="product_1" class="required">Producto 1</label><br />
               <select name="product_1" required>
                 <option value="872-AA">Diamond ring 22ct</option>
                 <option value="926-FH">Golden ring 8ct</option>
               </select>
               <br /><br />
 
-              <label for="quantity_1">Cantidad:</label><br />
+              <label for="quantity_1" class="required">Cantidad</label><br />
               <input type="number" name="quantity_1" min="1" required />
               <br /><br />
             </div>
@@ -118,9 +122,13 @@
 
       <!-- View Purchase -->
       <div class="form-div">
-        <h2 class="text-center">C O N S U L T A</h2>
+        <h2 class="text-center">CONSULTA</h2>
+        <p>
+          ¿Ya realizó una orden? Consulte sus detalles al ingresar el 
+          número de orden en el siguiente campo:
+        </p>
         <form action="/services" method="GET">
-          <label for="purchase_id">ID de la orden: </label>
+          <label for="purchase_id" class="required">ID</label>
           <input name="purchase_id" type="number" min="1" required />
           <br /><br />
           <button type="submit">Consultar</button>

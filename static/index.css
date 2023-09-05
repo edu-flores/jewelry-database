@@ -11,6 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    background-image: url(https://media.istockphoto.com/id/900596970/vector/jewelry-seamless-pattern-line-illustration-vector-flat-icons-of-jewels-accessories-gold.jpg?s=612x612&w=0&k=20&c=Mco81ava38kaD2cATpzKmjDBz3-ERFgHylsvHsCX6hk=);
 }
 
 .container {
@@ -26,7 +27,6 @@ body {
 h1 {
     font-size: 36px;
     margin-bottom: 20px;
-    font-style: italic;
 }
 
 p {
@@ -61,7 +61,7 @@ textarea {
 }
 
 button {
-    background-color: #f5a623;
+    background-color: #3fa0eb;
     border: none;
     border-radius: 4px;
     color: white;
@@ -73,7 +73,7 @@ button {
 }
 
 button:hover {
-    background-color: #f18c00;
+    background-color: #466adc;
 }
 
 .text-center {
@@ -86,7 +86,12 @@ button:hover {
 }
 
 #notification {
-    border: 1px solid #f18c00;
+    border: 1px solid #466adc;
     border-radius: 4px;
 
+}
+
+.required::after {
+    content: " *";
+    color: #dc3545;
 }
