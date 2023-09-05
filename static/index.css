@@ -1,3 +1,5 @@
+/* Tags */
+
 body {
     font-family: Monospace, sans-serif;
     margin: 2rem 4rem;
@@ -5,12 +7,12 @@ body {
 
 button {
     background-color: goldenrod;
-    color: black;
     border-radius: 0.5rem;
-    border: 0;
     padding: 0.5rem 1rem;
     cursor: pointer;
+    color: black;
     width: 50%;
+    border: 0;
 }
 
 button:active {
@@ -23,6 +25,8 @@ input, textarea, select {
     border: 0;
 }
 
+/* Classes */
+
 .form-div {
     border: 1px solid black;
     padding: 1rem 2rem;
@@ -30,10 +34,10 @@ input, textarea, select {
 }
 
 .input-container {
-    gap: 4rem;
     justify-content: center;
-    flex-wrap: wrap;
     text-align: left;
+    flex-wrap: wrap;
+    gap: 4rem;
 }
 
 .flex {
@@ -44,11 +48,13 @@ input, textarea, select {
     text-align: center;
 }
 
+/* IDs */
+
 #notification {
-    border-radius: 0.5rem;
     border: 1px solid darkgoldenrod;
     background-color: goldenrod;
+    border-radius: 0.5rem;
     color: black;
-    width: 30%;
     margin: auto;
+    width: 30%;
 }
