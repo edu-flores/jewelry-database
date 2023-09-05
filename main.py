@@ -26,16 +26,22 @@ mysql = MySQL(app)
 def index():
     return render_template("index.html", msg=(request.args.get("msg") or ""))
 
+# Handle form actions
 @app.route("/services", methods=["POST", "GET"])
 def services():
+    # Create purchase
     if request.method == "POST":
         return redirect(url_for("new_purchase"))
+
+    # Read purchase
     elif request.method == "GET":
         purchase_id = request.args.get("purchase_id", type=int)
         return redirect(url_for("show_purchase", id=purchase_id))
 
+# Create a new purchase order service
 @app.route("/new-purchase", methods=['POST'])
 def new_purchase():
+    # Get all inputs
     first_name = request.form.get("first_name")
     last_name = request.form.get("last_name")
     email = request.form.get("email")
@@ -52,6 +58,7 @@ def new_purchase():
     product_code = request.form.get("product_1")
     quantity = request.form.get("quantity_1")
 
+    # Call SP to create the purchase order
     cursor = mysql.connection.cursor()
     cursor.execute("CALL CreatePurchase(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, @purchase_id)", (
         first_name,
@@ -76,10 +83,12 @@ def new_purchase():
     result = cursor.fetchone()
     purchase_id = result[0]
 
+    # Save changes
     mysql.connection.commit()
 
     return redirect(url_for("home", msg=f"Orden #{purchase_id} creada exitosamente."))
 
+# Show a previously created purchase order with an id
 @app.route("/show-purchase/<int:id>", methods=['GET'])
 def show_purchase(id):
     cursor = mysql.connection.cursor()
@@ -101,6 +110,7 @@ def show_purchase(id):
 
     return Response(content, content_type="text/html")
 
+# Create a XML tree and transform it with XSLT
 def generate_xsl(details, products):
     # Root element
     root = ET.Element("purchase")
@@ -169,7 +179,6 @@ def generate_xsl(details, products):
     # XML
     tree = ET.ElementTree(root)
     xml = ET.tostring(tree.getroot(), encoding="UTF-8")
-    print("pene", xml)
 
     # XSLT
     xslt = etree.parse("./static/purchase.xsl")
