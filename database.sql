@@ -127,8 +127,7 @@ CREATE PROCEDURE CreatePurchase(
     IN billing_country VARCHAR(255),
     IN billing_postal_code VARCHAR(255),
     IN comments VARCHAR(255),
-    IN product_code VARCHAR(255),
-    IN quantity INT,
+    IN product_data JSON,
     OUT purchase_id INT
 )
 BEGIN
@@ -136,6 +135,10 @@ BEGIN
     DECLARE shipping_address_id INT;
     DECLARE billing_address_id INT;
     DECLARE product_price INT;
+    DECLARE total_price INT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
+    DECLARE product_code VARCHAR(255);
+    DECLARE quantity INT;
 
     -- Create a client
     INSERT INTO client (first_name, last_name, email, password) 
@@ -153,14 +156,26 @@ BEGIN
     SET billing_address_id = LAST_INSERT_ID();
 
     -- Generate purchase general details
-    SELECT price INTO product_price FROM product WHERE product_code = product_code LIMIT 1;
     INSERT INTO purchase (purchase_date, client_id, shipping_address_id, billing_address_id, status, receiver, comments, total)
-    VALUES (NOW(), client_id, shipping_address_id, billing_address_id, "Processing", receiver, comments, product_price * quantity);
+    VALUES (NOW(), client_id, shipping_address_id, billing_address_id, "Processing", receiver, comments, 0);
     SET purchase_id = LAST_INSERT_ID();
 
-    -- Generate purchase specific details
-    INSERT INTO purchase_detail (purchase_id, product_code, quantity, subtotal)
-    VALUES (purchase_id, product_code, quantity, product_price * quantity);
+    -- Loop through product data JSON array
+    WHILE i < JSON_LENGTH(product_data) DO
+        SET product_code = JSON_UNQUOTE(JSON_EXTRACT(product_data, CONCAT('$[', i, '].product_code')));
+        SET quantity = JSON_UNQUOTE(JSON_EXTRACT(product_data, CONCAT('$[', i, '].quantity')));
+
+        -- Generate purchase specific details
+        SELECT price INTO product_price FROM product WHERE product_code = product_code LIMIT 1;
+        INSERT INTO purchase_detail (purchase_id, product_code, quantity, subtotal)
+        VALUES (purchase_id, product_code, quantity, product_price * quantity);
+
+        SET total_price = total_price + (product_price * quantity);
+        SET i = i + 1;
+    END WHILE;
+
+    -- Update total
+    UPDATE purchase SET total = total_price WHERE purchase_id = purchase_id;
 END;
 //
 

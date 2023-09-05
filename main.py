@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 from lxml import etree
 
 # Misc
+import json
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -39,7 +40,7 @@ def services():
         return redirect(url_for("show_purchase", id=purchase_id))
 
 # Create a new purchase order service
-@app.route("/new-purchase")
+@app.route("/new-purchase", methods=["POST"])
 def new_purchase():
     # Get all inputs
     first_name = request.form.get("first_name")
@@ -55,12 +56,21 @@ def new_purchase():
     billing_country = request.form.get("billing_country")
     billing_postal_code = request.form.get("billing_postal_code")
     comments = request.form.get("comments")
-    product_code = request.form.get("product_1")
-    quantity = request.form.get("quantity_1")
+
+    # Prepare product_data as a JSON object
+    product_codes = request.form.getlist("product[]")
+    quantities = request.form.getlist("quantity[]")
+    product_data = []
+    for i in range(len(product_codes)):
+        product_data.append({
+            "product_code": product_codes[i],
+            "quantity": quantities[i]
+        })
+    product_data_json = json.dumps(product_data)
 
     # Call SP to create the purchase order
     cursor = mysql.connection.cursor()
-    cursor.execute("CALL CreatePurchase(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, @purchase_id)", (
+    cursor.execute("CALL CreatePurchase(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, @purchase_id)", (
         first_name,
         last_name,
         email,
@@ -74,8 +84,7 @@ def new_purchase():
         billing_country,
         billing_postal_code,
         comments,
-        product_code,
-        quantity
+        product_data_json
     ))
 
     # Get purchase_id
@@ -89,7 +98,7 @@ def new_purchase():
     return redirect(url_for("index", msg=f"Orden #{purchase_id} creada exitosamente."))
 
 # Show a previously created purchase order with an id
-@app.route("/show-purchase/<int:id>")
+@app.route("/show-purchase/<int:id>", methods=["GET"])
 def show_purchase(id):
     cursor = mysql.connection.cursor()
 
