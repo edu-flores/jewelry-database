@@ -14,19 +14,17 @@ load_dotenv()
 # Flask main app configuration with MySQL
 app = Flask(__name__)
 
-app.config["MYSQL_PORT"] = os.getenv("MYSQL_PORT")
-app.config["MYSQL_HOST"] = os.getenv("localhost")
-app.config["MYSQL_USER"] = os.getenv("root")
-app.config["MYSQL_PASSWORD"] = os.getenv("root")
-app.config["MYSQL_DB"] = os.getenv("jewelry")
+app.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT"))
+app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
+app.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
+app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
+app.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 mysql = MySQL(app)
-
 
 # Flask routes
 @app.route("/")
 def index():
     return render_template("index.html", msg=(request.args.get("msg") or ""))
-
 
 @app.route("/services", methods=["POST", "GET"])
 def services():
@@ -35,7 +33,6 @@ def services():
     elif request.method == "GET":
         purchase_id = request.args.get("purchase_id", type=int)
         return redirect(url_for("show_purchase", id=purchase_id))
-
 
 @app.route("/new-purchase", methods=['POST'])
 def new_purchase():
@@ -83,7 +80,6 @@ def new_purchase():
 
     return redirect(url_for("home", msg=f"Orden #{purchase_id} creada exitosamente."))
 
-
 @app.route("/show-purchase/<int:id>", methods=['GET'])
 def show_purchase(id):
     cursor = mysql.connection.cursor()
@@ -95,24 +91,18 @@ def show_purchase(id):
     # Products
     cursor.execute("CALL GetPurchaseProducts(%s)" % id)
     products = cursor.fetchall()
-    
+
     # Error
     if not details or not products:
         return redirect(url_for("index", msg="No se encontró la orden."))
 
-    tree = purchase_to_xml(details, products)
-    xml = ET.tostring(tree.getroot(), encoding="UTF-8")
+    # Get invoice
+    content = generate_xsl(details, products)
 
-    # XSLT
-    xslt = etree.parse("./static/purchase.xsl")
-    transform = etree.XSLT(xslt)
-    result = str(transform(etree.fromstring(xml)))
+    return Response(content, content_type="text/html")
 
-    return Response(result, content_type="text/html")
-
-
-def purchase_to_xml(details, products):
-    # Root element with instructions
+def generate_xsl(details, products):
+    # Root element
     root = ET.Element("purchase")
 
     # Details
@@ -176,7 +166,17 @@ def purchase_to_xml(details, products):
             element = ET.SubElement(product_element, element_name)
             element.text = str(product[index])
 
-    return ET.ElementTree(root)
+    # XML
+    tree = ET.ElementTree(root)
+    xml = ET.tostring(tree.getroot(), encoding="UTF-8")
+    print("pene", xml)
+
+    # XSLT
+    xslt = etree.parse("./static/purchase.xsl")
+    transform = etree.XSLT(xslt)
+    result = str(transform(etree.fromstring(xml)))
+
+    return result
 
 # Main thread
 if __name__ == "__main__":
