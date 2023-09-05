@@ -73,7 +73,7 @@ button {
 }
 
 button:hover {
-    background-color: #466adc;
+    background-color: #328bcf;
 }
 
 .text-center {
@@ -86,7 +86,7 @@ button:hover {
 }
 
 #notification {
-    border: 1px solid #466adc;
+    border: 1px solid #328bcf;
     border-radius: 4px;
 
 }
@@ -94,4 +94,16 @@ button:hover {
 .required::after {
     content: " *";
     color: #dc3545;
+}
+
+.buttons {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.buttons button {
+    background-color: initial;
+    border: 1px solid #3fa0eb;
+    color: black;
 }

@@ -100,19 +100,24 @@
           <textarea name="comments" cols="90" rows="5"></textarea>
 
           <!-- Products -->
-          <div class="flex">
-            <div>
-              <label for="product_1" class="required">Producto 1</label><br />
-              <select name="product_1" required>
+          <div class="flex" id="products">
+            <div class="product-item">
+              <label for="product" class="required">Producto</label><br />
+              <select name="product" required>
                 <option value="872-AA">Diamond ring 22ct</option>
                 <option value="926-FH">Golden ring 8ct</option>
               </select>
               <br /><br />
 
-              <label for="quantity_1" class="required">Cantidad</label><br />
-              <input type="number" name="quantity_1" min="1" required />
+              <label for="quantity" class="required">Cantidad</label><br />
+              <input type="number" name="quantity" min="1" required />
               <br /><br />
             </div>
+          </div>
+          <!-- Buttons -->
+          <div class="buttons">
+            <button type="button" id="removeProduct">Quitar</button>
+            <button type="button" id="addProduct">Agregar</button>
           </div>
           <button type="submit">Ordenar</button>
         </form>
@@ -135,5 +140,6 @@
         </form>
       </div>
     </div>
+    <script src="./static/index.js"></script>
   </body>
 </html>
