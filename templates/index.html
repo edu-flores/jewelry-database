@@ -108,11 +108,10 @@
       <!-- View Purchase -->
       <div class="form-div text-center">
         <h2>Consulta una orden</h2>
-        <form action="/show-purchase/{{ purchase_id }}" method="GET">
-          <label for="id">Buscar una orden por su ID: </label>
-          <input name="id" type="number" />
+        <form action="/services" method="GET">
+          <label for="purchase_id">Buscar una orden por su ID: </label>
+          <input name="purchase_id" type="number" />
           <br><br>
-
           <button type="submit">Buscar</button>
         </form>
       </div>

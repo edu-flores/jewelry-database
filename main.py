@@ -1,9 +1,12 @@
+# Flask
 from flask import Flask, Response, request, render_template, redirect, url_for
 from flask_mysqldb import MySQL
+
+# XML
 import xml.etree.ElementTree as ET
 from lxml import etree
 
-# Flask app
+# Flask main app configuration with MySQL
 app = Flask(__name__)
 
 app.config["MYSQL_PORT"] = 3307
@@ -11,15 +14,22 @@ app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
 app.config["MYSQL_PASSWORD"] = "root"
 app.config["MYSQL_DB"] = "jewelry"
-
 mysql = MySQL(app)
 
 
 # Flask routes
 @app.route("/")
-def home():
-    msg = request.args.get("msg") or ""
-    return render_template("index.html", msg=msg)
+def index():
+    return render_template("index.html", msg=(request.args.get("msg") or ""))
+
+
+@app.route("/services", methods=["POST", "GET"])
+def services():
+    if request.method == "POST":
+        return redirect(url_for("new_purchase"))
+    elif request.method == "GET":
+        purchase_id = request.args.get("purchase_id", type=int)
+        return redirect(url_for("show_purchase", id=purchase_id))
 
 
 @app.route("/new-purchase", methods=['POST'])
@@ -69,9 +79,8 @@ def new_purchase():
     return redirect(url_for("home", msg=f"Orden #{purchase_id} creada exitosamente."))
 
 
-@app.route("/show-purchase/", methods=['GET'])
-def show_purchase():
-    id = request.args.get("id") or 0
+@app.route("/show-purchase/<int:id>", methods=['GET'])
+def show_purchase(id):
     cursor = mysql.connection.cursor()
 
     # Details
@@ -84,7 +93,7 @@ def show_purchase():
     
     # Error
     if not details or not products:
-        return redirect(url_for("home", msg="No se encontró la orden."))
+        return redirect(url_for("index", msg="No se encontró la orden."))
 
     tree = purchase_to_xml(details, products)
     xml = ET.tostring(tree.getroot(), encoding="UTF-8")
