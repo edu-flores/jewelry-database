@@ -76,6 +76,11 @@ button:hover {
     background-color: #328bcf;
 }
 
+button:disabled {
+    opacity: 0.4;
+    cursor: initial;
+}
+
 .text-center {
     text-align: center;
 }

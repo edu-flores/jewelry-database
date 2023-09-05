@@ -13,6 +13,9 @@ addProductButton.addEventListener("click", () => {
     productsDiv.appendChild(newProductItem);
     productCounter++;
   }
+
+  addProductButton.disabled = (productCounter === 3) ? true : false;
+  removeProductButton.disabled = (productCounter === 1) ? true : false;
 });
 
 // Remove products
@@ -23,4 +26,7 @@ removeProductButton.addEventListener("click", () => {
     productsDiv.removeChild(lastProductItem);
     productCounter--;
   }
+
+  addProductButton.disabled = (productCounter === 3) ? true : false;
+  removeProductButton.disabled = (productCounter === 1) ? true : false;
 });
