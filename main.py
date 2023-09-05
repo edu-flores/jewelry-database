@@ -6,14 +6,19 @@ from flask_mysqldb import MySQL
 import xml.etree.ElementTree as ET
 from lxml import etree
 
+# Misc
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 # Flask main app configuration with MySQL
 app = Flask(__name__)
 
-app.config["MYSQL_PORT"] = 3307
-app.config["MYSQL_HOST"] = "localhost"
-app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = "root"
-app.config["MYSQL_DB"] = "jewelry"
+app.config["MYSQL_PORT"] = os.getenv("MYSQL_PORT")
+app.config["MYSQL_HOST"] = os.getenv("localhost")
+app.config["MYSQL_USER"] = os.getenv("root")
+app.config["MYSQL_PASSWORD"] = os.getenv("root")
+app.config["MYSQL_DB"] = os.getenv("jewelry")
 mysql = MySQL(app)
 
 
