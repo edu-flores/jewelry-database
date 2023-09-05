@@ -106,14 +106,18 @@ def show_purchase(id):
         return redirect(url_for("index", msg="No se encontró la orden."))
 
     # Get invoice
-    content = generate_xsl(details, products)
+    content = generate_xsl(id, details, products)
 
     return Response(content, content_type="text/html")
 
 # Create a XML tree and transform it with XSLT
-def generate_xsl(details, products):
+def generate_xsl(id, details, products):
     # Root element
     root = ET.Element("purchase")
+
+    # ID
+    id_element = ET.SubElement(root, "id")
+    id_element.text = str(id)
 
     # Details
     details_element = ET.SubElement(root, "details")
