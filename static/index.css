@@ -96,6 +96,11 @@ button:disabled {
 
 }
 
+#products {
+    justify-content: initial;
+    gap: 3.5rem;
+}
+
 .required::after {
     content: " *";
     color: #dc3545;
