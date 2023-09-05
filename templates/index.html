@@ -9,12 +9,14 @@
   <body>
     <h1><i>Joyería Fina</i></h1>
     <p>¡Bienvenido a nuestra joyería! Ofrecemos envíos internacionales a precios inigualables.</p>
+
     <!-- Notification -->
     {% if msg|length > 0 %}
     <div id="notification" class="text-center">
       <h4>{{ msg }}</h4>
     </div>
     {% endif %}
+
     <!-- New Purchase -->
     <div class="container">
       <div class="form-div text-center">
@@ -46,15 +48,15 @@
               <label for="shipping_street">Calle:</label><br>
               <input type="text" name="shipping_street" required>
               <br><br>
-      
+
               <label for="shipping_city">Ciudad:</label><br>
               <input type="text" name="shipping_city" required>
               <br><br>
-      
+
               <label for="shipping_country">País:</label><br>
               <input type="text" name="shipping_country" required>
               <br><br>
-      
+
               <label for="shipping_postal_code">CP:</label><br>
               <input type="text" name="shipping_postal_code" required>
               <br><br>
@@ -65,29 +67,33 @@
               <label for="billing_street">Calle:</label><br>
               <input type="text" name="billing_street" required>
               <br><br>
-      
+
               <label for="billing_city">Ciudad:</label><br>
               <input type="text" name="billing_city" required>
               <br><br>
-      
+
               <label for="billing_country">País:</label><br>
               <input type="text" name="billing_country" required>
               <br><br>
-      
+
               <label for="billing_postal_code">CP:</label><br>
               <input type="text" name="billing_postal_code" required>
               <br><br>
             </div>
           </div>
+
           <!-- Comments -->
           <label for="comments">Comentarios:</label><br>
           <textarea name="comments" cols="90" rows="5"></textarea>
+
           <!-- Products -->
           <div class="text-center">
             <h3>Productos</h3>
             <!-- <label for="product_count">Cantidad de Productos:</label>
             <input type="number" name="product_count" min="1" max="5" value="1" required><br><br> -->
           </div>
+
+          <!-- Products -->
           <div class="input-container flex">
             <div>
               <label for="product_1">Producto 1:</label><br>
@@ -105,6 +111,7 @@
           <button type="submit">Ordenar</button>
         </form>
       </div>
+
       <!-- View Purchase -->
       <div class="form-div text-center">
         <h2>Consulta una orden</h2>
