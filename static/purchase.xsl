@@ -26,15 +26,21 @@
             display: flex;
           }
 
-          a {
-            display: block;
-            margin-top: 2rem;
+          h3 {
+            margin-top: 3rem;
+          }
+
+          .total {
+            width: 40%;
+            float: right;
           }
         </style>
       </head>
       <body>
+        <h1><i>Factura - Orden #<xsl:value-of select="id"/></i></h1>
         <!-- Details -->
-        <h1>Detalles de la Orden</h1>
+        <h2>Detalles de la Orden</h2>
+        <hr/>
         <div class="flex">
         <table>
           <tr>
@@ -56,10 +62,6 @@
           <tr>
             <th>Comentarios</th>
             <td><xsl:value-of select="details/comments"/></td>
-          </tr>
-          <tr>
-            <th>Total</th>
-            <td>$<xsl:value-of select="details/total"/></td>
           </tr>
         </table>
         <!-- Addresses -->
@@ -106,26 +108,46 @@
           </tr>
         </table>
         </div>
+        <hr/>
         <!-- List of Products -->
         <h2>Productos (<xsl:value-of select="count(products/product)"/>)</h2>
         <table>
           <tr>
             <th>Código</th>
             <th>Descripción</th>
-            <th>Precio</th>
             <th>Cantidad</th>
+            <th>Precio</th>
             <th>Subtotal</th>
           </tr>
           <xsl:for-each select="products/product">
             <tr>
               <td><xsl:value-of select="code"/></td>
               <td><xsl:value-of select="description"/></td>
-              <td>$<xsl:value-of select="price"/></td>
               <td><xsl:value-of select="quantity"/></td>
+              <td>$<xsl:value-of select="price"/></td>
               <td>$<xsl:value-of select="subtotal"/></td>
             </tr>
           </xsl:for-each>
         </table>
+        <!-- Total -->
+        <br/>
+        <div class="total">
+          <table>
+            <tr>
+              <th>Subtotal</th>
+              <td>$<xsl:value-of select="details/total"/></td>
+            </tr>
+            <tr>
+              <th>IVA</th>
+              <td>$0</td>
+            </tr>
+            <tr>
+              <th>Total</th>
+              <td>$<xsl:value-of select="details/total"/></td>
+            </tr>
+          </table>
+        </div>
+        <h3>¡Gracias por su compra!</h3>
         <!-- Go Back -->
         <a href="/">↻ Regresar a la página principal</a>
       </body>
