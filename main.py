@@ -25,7 +25,11 @@ mysql = MySQL(app)
 # Flask routes
 @app.route("/")
 def index():
-    return render_template("index.html", msg=(request.args.get("msg") or ""))
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT product_code, description, price FROM product")
+    products = cursor.fetchall()
+
+    return render_template("index.html", msg=(request.args.get("msg") or ""), products=(products or ()))
 
 # Handle form actions
 @app.route("/services", methods=["POST", "GET"])
