@@ -22,8 +22,8 @@ CREATE TABLE address (
 );
 
 INSERT INTO address VALUES
-(1, "Club Pachuca 18", "Villa Coapa", "Mexico", "666-666"),
-(2, "Minami Josanjima-Cho Itano Gun", "Osaka-ken", "Japan", "0666");
+(1, "Club Pachuca 18", "Villa Coapa", "México", "666-666"),
+(2, "Minami Josanjima-Cho Itano Gun", "Osaka-ken", "Japón", "0666");
 
 CREATE TABLE client (
     client_id INT NOT NULL AUTO_INCREMENT,
@@ -54,7 +54,7 @@ CREATE TABLE purchase (
 );
 
 INSERT INTO purchase VALUES
-(1, "2023-08-09 18:00:00", 1, 1, 2, "Processing", "Frida Montiel", "Me urge la entrega para mañana, es el cumpleaños de mi esposa.", 12500);
+(1, "2023-08-09 18:00:00", 1, 1, 2, "Procesando", "Frida Montiel", "Me urge la entrega para mañana, es el cumpleaños de mi esposa.", 12500);
 
 CREATE TABLE product (
     product_code VARCHAR(255) NOT NULL,
@@ -64,8 +64,8 @@ CREATE TABLE product (
 );
 
 INSERT INTO product VALUES
-("872-AA", "Diamond ring 22ct", 10500),
-("926-FH", "Golden ring 8ct", 1000);
+("872-AA", "Anillo de diamante 22qt", 10500),
+("926-FH", "Anillo de oro 8qt", 1000);
 
 CREATE TABLE purchase_detail (
     purchase_id INT NOT NULL,
@@ -169,7 +169,7 @@ BEGIN
 
     -- Generate purchase general details
     INSERT INTO purchase (purchase_date, client_id, shipping_address_id, billing_address_id, status, receiver, comments, total)
-    VALUES (NOW(), client_id, shipping_address_id, billing_address_id, "Processing", receiver, comments, 0);
+    VALUES (NOW(), client_id, shipping_address_id, billing_address_id, "Procesando", receiver, comments, 0);
     SET purchase_id = LAST_INSERT_ID();
 
     -- Loop through product data JSON array
