@@ -198,7 +198,7 @@ def generate_xsl(id, details, products):
     xml = ET.tostring(tree.getroot(), encoding="UTF-8")
 
     # XSLT
-    xslt = etree.parse("./static/purchase.xsl")
+    xslt = etree.parse("./static/html/purchase.xsl")
     transform = etree.XSLT(xslt)
     result = str(transform(etree.fromstring(xml)))
 
