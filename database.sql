@@ -1,3 +1,15 @@
+-- Drop tables if they exist
+DROP TABLE IF EXISTS purchase_detail;
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS purchase;
+DROP TABLE IF EXISTS client;
+DROP TABLE IF EXISTS address;
+
+-- Drop stored procedures if they exist
+DROP PROCEDURE IF EXISTS GetPurchaseDetails;
+DROP PROCEDURE IF EXISTS GetPurchaseProducts;
+DROP PROCEDURE IF EXISTS CreatePurchase;
+
 -- Tables and sample data
 
 CREATE TABLE address (
