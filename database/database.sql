@@ -1,3 +1,7 @@
+-- Database
+CREATE DATABASE IF NOT EXISTS jewelry;
+USE jewelry;
+
 -- Drop tables if they exist
 DROP TABLE IF EXISTS purchase_detail;
 DROP TABLE IF EXISTS product;
