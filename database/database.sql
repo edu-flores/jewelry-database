@@ -16,6 +16,59 @@ DROP PROCEDURE IF EXISTS CreatePurchase;
 
 -- Tables and sample data
 
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT,
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    PRIMARY KEY (user_id)
+);
+
+INSERT INTO users VALUES
+(1, "Raúl", "Morales", "raul.moraless@udem.edu", "666"),
+(2, "Edu", "Flores", "edu@a.a", "123"),
+(3, "Davo", "Zavala", "a", "a");
+
+CREATE TABLE routes (
+    route_id INT AUTO_INCREMENT,
+    name VARCHAR(250) NOT NULL,
+    distance INT NOT NULL,
+
+    PRIMARY KEY (route_id)
+);
+/*
+CREATE TABLE `route` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `distance` float DEFAULT NULL,
+  `average_speed` float DEFAULT NULL,
+  `short_stops_count` int(11) DEFAULT NULL,
+  `time` bigint(20) DEFAULT NULL,
+  `first_stem_distance` double DEFAULT NULL,
+  `first_stem_time` double DEFAULT NULL,
+  `second_stem_distance` double DEFAULT NULL,
+  `second_stem_time` double DEFAULT NULL,
+  `short_stops_time` double DEFAULT NULL,
+  `traveling_time` double DEFAULT NULL,
+  `stops_between_0_5` int(11) DEFAULT NULL,
+  `stops_between_5_15` int(11) DEFAULT NULL,
+  `stops_between_15_30` int(11) DEFAULT NULL,
+  `stops_between_30_60` int(11) DEFAULT NULL,
+  `stops_between_60_120` int(11) DEFAULT NULL,
+  `stops_between_120_plus` int(11) DEFAULT NULL,
+  `average_short_stop_duration` double DEFAULT NULL,
+  `is_valid` int(11) DEFAULT NULL,
+  `fuel_consumption` double DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `aux1` float DEFAULT NULL,
+  `aux2` float DEFAULT NULL,
+  `aux3` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+);
+*/
+
 CREATE TABLE address (
     address_id INT NOT NULL AUTO_INCREMENT,
     street VARCHAR(255) NOT NULL,
