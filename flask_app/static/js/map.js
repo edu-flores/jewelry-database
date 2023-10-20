@@ -46,6 +46,14 @@ function initMap() {
     zoom: 11
   });
 
+  // Get coords
+  google.maps.event.addListener(map, "rightclick", function(event) {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+
+    alert("Latitud = " + lat + "\nLongitud = " + lng);
+  });
+
   // Add markers to the map
   const locations = JSON.parse(document.getElementById("locations-container").dataset.locations);
   locations.forEach(location => {
