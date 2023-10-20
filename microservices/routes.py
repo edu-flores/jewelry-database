@@ -1,7 +1,7 @@
 ################### PORT 5003 ###################
 
 # Flask
-from flask import Flask, request, url_for, jsonify
+from flask import Flask, request, jsonify
 from flask_mysqldb import MySQL
 
 # XML generator
@@ -23,7 +23,7 @@ routes.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 
 mysql = MySQL(routes)
 
-@routes.route("/retrieve_routes", methods=["POST"])
+@routes.route("/retrieve-routes", methods=["POST"])
 def retrieve_routes():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, t.name FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id")
@@ -34,9 +34,9 @@ def retrieve_routes():
         routesJSON = [{"id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_name": route[6], "error": False} for route in routes]
         return jsonify(routesJSON), 200
     else:
-        return jsonify({"error": False}),401
+        return jsonify({"error": False}), 401
     
-@routes.route("/add_route", methods=["POST"])
+@routes.route("/add-route", methods=["POST"])
 def add_route():
     data = request.get_json()
     name = data["name"]
@@ -56,7 +56,7 @@ def add_route():
 
     return "Se agregó correctamente la ruta"
 
-@routes.route("/edit_route", methods=["POST"])
+@routes.route("/edit-route", methods=["POST"])
 def edit_route():
     data = request.get_json()
     id = data["id"]
@@ -81,7 +81,7 @@ def edit_route():
 
     return "Se actualizó correctamente la ruta"
 
-@routes.route("/retrieve_route", methods=["POST"])
+@routes.route("/retrieve-route", methods=["POST"])
 def retrieve_route():
     data = request.get_json()
     id = data["id"]
@@ -96,7 +96,7 @@ def retrieve_route():
     else:
         return jsonify({"error", False}), 401
 
-@routes.route("/retrieve_trucks", methods=["POST"])
+@routes.route("/retrieve-trucks", methods=["POST"])
 def retrieve_trucks():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT truck_id, name FROM trucks")
@@ -109,7 +109,7 @@ def retrieve_trucks():
     else:
         return jsonify({"error", False}), 401
     
-@routes.route("/delete_route", methods=["POST"])
+@routes.route("/delete-route", methods=["POST"])
 def delete_route():
     data = request.get_json()
     id = data["id"]
@@ -121,14 +121,14 @@ def delete_route():
 
     return "Eliminado Exsitosamente"
 
-@routes.route("/retrieve_xml", methods=["POST"])
+@routes.route("/retrieve-xml", methods=["POST"])
 def retrieve_xml():
     data = request.get_json()
     id = data["id"]
     cursor = mysql.connection.cursor()
     cursor.execute("""SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, r.truck_id, t.name 
                    FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id 
-                   WHERE r.truck_id = %s""",(id,))
+                   WHERE r.truck_id = %s""", (id,))
     route = cursor.fetchone()
     cursor.close()
 
@@ -160,14 +160,14 @@ def retrieve_xml():
 
     return xml
 
-@routes.route("/retrieve_json", methods=["POST"])
+@routes.route("/retrieve-json", methods=["POST"])
 def retrieve_json():
     data = request.get_json()
     id = data["id"]
     cursor = mysql.connection.cursor()
     cursor.execute("""SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, r.truck_id, t.name 
                    FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id 
-                   WHERE r.truck_id = %s""",(id,))
+                   WHERE r.truck_id = %s""", (id,))
     route = cursor.fetchone()
     cursor.close()
     j = {}
@@ -180,3 +180,6 @@ def retrieve_json():
     if route[6] is not None:
         j["Truck"] = route[7]
     return j
+
+if __name__ == "__main__":
+    routes.run(debug=True, host="0.0.0.0", port=5003)

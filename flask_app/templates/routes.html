@@ -37,12 +37,12 @@
           <th class="dato">{{ route["average_speed"] }}</th>
           <th class="dato">{{ route["time"] }}</th>
           <th class="dato">{{ route["truck_name"] }}</th>
-          <th class="dato"><a class="boton editar" href="/route_edit/{{ route['id'] }}">Editar</a><a class="boton eliminar" href="/route_delete/{{ route['id'] }}">Eliminar</a></th>
-          <th class="dato"><a class="boton xml" href="/routes/xml/{{ route['id'] }}">XML</a><a class="boton json" href="/routes/json/{{ route['id'] }}">JSON</a></th>
+          <th class="dato"><a class="boton editar" href="/admin/route-edit/{{ route['id'] }}">Editar</a><a class="boton eliminar" href="/admin/route-delete/{{ route['id'] }}">Eliminar</a></th>
+          <th class="dato"><a class="boton xml" href="/admin/routes/xml/{{ route['id'] }}">XML</a><a class="boton json" href="/admin/routes/json/{{ route['id'] }}">JSON</a></th>
         </tr>
       {% endfor %}
     </table>
-    <a class="boton agregar" href="/route_add_form">Agregar</a>
+    <a class="boton agregar" href="/admin/route-add-form">Agregar</a>
     {% else %}
       <h2>Ocurrio un error, si al recargar la página sigue este mensaje, no hay rutas existentes</h2>
     {% endif %}
