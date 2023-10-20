@@ -4,6 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joyería Fina</title>
+
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #fff6fc;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin: 0;
+      }
+
+      h1 {
+          color: #333;
+      }
+
+      form {
+          text-align: left;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-column {
+          float: left;
+          width: 33.33%;
+          padding: 10px;
+          box-sizing: border-box;
+      }
+
+      label {
+          display: block;
+          margin-bottom: 5px;
+      }
+
+      input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          box-sizing: border-box;
+      }
+
+      select {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin-bottom: 10px;
+      }
+
+      button {
+          display: block;
+          width: 100%;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          font-size: 16px;
+          cursor: pointer;
+          color: #fff;
+      }
+
+      button a {
+          color: #fff;
+          text-decoration: none;
+      }
+
+      button a:hover {
+          text-decoration: underline;
+      }
+
+      .buttons-container {
+          text-align: right;
+          padding: 10px;
+      }
+
+      .secondary {
+          background-color: #6eb0a2;
+      }
+
+      .primary {
+          background-color: #718ab4;
+      }
+
+      .flex {
+        display: flex;
+        gap: 2rem;
+      }
+    </style>
   </head>
   <body>
     {% if error %}
@@ -11,81 +102,95 @@
     {% endif %}
 
     {% if data %}
-      <h1>Actualizando ruta</h1>
+      <h1>Actualizando ruta #{{ route["route_id"] }}</h1>
       <form action="/route-udpate/{{ route["route_id"] }}" method="POST">
-        <label for="name">Nombre:</label>
-        <input type="text" id="name" name="name" required value="{{ route["name"] }}">
-        <br><br>
-          
-        <label for="distance">Distancia en metros:</label>
-        <input type="text" id="distance" name="distance" required value="{{ route["distance"] }}">
-        <br><br>
+        <div class="flex">
+          <div>
+            <label for="name">Nombre</label>
+            <input type="text" id="name" name="name" required value="{{ route["name"] }}">
+            <br><br>
+              
+            <label for="distance">Distancia en metros</label>
+            <input type="text" id="distance" name="distance" required value="{{ route["distance"] }}">
+            <br><br>
+    
+            <label for="time">Tiempo en minutos</label>
+            <input type="text" id="time" name="time" required value="{{ route["time"] }}">
+            <br><br>
+          </div>
+          <div>
+            <label for="average_speed">Velocidad promedio en km/h</label>
+            <input type="text" id="average_speed" name="average_speed" required value="{{ route["average_speed"] }}">
+            <br><br>
+    
+            <label for="activo">¿Actualmente está activo?</label>
+            <select id="activo" name="activo">
+              {% if route["active"] %}
+                <option value="0">No</option>
+                <option value="1" selected>Sí</option>
+              {% else %}
+                <option value="0" selected>No</option>
+                <option value="1">Sí</option>
+              {% endif %}
+            </select>
+            <br><br>
+    
+            <label for="truck">¿Qué camión va por esta ruta?</label>
+            <select id="truck" name="truck">
+              {% for truck in trucks %}
+                <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
+              {% endfor %}
+            </select>
+            <br><br>
+          </div>
+        </div>
 
-        <label for="time">Tiempo en minutos:</label>
-        <input type="text" id="time" name="time" required value="{{ route["time"] }}">
-        <br><br>
-
-        <label for="average_speed">Velocidad Promedio en km/h:</label>
-        <input type="text" id="average_speed" name="average_speed" required value="{{ route["average_speed"] }}">
-        <br><br>
-
-        <label for="activo">¿Actualmente está activo?</label>
-        <select id="activo" name="activo">
-          {% if route["active"] %}
-            <option value="0">No</option>
-            <option value="1" selected>Sí</option>
-          {% else %}
-            <option value="0" selected>No</option>
-            <option value="1">Sí</option>
-          {% endif %}
-        </select>
-        <br><br>
-
-        <label for="truck">¿Qué camión va por esta ruta?</label>
-        <select id="truck" name="truck">
-          {% for truck in trucks %}
-            <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
-          {% endfor %}
-        </select>
-        <br><br>
-
-        <button type="submit">Actualizar</button>
+        <button type="submit" class="primary">Actualizar</button>
+        <br>
+        <button type="button" class="secondary"><a href="/admin/routes">Regresar</a></button>
       </form>
     {% else %}
       <h1>Agregando ruta</h1>
       <form action="/route-add" method="POST">
-        <label for="name">Nombre:</label>
-        <input type="text" id="name" name="name" required>
-        <br><br>
+        <div class="flex">
+          <div>
+            <label for="name">Nombre</label>
+            <input type="text" id="name" name="name" required>
+            <br><br>
+    
+            <label for="distance">Distancia en metros</label>
+            <input type="text" id="distance" name="distance" required>
+            <br><br>
+    
+            <label for="time">Tiempo en minutos</label>
+            <input type="text" id="time" name="time" required>
+            <br><br>
+          </div>
+          <div>
+            <label for="average_speed">Velocidad promedio en km/h</label>
+            <input type="text" id="average_speed" name="average_speed" required>
+            <br><br>
+    
+            <label for="activo">¿Actualmente está activo?</label>
+            <select id="activo" name="activo">
+              <option value="0">No</option>
+              <option value="1">Sí</option>
+            </select>
+            <br><br>
+    
+            <label for="truck">¿Qué camión va por esta ruta?</label>
+            <select id="truck" name="truck">
+              {% for truck in trucks %}
+                <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
+              {% endfor %}
+            </select>
+            <br><br>
+          </div>
+        </div>
 
-        <label for="distance">Distancia en metros:</label>
-        <input type="text" id="distance" name="distance" required>
-        <br><br>
-
-        <label for="time">Tiempo en minutos:</label>
-        <input type="text" id="time" name="time" required>
-        <br><br>
-
-        <label for="average_speed">Velocidad promedio en km/h:</label>
-        <input type="text" id="average_speed" name="average_speed" required>
-        <br><br>
-
-        <label for="activo">¿Actualmente está activo?</label>
-        <select id="activo" name="activo">
-          <option value="0">No</option>
-          <option value="1">Sí</option>
-        </select>
-        <br><br>
-
-        <label for="truck">¿Qué camión va por esta ruta?</label>
-        <select id="truck" name="truck">
-          {% for truck in trucks %}
-            <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
-          {% endfor %}
-        </select>
-        <br><br>
-
-        <button type="submit">Agregar</button>
+        <button type="submit" class="primary">Agregar</button>
+        <br>
+        <button type="button" class="secondary"><a href="/admin/routes">Regresar</a></button>
       </form>
     {% endif %}
   </body>
