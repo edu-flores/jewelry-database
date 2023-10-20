@@ -22,4 +22,4 @@ mysql = MySQL(app)
 app.secret_key = secrets.token_hex(16)
 
 # Import all other modules
-from flask_app import invoice, purchase, users, actions, routescrud
+from flask_app import invoice, purchase, routes, users, actions
