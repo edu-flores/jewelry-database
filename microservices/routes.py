@@ -136,26 +136,32 @@ def retrieve_xml():
 
     route_id_elem = ET.SubElement(root, "ID")
     route_id_elem.text = str(route[0])
-    
-    route_name_elem = ET.SubElement(root, "Name")
+
+    data_elem = ET.SubElement(root, "Data")
+
+    route_name_elem = ET.SubElement(data_elem, "Name")
     route_name_elem.text = str(route[1])
 
-    distance_elem = ET.SubElement(root, "Distance")
+    distance_elem = ET.SubElement(data_elem, "Distance")
     distance_elem.text = str(route[2])
 
-    route_name_elem = ET.SubElement(root, "Active")
+    route_name_elem = ET.SubElement(data_elem, "Active")
     route_name_elem.text = str(route[3])
 
-    average_speed_elem = ET.SubElement(root, "AverageSpeed")
+    average_speed_elem = ET.SubElement(data_elem, "AverageSpeed")
     average_speed_elem.text = str(route[4])
 
-    time_elem = ET.SubElement(root, "Time")
+    time_elem = ET.SubElement(data_elem, "Time")
     time_elem.text = str(route[5])
 
-    if route[6] is not None:
-        truck_elem = ET.SubElement(root, "Truck")
-        truck_elem.text = str(route[7])
-    
+    truck_elem = ET.SubElement(root, "Truck")
+
+    truck_id_elem = ET.SubElement(truck_elem, "TruckID")
+    truck_id_elem.text = str(route[7])
+
+    truck_name_elem = ET.SubElement(truck_elem, "TruckName")
+    truck_name_elem.text = str(route[8])
+
     xml = ET.tostring(root)
 
     return xml
@@ -167,15 +173,20 @@ def retrieve_json():
     id = data["id"]
     route = get_route_data(id)
 
-    j = {}
-    j["id"] = route[0]
-    j["name"] = route[1]
-    j["distance"] = route[2]
-    j["active"] = route[3]
-    j["averageSpeed"] = route[4]
-    j["time"] = route[5]
-    if route[6] is not None:
-        j["truck"] = route[7]
+    j = {
+        "id": route[0],
+        "data": {
+            "name": route[1],
+            "distance": route[2],
+            "active": route[3] == "1",
+            "averageSpeed": route[4],
+            "time": route[5]
+        },
+        "truck": {
+            "id": route[7],
+            "name": route[8]
+        }
+    }
 
     return j
 
@@ -183,8 +194,8 @@ def retrieve_json():
 def get_route_data(id):
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        SELECT routes.*, trucks.name
-        FROM routes LEFT JOIN trucks ON routes.truck_id = trucks.truck_id 
+        SELECT routes.*, trucks.truck_id, trucks.name
+        FROM routes JOIN trucks ON routes.truck_id = trucks.truck_id 
         WHERE route_id = %s
     """, (id,))
     route = cursor.fetchone()

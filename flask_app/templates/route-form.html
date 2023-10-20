@@ -39,26 +39,15 @@
             <option value="1">Sí</option>
           {% endif %}
         </select>
+        <br><br>
 
-        <div id="campos-adicionales" style="display: none;">
-          <label for="truck">¿Qué camión va por esta ruta?</label>
-          <select id="truck" name="truck">
-            {% for truck in trucks %}
-              <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <script>
-          document.getElementById("activo").addEventListener("change", function () {
-            let camposAdicionales = document.getElementById("campos-adicionales");
-            if (this.value === "1") {
-              camposAdicionales.style.display = "block";
-            } else {
-              camposAdicionales.style.display = "none";
-            }
-          });
-        </script>
+        <label for="truck">¿Qué camión va por esta ruta?</label>
+        <select id="truck" name="truck">
+          {% for truck in trucks %}
+            <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
+          {% endfor %}
+        </select>
+        <br><br>
 
         <button type="submit">Actualizar</button>
       </form>
@@ -86,26 +75,15 @@
           <option value="0">No</option>
           <option value="1">Sí</option>
         </select>
+        <br><br>
 
-        <div id="campos-adicionales" style="display: none;">
-          <label for="truck">¿Qué camión va por esta ruta?</label>
-          <select id="truck" name="truck">
-            {% for truck in trucks %}
-              <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <script>
-          document.getElementById("activo").addEventListener("change", function () {
-            let camposAdicionales = document.getElementById("campos-adicionales");
-            if (this.value === "1") {
-              camposAdicionales.style.display = "block";
-            } else {
-              camposAdicionales.style.display = "none";
-            }
-          });
-        </script>
+        <label for="truck">¿Qué camión va por esta ruta?</label>
+        <select id="truck" name="truck">
+          {% for truck in trucks %}
+            <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
+          {% endfor %}
+        </select>
+        <br><br>
 
         <button type="submit">Agregar</button>
       </form>

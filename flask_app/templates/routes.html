@@ -37,11 +37,7 @@
             {% endif %}
             <th class="dato">{{ route["average_speed"] }} km/h</th>
             <th class="dato">{{ route["time"] }} min(s)</th>
-            {% if route["truck_name"] %}
-              <th class="dato">{{ route["truck_name"] }}</th>
-            {% else %}
-              <th class="dato">N/A</th>
-            {% endif %}
+            <th class="dato">{{ route["truck_name"] }}</th>
             <th class="dato"><a class="boton editar" href="/admin/route-edit/{{ route['id'] }}">Editar</a><a class="boton eliminar" href="/admin/route-delete/{{ route['id'] }}">Eliminar</a></th>
             <th class="dato"><a class="boton xml" href="/admin/routes/xml/{{ route['id'] }}">XML</a><a class="boton json" href="/admin/routes/json/{{ route['id'] }}">JSON</a></th>
           </tr>
