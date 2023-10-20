@@ -4,110 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joyería Fina</title>
+    <link rel="stylesheet" href="../static/css/routes.css">
   </head>
   <body>
+    <!-- Nav -->
+    {% include "navbar.html" %}
+
     <h1>Rutas</h1>
-    {% if message %}
-      <h2>{{ message }}</h2>
-    {% endif %}
     {% if data %}
-    <table>
-      <tr class="ruta_head">
-        <th class="header">ID</th> <!-- route[0] -->
-        <th class="header">Nombre</th> <!-- route[1] -->
-        <th class="header">Distancia Total</th> <!-- route[2] -->
-        <th class="header">Estado</th> <!-- route[3] -->
-        <th class="header">Velocidad Promedio</th> <!-- route[4] -->
-        <th class="header">Tiempo</th> <!-- route[5] -->
-        <th class="header">Camión</th> <!-- route[6] -->
-        <!-- Nombre del camión == route[07] -->
-        <th class="header">Acciones</th>
-        <th class="header">Solicitar en</th>
-      </tr>
-      {% for route in routes %}
-        <tr class="ruta">
-          <th class="dato">{{ route["id"] }}</th>
-          <th class="dato">{{ route["name"] }}</th>
-          <th class="dato">{{ route["distance"] }}</th>
-          {% if route["active"] %}
-            <th class="dato">Activo</th>
-          {% else %}
-            <th class="dato">Terminado</th>
-          {% endif %}
-          <th class="dato">{{ route["average_speed"] }}</th>
-          <th class="dato">{{ route["time"] }}</th>
-          <th class="dato">{{ route["truck_name"] }}</th>
-          <th class="dato"><a class="boton editar" href="/admin/route-edit/{{ route['id'] }}">Editar</a><a class="boton eliminar" href="/admin/route-delete/{{ route['id'] }}">Eliminar</a></th>
-          <th class="dato"><a class="boton xml" href="/admin/routes/xml/{{ route['id'] }}">XML</a><a class="boton json" href="/admin/routes/json/{{ route['id'] }}">JSON</a></th>
+      <table>
+        <tr class="ruta_head">
+          <th class="header">ID</th> <!-- route[0] -->
+          <th class="header">Nombre</th> <!-- route[1] -->
+          <th class="header">Distancia Total</th> <!-- route[2] -->
+          <th class="header">Estado</th> <!-- route[3] -->
+          <th class="header">Velocidad Promedio</th> <!-- route[4] -->
+          <th class="header">Tiempo</th> <!-- route[5] -->
+          <th class="header">Camión</th> <!-- route[6] -->
+          <!-- Nombre del camión == route[07] -->
+          <th class="header">Acciones</th>
+          <th class="header">Solicitar en</th>
         </tr>
-      {% endfor %}
-    </table>
-    <a class="boton agregar" href="/admin/route-add-form">Agregar</a>
+        {% for route in routes %}
+          <tr class="ruta">
+            <th class="dato">{{ route["id"] }}</th>
+            <th class="dato">{{ route["name"] }}</th>
+            <th class="dato">{{ route["distance"] }}</th>
+            {% if route["active"] %}
+              <th class="dato">Activo</th>
+            {% else %}
+              <th class="dato">Terminado</th>
+            {% endif %}
+            <th class="dato">{{ route["average_speed"] }}</th>
+            <th class="dato">{{ route["time"] }}</th>
+            <th class="dato">{{ route["truck_name"] }}</th>
+            <th class="dato"><a class="boton editar" href="/admin/route-edit/{{ route['id'] }}">Editar</a><a class="boton eliminar" href="/admin/route-delete/{{ route['id'] }}">Eliminar</a></th>
+            <th class="dato"><a class="boton xml" href="/admin/routes/xml/{{ route['id'] }}">XML</a><a class="boton json" href="/admin/routes/json/{{ route['id'] }}">JSON</a></th>
+          </tr>
+        {% endfor %}
+      </table>
+      <a class="boton agregar" href="/admin/route-add-form">Agregar</a>
     {% else %}
       <h2>Ocurrió un error. Si al recargar la página sigue este mensaje, no hay rutas existentes</h2>
     {% endif %}
-    {% if msg %}
-      <h2>{{ msg }}</h2>
+
+    <!-- Notifications -->
+    {% if message %}
+      <div class="notifications">
+        <h2>{{ message }}</h2>
+      </div>
     {% endif %}
-    <style>
-      /*Estilo general de botones*/
-      .boton {
-        display: inline-block;
-        padding: 10px 20px;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 4px;
-      }
-
-      /*Boton editar*/
-      .boton.editar {
-        background-color: #b8b843;
-        border: 3px solid #b8b843;
-      }
-
-      .boton.editar:hover {
-        background-color: #707029;
-      }
-
-      /*Boton eliminar*/
-      .boton.eliminar {
-        background-color: #c63c3c;
-        border: 3px solid #c63c3c;
-      }
-
-      .boton.eliminar:hover {
-        background-color: #591c1c;
-      }
-
-      /*Boton Agregar*/
-      .boton.agregar {
-        background-color: #3cc651;
-        border: 3px solid #3cc651;
-      }
-
-      .boton.agregar:hover {
-        background-color: #1a5623;
-      }
-
-      /*Boton XML*/
-      .boton.xml {
-        background-color: #5e31a8;
-        border: 3px solid #5e31a8;
-      }
-
-      .boton.xml:hover {
-        background-color: #391d66;
-      }
-
-      /*Coton JSON*/
-      .boton.json {
-        background-color: #007bff;
-        border: 3px solid #007bff;
-      }
-
-      .boton.json:hover {
-        background-color: #004085;
-      }
-    </style>
   </body>
 </html>

@@ -1,5 +1,5 @@
 # Flask
-from flask import request, render_template, redirect, url_for, Response
+from flask import request, render_template, redirect, url_for, session, Response
 from flask_app import app, mysql
 
 # Misc
@@ -8,6 +8,9 @@ import requests
 # Manage routes
 @app.route("/admin/routes")
 def routes():
+    if "id" not in session:
+        return redirect(url_for("sign_in", msg="Inicio de sesión requerido"))
+
     routes = requests.post("http://localhost:5003/retrieve-routes")
     routes_data = routes.json()
 
