@@ -30,7 +30,7 @@ def login():
     if auth_response.status_code == 200:
         session["id"] = response_data["id"]
         session["name"] = response_data["name"] + " " + response_data["last"]
-        return redirect("/admin/vehicles")
+        return redirect("/admin/map")
     else:
         return redirect(url_for("sign_in", msg="Credenciales incorrectas"))
 

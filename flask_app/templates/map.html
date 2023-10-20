@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa</title>
+
+    <!-- Maps and WebSocket -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ maps_api_key }}&callback=initMap"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+  </head>
+  <body>
+    <!-- Nav -->
+    {% include "navbar.html" %}
+
+    <main>
+      <h2>Ubicación de Camiones</h2>
+
+      <!-- Map Container -->
+      <div id="map" style="width:90%; height: 600px;"></div>
+      <div id="locations-container" data-locations='{{ locations|tojson }}'></div>
+    </main>
+
+    <script src="../static/js/map.js"></script>
+  </body>
+</html>
