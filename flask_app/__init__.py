@@ -19,4 +19,4 @@ app.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 mysql = MySQL(app)
 
 # Import all other modules
-from flask_app import invoice, purchase, routes
+from flask_app import invoice, purchase, routes, users
