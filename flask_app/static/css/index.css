@@ -24,6 +24,17 @@ body {
     text-align: center;
 }
 
+header {
+    text-align: end;
+    margin-bottom: 2rem;
+}
+
+header a {
+    text-decoration: none;
+    font-weight: bold;
+    color: initial;
+}
+
 h1 {
     font-size: 36px;
     margin-bottom: 20px;
