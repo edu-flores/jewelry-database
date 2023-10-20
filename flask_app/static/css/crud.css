@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #fff6fc;
+    background-color: #cee9ff;
     text-align: center;
     margin: 0;
 }
@@ -19,7 +19,7 @@ table {
 }
 
 .ruta_head {
-    background-color: #71b0a2;
+    background-color: #1c7690;
     color: white;
 }
 
@@ -43,7 +43,6 @@ th, td {
     padding: 8px 15px;
     text-align: center;
     text-decoration: none;
-    background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
@@ -51,23 +50,23 @@ th, td {
 }
 
 .boton.editar {
-    background-color: #b4bb4c;
+    background-color: #6c757d;
 }
 
 .boton.eliminar {
-    background-color: #c2433d;
+    background-color: #dc3545;
 }
 
 .boton.xml {
-    background-color: #6820a6;
+    background-color: #e45735;
 }   
 
 .boton.json {
-    background-color: #456efc;
+    background-color: #fbc02d;
 }
 
 .boton.agregar {
-    background-color: #7687b3;
+    background-color: #022539;
 }
 
 .boton:hover {
@@ -75,5 +74,5 @@ th, td {
 }
 
 .notifications {
-    color: #e28743;
+    color: #fb991c;
 }

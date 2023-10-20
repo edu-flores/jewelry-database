@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #fff6fc;
+    background-color: #cee9ff;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -60,11 +60,11 @@ button a:hover {
 }
   
 .secondary {
-    background-color: #6eb0a2;
+    background-color: #1c7690;
 }
   
 .primary {
-    background-color: #718ab4;
+    background-color: #022539;
 }
 
 #return {

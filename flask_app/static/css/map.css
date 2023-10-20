@@ -1,5 +1,5 @@
 body {
-    background-color: #fff6fc;
+    background-color: #cee9ff;
     margin: 0;
 }
 
@@ -47,7 +47,7 @@ tr:nth-child(odd) {
 }
 
 th {
-    background-color: #71b0a2;
+    background-color: #1c7690;
     color: white;
 }
 
