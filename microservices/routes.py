@@ -130,12 +130,7 @@ def delete_route():
 def retrieve_xml():
     data = request.get_json()
     id = data["id"]
-    cursor = mysql.connection.cursor()
-    cursor.execute("""SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, r.truck_id, t.name 
-                   FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id 
-                   WHERE r.truck_id = %s""", (id,))
-    route = cursor.fetchone()
-    cursor.close()
+    route = get_route_data(id)
 
     root = ET.Element("Route")
 
@@ -170,23 +165,32 @@ def retrieve_xml():
 def retrieve_json():
     data = request.get_json()
     id = data["id"]
-    cursor = mysql.connection.cursor()
-    cursor.execute("""SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, r.truck_id, t.name 
-                   FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id 
-                   WHERE r.truck_id = %s""", (id,))
-    route = cursor.fetchone()
-    cursor.close()
+    route = get_route_data(id)
+
     j = {}
-    j["ID"] = route[0]
-    j["Name"] = route[1]
-    j["Distance"] = route[2]
-    j["Active"] = route[3]
-    j["AverageSpeed"] = route[4]
-    j["Time"] = route[5]
+    j["id"] = route[0]
+    j["name"] = route[1]
+    j["distance"] = route[2]
+    j["active"] = route[3]
+    j["averageSpeed"] = route[4]
+    j["time"] = route[5]
     if route[6] is not None:
-        j["Truck"] = route[7]
+        j["truck"] = route[7]
 
     return j
+
+# Route data query
+def get_route_data(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        SELECT routes.*, trucks.name
+        FROM routes LEFT JOIN trucks ON routes.truck_id = trucks.truck_id 
+        WHERE route_id = %s
+    """, (id,))
+    route = cursor.fetchone()
+    cursor.close()
+
+    return route
 
 if __name__ == "__main__":
     routes.run(debug=True, host="0.0.0.0", port=5003)

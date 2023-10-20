@@ -16,9 +16,9 @@
         <tr class="ruta_head">
           <th class="header">ID</th> <!-- route[0] -->
           <th class="header">Nombre</th> <!-- route[1] -->
-          <th class="header">Distancia Total</th> <!-- route[2] -->
+          <th class="header">Distancia total</th> <!-- route[2] -->
           <th class="header">Estado</th> <!-- route[3] -->
-          <th class="header">Velocidad Promedio</th> <!-- route[4] -->
+          <th class="header">Velocidad promedio</th> <!-- route[4] -->
           <th class="header">Tiempo</th> <!-- route[5] -->
           <th class="header">Camión</th> <!-- route[6] -->
           <!-- Nombre del camión == route[07] -->
@@ -29,15 +29,19 @@
           <tr class="ruta">
             <th class="dato">{{ route["id"] }}</th>
             <th class="dato">{{ route["name"] }}</th>
-            <th class="dato">{{ route["distance"] }}</th>
+            <th class="dato">{{ route["distance"] }} km</th>
             {% if route["active"] %}
               <th class="dato">Activo</th>
             {% else %}
               <th class="dato">Terminado</th>
             {% endif %}
-            <th class="dato">{{ route["average_speed"] }}</th>
-            <th class="dato">{{ route["time"] }}</th>
-            <th class="dato">{{ route["truck_name"] }}</th>
+            <th class="dato">{{ route["average_speed"] }} km/h</th>
+            <th class="dato">{{ route["time"] }} min(s)</th>
+            {% if route["truck_name"] %}
+              <th class="dato">{{ route["truck_name"] }}</th>
+            {% else %}
+              <th class="dato">N/A</th>
+            {% endif %}
             <th class="dato"><a class="boton editar" href="/admin/route-edit/{{ route['id'] }}">Editar</a><a class="boton eliminar" href="/admin/route-delete/{{ route['id'] }}">Eliminar</a></th>
             <th class="dato"><a class="boton xml" href="/admin/routes/xml/{{ route['id'] }}">XML</a><a class="boton json" href="/admin/routes/json/{{ route['id'] }}">JSON</a></th>
           </tr>
