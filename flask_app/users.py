@@ -24,11 +24,12 @@ def login():
 
     # Attempt auth with microservice
     auth_response = requests.post("http://localhost:5001/check-auth", json={"username": username, "password": password})
+    response_data = auth_response.json()
 
     # Response
     if auth_response.status_code == 200:
-        session["id"] = account[0]
-        session["name"] = account[1] + " " + account[2]
+        session["id"] = response_data["id"]
+        session["name"] = response_data["name"] + " " + response_data["last"]
         return redirect("/admin/vehicles")
     else:
         return redirect(url_for("sign_in", msg="Credenciales incorrectas"))
@@ -57,5 +58,5 @@ def register():
     if auth_response.status_code == 200:
         return redirect(url_for("sign_in", msg=response_data["message"]))
     else:
-        return redirect(url_for("sign_ip", msg=response_data["message"]))
+        return redirect(url_for("sign_up", msg=response_data["message"]))
 

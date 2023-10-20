@@ -1,6 +1,6 @@
 ################### Correr microservicio en puerto 5001
 # Flask
-from flask import Flask, redirect, request, url_for, session, jsonify
+from flask import Flask, request, url_for, jsonify
 from flask_mysqldb import MySQL
 
 # Misc
@@ -22,28 +22,28 @@ mysql = MySQL(auth)
 # Check if the username and password combination is in the database
 @auth.route("/check-auth", methods=["POST"])
 def check_auth():
-    username = request.form["username"]
-    password = request.form["password"]
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
 
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM user WHERE username = %s AND password = %s", (username, password))
+    cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
     account = cursor.fetchone()
     cursor.close()
 
     if account:
-        session["id"] = account[0]
-        session["name"] = account[1] + " " + account[2]
-        return jsonify({"message": "Autenticación exitosa", "error": False}), 200
+        return jsonify({"message": "Autenticación exitosa", "id": account[0], "name": account[1], "last": account[2], "error": False}), 200
     else:
         return jsonify({"message": "Fallo de autenticación", "error": False}), 401
 
 # Register a new user into the database
 @auth.route("/new-user", methods=["POST"])
 def register():
-    name = request.form["name"]
-    lastname = request.form["lastname"]
-    username = request.form["username"]
-    password = request.form["password"]
+    data = request.get_json()
+    name = data["name"]
+    lastname = data["lastname"]
+    username = data["username"]
+    password = data["password"]
 
     data = [name, lastname, username, password]
     error_message = create_identity(data)
@@ -65,7 +65,7 @@ def create_identity(data):
     cursor.execute("""
         INSERT INTO users 
         (firstname, lastname, username, password) VALUES 
-        (%s, %s, %s, %s, 0, current_timestamp(), current_timestamp())
+        (%s, %s, %s, %s)
     """, (data[0], data[1], data[2], data[3]))
     mysql.connection.commit()
     cursor.close()
