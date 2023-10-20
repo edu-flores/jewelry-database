@@ -8,9 +8,9 @@ Users
 
 GPS & Ambiental Data
     port 5002
-    flask_app/microservices/
+    flask_app/microservices/gps.py
 
 CRUD for Routes & XML and JSON
     port 5003
-    flask_app/microservices/routeCRUD.py
+    flask_app/microservices/routes.py
 
