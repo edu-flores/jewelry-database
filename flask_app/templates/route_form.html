@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyería Fina</title>
+</head>
+<body>
+    {% if error %}
+        <h2>Lo sentimos ocurrio un error y no se pudo recuperar la información de la ruta</h2>
+    {% endif %}
+    {% if data %}
+    <h1>Actualizando ruta</h1>
+    <form action="/route_udpate/{{ route["route_id"] }}" method="POST">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required value="{{ route["name"] }}">
+        <br><br>
+        
+        <label for="distance">Distancia en metros:</label>
+        <input type="text" id="distance" name="distance" required value="{{ route["distance"] }}">
+        <br><br>
+
+        <label for="time">Tiempo en minutos:</label>
+        <input type="text" id="time" name="time" required value="{{ route["time"] }}">
+        <br><br>
+
+        <label for="average_speed">Velocidad Promedio en km/h:</label>
+        <input type="text" id="average_speed" name="average_speed" required value="{{ route["average_speed"] }}">
+        <br><br>
+
+        <label for="activo">¿Actualmente está activo?</label>
+        <select id="activo" name="activo">
+            {% if route["active"] %}
+                <option value="0">No</option>
+                <option value="1" selected>Sí</option>
+            {% else %}
+                <option value="0" selected>No</option>
+                <option value="1">Sí</option>
+            {% endif %}
+        </select>
+
+        <div id="campos-adicionales" style="display: none;">
+            <label for="truck">¿Qué camión va por esta ruta?</label>
+            <select id="truck" name="truck">
+                {% for truck in trucks %}
+                    <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <script>
+            document.getElementById('activo').addEventListener('change', function () {
+                var camposAdicionales = document.getElementById('campos-adicionales');
+                if (this.value === '1') {
+                    camposAdicionales.style.display = 'block';
+                } else {
+                    camposAdicionales.style.display = 'none';
+                }
+            });
+        </script>
+
+        <button type="submit">Actualizar</button>
+    </form>
+    {% else %}
+    <h1>Agregando ruta</h1>
+    <form action="/route_add" method="POST">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+        
+        <label for="distance">Distancia en metros:</label>
+        <input type="text" id="distance" name="distance" required>
+        <br><br>
+
+        <label for="time">Tiempo en minutos:</label>
+        <input type="text" id="time" name="time" required>
+        <br><br>
+
+        <label for="average_speed">Velocidad Promedio en km/h:</label>
+        <input type="text" id="average_speed" name="average_speed" required>
+        <br><br>
+
+        <label for="activo">¿Actualmente está activo?</label>
+        <select id="activo" name="activo">
+            <option value="0">No</option>
+            <option value="1">Sí</option>
+        </select>
+
+        <div id="campos-adicionales" style="display: none;">
+            <label for="truck">¿Qué camión va por esta ruta?</label>
+            <select id="truck" name="truck">
+                {% for truck in trucks %}
+                    <option value="{{ truck["id"] }}">{{ truck["name"] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <script>
+            document.getElementById('activo').addEventListener('change', function () {
+                var camposAdicionales = document.getElementById('campos-adicionales');
+                if (this.value === '1') {
+                    camposAdicionales.style.display = 'block';
+                } else {
+                    camposAdicionales.style.display = 'none';
+                }
+            });
+        </script>
+
+        <button type="submit">Agregar</button>
+    </form>
+    {% endif %}
+</body>
+</html>
