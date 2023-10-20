@@ -108,7 +108,7 @@ def retrieve_xml():
     id = data["id"]
     truck = get_truck_data(id)
 
-    root = ET.Element("truck")
+    root = ET.Element("Truck")
 
     truck_id_elem = ET.SubElement(root, "ID")
     truck_id_elem.text = str(truck[0])
@@ -118,16 +118,16 @@ def retrieve_xml():
     truck_name_elem = ET.SubElement(data_elem, "Name")
     truck_name_elem.text = str(truck[1])
 
-    total_distance_elem = ET.SubElement(data_elem, "Total_Distance")
+    total_distance_elem = ET.SubElement(data_elem, "TotalDistance")
     total_distance_elem.text = str(truck[2])
 
-    total_co2_elem = ET.SubElement(data_elem, "Total_CO2_Emitted")
+    total_co2_elem = ET.SubElement(data_elem, "TotalCO2Emitted")
     total_co2_elem.text = str(truck[3])
 
-    average_distance_elem = ET.SubElement(data_elem, "Average_Distance")
+    average_distance_elem = ET.SubElement(data_elem, "AverageDistance")
     average_distance_elem.text = str(truck[4])
 
-    average_co2_elem = ET.SubElement(data_elem, "Average_CO2_Emitted")
+    average_co2_elem = ET.SubElement(data_elem, "AverageCO2Emitted")
     average_co2_elem.text = str(truck[5])
     
     location_elem = ET.SubElement(root, "Location")
@@ -153,10 +153,10 @@ def retrieve_json():
         "id": truck[0],
         "data": {
             "name": truck[1],
-            "total_distance": truck[2],
-            "total_co2": truck[3],
-            "average_distance": truck[4],
-            "average_co2": truck[5],
+            "totalDistance": truck[2],
+            "totalCO2": truck[3],
+            "averageDistance": truck[4],
+            "averageCO2": truck[5],
         },
         "location": {
             "latitude": truck[6],
