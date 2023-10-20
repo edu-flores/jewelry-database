@@ -1,8 +1,12 @@
 -- Database
-CREATE DATABASE IF NOT EXISTS jewelry;
+DROP DATABASE IF EXISTS jewelry;
+CREATE DATABASE jewelry;
 USE jewelry;
 
 -- Drop tables if they exist
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS trucks;
+DROP TABLE IF EXISTS routes;
 DROP TABLE IF EXISTS purchase_detail;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS purchase;
@@ -25,7 +29,6 @@ CREATE TABLE users (
     PRIMARY KEY (user_id)
 );
 
-
 INSERT INTO users VALUES
 (1, "Raúl", "Morales", "raul.moraless@udem.edu", "666"),
 (2, "Edu", "Flores", "edu@a.a", "123"),
@@ -42,9 +45,9 @@ CREATE TABLE trucks (
 );
 
 INSERT INTO trucks VALUES
-(1,"SVY-312",21000,10000,25.6691452,-100.3854379),
-(2,"RVW-115",1500,1500,NULL,NULL),
-(3,"SVY-312",4500,4500,25.6914035,-100.2513623);
+(1, "SVY-312", 21000, 10000, 25.6691452, -100.3854379),
+(2, "RVW-115", 1500, 1500, NULL, NULL),
+(3, "KFX-842", 4500, 4500, 25.6914035, -100.2513623);
 
 CREATE TABLE routes (
     route_id INT AUTO_INCREMENT,
@@ -59,10 +62,10 @@ CREATE TABLE routes (
 );
 
 INSERT INTO routes VALUES
-(1,"FiftyCent",5500,0,90,180,1),
-(2,"FourtyCent",1500,0,60,40,2),
-(3,"ThirtyCent",15500,1,120,320,1),
-(4,"TwentyCent",4500,1,90,20,3);
+(1, "FiftyCent", 5500, 0, 90, 180, 1),
+(2, "FourtyCent", 1500, 0, 60, 40, 2),
+(3, "ThirtyCent", 15500, 1, 120, 320, 1),
+(4, "TwentyCent", 4500, 1, 90, 20, 3);
 
 CREATE TABLE address (
     address_id INT NOT NULL AUTO_INCREMENT,
@@ -98,15 +101,17 @@ CREATE TABLE purchase (
     status VARCHAR(255) NOT NULL,
     receiver VARCHAR(255) NOT NULL,
     comments VARCHAR(255),
+    truck_id INT NOT NULL,
     total INT NOT NULL,
     PRIMARY KEY (purchase_id),
     FOREIGN KEY (client_id) REFERENCES client (client_id),
     FOREIGN KEY (shipping_address_id) REFERENCES address (address_id),
-    FOREIGN KEY (billing_address_id) REFERENCES address (address_id)
+    FOREIGN KEY (billing_address_id) REFERENCES address (address_id),
+    FOREIGN KEY (truck_id) REFERENCES trucks (truck_id)
 );
 
 INSERT INTO purchase VALUES
-(1, "2023-08-09 18:00:00", 1, 1, 2, "Procesando", "Frida Montiel", "Me urge la entrega para mañana, es el cumpleaños de mi esposa.", 12500);
+(1, "2023-08-09 18:00:00", 1, 1, 2, "En camino", "Frida Montiel", "Me urge la entrega para mañana, es el cumpleaños de mi esposa.", 1, 12500);
 
 CREATE TABLE product (
     product_code VARCHAR(255) NOT NULL,
@@ -203,6 +208,7 @@ BEGIN
     DECLARE i INT DEFAULT 0;
     DECLARE product_code VARCHAR(255);
     DECLARE quantity INT;
+    DECLARE truck INT;
 
     -- Create a client
     INSERT INTO client (first_name, last_name, email, password) 
@@ -219,9 +225,12 @@ BEGIN
     VALUES (billing_street, billing_city, billing_country, billing_postal_code);
     SET billing_address_id = LAST_INSERT_ID();
 
+    -- Select a truck
+    SELECT truck_id INTO truck FROM trucks WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY RAND() LIMIT 1;
+
     -- Generate purchase general details
-    INSERT INTO purchase (purchase_date, client_id, shipping_address_id, billing_address_id, status, receiver, comments, total)
-    VALUES (NOW(), client_id, shipping_address_id, billing_address_id, "Procesando", receiver, comments, 0);
+    INSERT INTO purchase (purchase_date, client_id, shipping_address_id, billing_address_id, status, receiver, comments, truck_id, total)
+    VALUES (NOW(), client_id, shipping_address_id, billing_address_id, "En camino", receiver, comments, truck, 0);
     SET purchase_id = LAST_INSERT_ID();
 
     -- Loop through product data JSON array

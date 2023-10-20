@@ -66,3 +66,17 @@ button a:hover {
 .primary {
     background-color: #718ab4;
 }
+
+#return {
+    margin-top: 2rem;
+}
+
+#return button {
+    background-color: #fff;
+    padding: 15px 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#return a {
+    color: #333 !important;
+}
