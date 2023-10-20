@@ -3,6 +3,9 @@
 from flask import Flask, request, url_for, jsonify
 from flask_mysqldb import MySQL
 
+# XML generator
+import xml.etree.ElementTree as ET
+
 # Misc
 from dotenv import load_dotenv
 import os
@@ -24,7 +27,7 @@ def retrieve_routes():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, t.name FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id")
     routes = cursor.fetchall()
-    print(routes)
+
     cursor.close()
     if routes:
         routesJSON = [{"id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_name": route[6], "error": False} for route in routes]
@@ -116,3 +119,63 @@ def delete_route():
     cursor.close()
 
     return "Eliminado Exsitosamente"
+
+@routes.route("/retrieve_xml", methods=["POST"])
+def retrieve_xml():
+    data = request.get_json()
+    id = data["id"]
+    cursor = mysql.connection.cursor()
+    cursor.execute("""SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, r.truck_id, t.name 
+                   FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id 
+                   WHERE r.truck_id = %s""",(id,))
+    route = cursor.fetchone()
+    cursor.close()
+
+    root = ET.Element("Route")
+
+    route_id_elem = ET.SubElement(root, "ID")
+    route_id_elem.text = str(route[0])
+    
+    route_name_elem = ET.SubElement(root, "Name")
+    route_name_elem.text = str(route[1])
+
+    distance_elem = ET.SubElement(root, "Distance")
+    distance_elem.text = str(route[2])
+
+    route_name_elem = ET.SubElement(root, "Active")
+    route_name_elem.text = str(route[3])
+
+    average_speed_elem = ET.SubElement(root, "AverageSpeed")
+    average_speed_elem.text = str(route[4])
+
+    time_elem = ET.SubElement(root, "Time")
+    time_elem.text = str(route[5])
+
+    if route[6] is not None:
+        truck_elem = ET.SubElement(root, "Truck")
+        truck_elem.text = str(route[7])
+    
+    xml = ET.tostring(root)
+
+    return xml
+
+@routes.route("/retrieve_json", methods=["POST"])
+def retrieve_json():
+    data = request.get_json()
+    id = data["id"]
+    cursor = mysql.connection.cursor()
+    cursor.execute("""SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, r.truck_id, t.name 
+                   FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id 
+                   WHERE r.truck_id = %s""",(id,))
+    route = cursor.fetchone()
+    cursor.close()
+    j = {}
+    j["ID"] = route[0]
+    j["Name"] = route[1]
+    j["Distance"] = route[2]
+    j["Active"] = route[3]
+    j["AverageSpeed"] = route[4]
+    j["Time"] = route[5]
+    if route[6] is not None:
+        j["Truck"] = route[7]
+    return j
