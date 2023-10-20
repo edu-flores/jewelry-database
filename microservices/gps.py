@@ -48,8 +48,9 @@ def handle_update():
 @gps.route("/get-locations", methods=["GET"])
 def get_locations():
     if request.method == "GET":
-        data = get_truck_locations()
-        return jsonify({"message": "Ubicaciones recuperadas con éxito", "data": data, "error": False}), 200
+        locations = get_truck_locations()
+        purchases = get_truck_purchases()
+        return jsonify({"message": "Ubicaciones recuperadas con éxito", "locations": locations, "purchases": purchases, "error": False}), 200
 
     return jsonify({"message": "Error de método", "error": True}), 404
 
@@ -60,6 +61,20 @@ def get_truck_locations():
         SELECT truck_id, name, latitude, longitude
         FROM trucks
         WHERE latitude IS NOT NULL AND longitude IS NOT NULL
+    """)
+    data = cursor.fetchall()
+    cursor.close()
+
+    return data
+
+# Retrieve each truck and purchase association
+def get_truck_purchases():
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        SELECT t.name, p.purchase_id 
+        FROM trucks t 
+        JOIN purchase p 
+        ON t.truck_id = p.truck_id;
     """)
     data = cursor.fetchall()
     cursor.close()

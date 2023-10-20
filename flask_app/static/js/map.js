@@ -45,7 +45,7 @@ function initMap() {
   });
 
   // Add markers to the map
-  const locations = JSON.parse(document.getElementById("locations-container").dataset.locations);
+  const locations = JSON.parse(document.getElementById("dataset").dataset.locations);
   locations.forEach(location => {
     const marker = new google.maps.Marker({
       position: { lat: parseFloat(location[2]), lng: parseFloat(location[3]) },
