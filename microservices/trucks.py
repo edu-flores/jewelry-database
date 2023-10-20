@@ -31,8 +31,20 @@ def retrieve_trucks():
     cursor.execute("SELECT t.truck_id, t.name, t.total_distance, ((t.total_distance / 25) * 2.68) AS total_CO2, t.average_trip_distance, ((t.average_trip_distance / 25) * 2.68) AS average_CO2, t.latitude, t.longitude FROM trucks AS t")
     trucks = cursor.fetchall()
     cursor.close()
-    if truck:
-        trucksJSON = [{"id": truck[0], "name": truck[1], "total_distance": truck[2], "total_CO2": truck[3], "average_trip_distance": truck[4], "average_CO2": truck[5], "latitude": truck[6], "longitude": truck[7], "error": False} for truck in trucks]
+
+    # Environment
+    highest_co2_truck = get_highest_emission_truck()
+    environmental_data = get_environmental_data()
+
+    if trucks:
+        trucksJSON = {
+            "trucks": [{"id": truck[0], "name": truck[1], "total_distance": truck[2], "total_CO2": truck[3], "average_trip_distance": truck[4], "average_CO2": truck[5], "latitude": truck[6], "longitude": truck[7], "error": False} for truck in trucks],
+            "environment": {
+                "highest": highest_co2_truck[0],
+                "total": environmental_data[0],
+                "average": environmental_data[1]
+            }
+        }
         return jsonify(trucksJSON), 200
     else:
         return jsonify({"error": False}), 401
@@ -100,6 +112,34 @@ def delete_truck():
     return jsonify({"message": "Camión eliminado exitosamente", "error": False}), 200
 
 """CRUD"""
+
+# Total CO2 and average CO2 by all trucks
+def get_environmental_data():
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        SELECT 
+        SUM(((total_distance / 25) * 2.68)) AS total_CO2, 
+        AVG(((average_trip_distance / 25) * 2.68)) AS average_CO2 
+        FROM trucks
+    """)
+    data = cursor.fetchone()
+    cursor.close()
+
+    return data
+
+# Retrieve the truck with the most CO2 emitted
+def get_highest_emission_truck():
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        SELECT name 
+        FROM trucks 
+        ORDER BY (total_distance / 25) * 2.68 DESC 
+        LIMIT 1
+    """)
+    data = cursor.fetchone()
+    cursor.close()
+
+    return data
 
 # XML Format
 @truck.route("/retrieve-xml", methods=["POST"])

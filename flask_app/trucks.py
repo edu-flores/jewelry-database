@@ -15,7 +15,7 @@ def trucks():
     trucks_data = trucks.json()
 
     if trucks.status_code == 200:
-        return render_template("trucks.html", data=1, message=request.args.get("msg", ""), trucks=trucks_data)
+        return render_template("trucks.html", data=1, message=request.args.get("msg", ""), trucks=trucks_data["trucks"], environment=trucks_data["environment"])
     else:
         return render_template("trucks.html", data=0, message=request.args.get("msg", ""))
 

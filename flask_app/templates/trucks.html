@@ -57,5 +57,26 @@
         <h2>{{ message }}</h2>
       </div>
     {% endif %}
+
+    <!-- Environmental Data -->
+    <h3>🌳 Estadísticas Ambientales de la Empresa 🌳</h3>
+    {% if environment %}
+      <table>
+        <tr>
+          <th>Camión con más gases emitidos</th>
+          <td>{{ environment["highest"] or "" }}</td>
+        </tr>
+        <tr>
+          <th>CO<sub>2</sub> total</th>
+          <td>{{ environment["total"] or 0 }} g</td>
+        </tr>
+        <tr>
+          <th>CO<sub>2</sub> promedio</th>
+          <td>{{ environment["average"] or 0 }} g</td>
+        </tr>
+      </table>
+    {% else %}
+      <p style="text-align: center;">No hay datos al momento</p>
+    {% endif %}
   </body>
 </html>
