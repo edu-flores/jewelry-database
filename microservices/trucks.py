@@ -62,6 +62,7 @@ def edit_truck():
     average_trip_distance = data["average_trip_distance"]
     latitude = data["latitude"]
     longitude = data["longitude"]
+    print(latitude, longitude)
 
     cursor = mysql.connection.cursor()
     cursor.execute("""UPDATE trucks SET 
