@@ -6,3 +6,10 @@ Users
     port 5001
     flask_app/microservices/auth.py
 
+GPS & Ambiental Data
+    port 5002
+    flask_app/microservices/
+
+CRUD for Routes & XML and JSON
+    port 5002
+    flask_app/microservices/
