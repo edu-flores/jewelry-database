@@ -22,7 +22,7 @@
         <th class="header">Camión</th> <!-- route[6] -->
         <!-- Nombre del camión == route[07] -->
         <th class="header">Acciones</th>
-        <th class="header">Solicitar en:</th>
+        <th class="header">Solicitar en</th>
       </tr>
       {% for route in routes %}
         <tr class="ruta">
@@ -44,7 +44,7 @@
     </table>
     <a class="boton agregar" href="/admin/route-add-form">Agregar</a>
     {% else %}
-      <h2>Ocurrio un error, si al recargar la página sigue este mensaje, no hay rutas existentes</h2>
+      <h2>Ocurrió un error. Si al recargar la página sigue este mensaje, no hay rutas existentes</h2>
     {% endif %}
     {% if msg %}
       <h2>{{ msg }}</h2>

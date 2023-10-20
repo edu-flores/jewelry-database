@@ -23,6 +23,8 @@ routes.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 
 mysql = MySQL(routes)
 
+"""CRUD"""
+
 @routes.route("/retrieve-routes", methods=["POST"])
 def retrieve_routes():
     cursor = mysql.connection.cursor()
@@ -35,7 +37,7 @@ def retrieve_routes():
         return jsonify(routesJSON), 200
     else:
         return jsonify({"error": False}), 401
-    
+
 @routes.route("/add-route", methods=["POST"])
 def add_route():
     data = request.get_json()
@@ -48,13 +50,13 @@ def add_route():
 
     cursor = mysql.connection.cursor()
     if truck_id == -1:
-        cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time) VALUES (%s,%s,%s,%s,%s)",(name,distance,activo,average_speed,time))
+        cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time) VALUES (%s,%s,%s,%s,%s)", (name, distance, activo, average_speed, time))
     else:
-        cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)",(name,distance,activo,average_speed,time,truck_id))
+        cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, activo, average_speed, time, truck_id))
     mysql.connection.commit()
     cursor.close()
 
-    return "Se agregó correctamente la ruta"
+    return jsonify({"message": "Se agregó correctamente la ruta", "error": False}), 200
 
 @routes.route("/edit-route", methods=["POST"])
 def edit_route():
@@ -79,7 +81,7 @@ def edit_route():
     mysql.connection.commit()
     cursor.close()
 
-    return "Se actualizó correctamente la ruta"
+    return jsonify({"message": "Se actualizó correctamente la ruta", "error": False}), 200
 
 @routes.route("/retrieve-route", methods=["POST"])
 def retrieve_route():
@@ -87,7 +89,7 @@ def retrieve_route():
     id = data["id"]
     
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM routes WHERE route_id = %s",(id,))
+    cursor.execute("SELECT * FROM routes WHERE route_id = %s", (id,))
     route = cursor.fetchone()
     cursor.close()
 
@@ -108,19 +110,22 @@ def retrieve_trucks():
         return jsonify(trucksJSON), 200
     else:
         return jsonify({"error", False}), 401
-    
+
 @routes.route("/delete-route", methods=["POST"])
 def delete_route():
     data = request.get_json()
     id = data["id"]
 
     cursor = mysql.connection.cursor()
-    cursor.execute("DELETE FROM routes WHERE route_id = %s",(id,))
+    cursor.execute("DELETE FROM routes WHERE route_id = %s", (id,))
     mysql.connection.commit()
     cursor.close()
 
-    return "Eliminado Exsitosamente"
+    return jsonify({"message": "Ruta eliminada exitosamente", "error": False}), 200
 
+"""CRUD"""
+
+# XML Format
 @routes.route("/retrieve-xml", methods=["POST"])
 def retrieve_xml():
     data = request.get_json()
@@ -160,6 +165,7 @@ def retrieve_xml():
 
     return xml
 
+# JSON Format
 @routes.route("/retrieve-json", methods=["POST"])
 def retrieve_json():
     data = request.get_json()
@@ -179,6 +185,7 @@ def retrieve_json():
     j["Time"] = route[5]
     if route[6] is not None:
         j["Truck"] = route[7]
+
     return j
 
 if __name__ == "__main__":

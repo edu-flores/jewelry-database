@@ -12,7 +12,7 @@ def routes():
     routes_data = routes.json()
 
     if routes.status_code == 200:
-        return render_template("routes.html", data=1, routes=routes_data)
+        return render_template("routes.html", data=1, message=request.args.get("msg", ""), routes=routes_data)
     else:
         return render_template("routes.html", data=0, message=request.args.get("msg", ""))
 
@@ -23,7 +23,8 @@ def routes():
 def route_add_form():
     trucks = requests.post("http://localhost:5003/retrieve-trucks")
     trucks_data = trucks.json()
-    return render_template("route-form.html",data=0,trucks=trucks_data)
+
+    return render_template("route-form.html", data=0, trucks=trucks_data)
 
 # Add route into the DB
 @app.route("/route-add", methods=["POST"])
@@ -37,9 +38,10 @@ def route_add():
     if activo:
         truck_id = request.form.get("truck")
 
-    msg = requests.post("http://localhost:5003/add-route", json={"name": name, "distance": distance, "time": time, "average_speed": average_speed, "activo": activo, "truck_id": truck_id})
+    route_response = requests.post("http://localhost:5003/add-route", json={"name": name, "distance": distance, "time": time, "average_speed": average_speed, "activo": activo, "truck_id": truck_id})
+    response_data = route_response.json()
 
-    return redirect(url_for("routes"))
+    return redirect(url_for("routes", msg=response_data["message"]))
 
 # Update route in the DB
 @app.route("/route-udpate/<int:id>", methods=["POST"])
@@ -53,15 +55,17 @@ def route_update(id):
     if activo:
         truck_id = request.form.get("truck")
 
-    msg = requests.post("http://localhost:5003/edit-route", json={"id": id, "name": name, "distance": distance, "time": time, "average_speed": average_speed, "activo": activo, "truck_id": truck_id})
-    
-    return redirect(url_for("routes"))
+    route_response = requests.post("http://localhost:5003/edit-route", json={"id": id, "name": name, "distance": distance, "time": time, "average_speed": average_speed, "activo": activo, "truck_id": truck_id})
+    response_data = route_response.json()
+
+    return redirect(url_for("routes", msg=response_data["message"]))
 
 # Update route template
 @app.route("/admin/route-edit/<int:id>")
 def route_edit(id):
     route = requests.post("http://localhost:5003/retrieve-route", json={"id":id})
     route_data = route.json()
+
     trucks = requests.post("http://localhost:5003/retrieve-trucks")
     trucks_data = trucks.json()
 
@@ -73,21 +77,15 @@ def route_edit(id):
 # Remove route from the DB
 @app.route("/admin/route-delete/<int:id>")
 def route_delete(id):
-    route = requests.post("http://localhost:5003/delete-route", json={"id":id})
+    route = requests.post("http://localhost:5003/delete-route", json={"id": id})
 
     routes = requests.post("http://localhost:5003/retrieve-routes")
     routes_data = routes.json()
 
-    if route.status_code == 200:
-        if routes.status_code == 200:
-            return render_template("routes.html", msg="Ruta eliminada exitosamente", data=1, routes=routes_data)
-        else:
-            return render_template("routes.html", msg="Ruta eliminada exitosamente", data=0)
+    if route.status_code == 200 and routes.status_code == 200:
+        return redirect(url_for("routes", msg="Ruta eliminada exitosamente"))
     else:
-        if routes.status_code == 200:
-            return render_template("routes.html", msg="Ocurrio un error y la ruta no pudo ser eliminada")
-        else:
-            return render_template("routes.html", msg="Ocurrio un error y la ruta no pudo ser eliminada", data=0)
+        return redirect(url_for("routes", msg="Ocurrió un error y la ruta no pudo ser eliminada"))
 
 """CRUD"""
 
