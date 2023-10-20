@@ -54,18 +54,18 @@ CREATE TABLE routes (
     name VARCHAR(255) NOT NULL,
     distance INT NOT NULL,
     active INT NOT NULL,
-    average_speed INT,
-    time INT,
-    truck_id INT,
+    average_speed INT NOT NULL,
+    time INT NOT NULL,
+    truck_id INT NOT NULL,
     PRIMARY KEY (route_id),
     FOREIGN KEY (truck_id) REFERENCES trucks (truck_id)
 );
 
 INSERT INTO routes VALUES
-(1, "FiftyCent", 5500, 0, 90, 180, 1),
-(2, "FourtyCent", 1500, 0, 60, 40, 2),
-(3, "ThirtyCent", 15500, 1, 120, 320, 1),
-(4, "TwentyCent", 4500, 1, 90, 20, 3);
+(1, "FiftyCent", 5500, 1, 90, 180, 1),
+(2, "Route 923", 1500, 0, 60, 40, 2),
+(3, "Gonzalitos", 15500, 1, 120, 320, 1),
+(4, "La Peligrosa", 4500, 1, 90, 20, 3);
 
 CREATE TABLE address (
     address_id INT NOT NULL AUTO_INCREMENT,
