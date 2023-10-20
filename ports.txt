@@ -1,2 +1,8 @@
-Main site is in port 5000
-Users is in port 5001
+Main site 
+    port 5000
+    app.py
+
+Users
+    port 5001
+    flask_app/microservices/auth.py
+
