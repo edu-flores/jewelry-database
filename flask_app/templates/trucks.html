@@ -4,40 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joyería Fina</title>
-    <link rel="stylesheet" href="../static/css/routes.css">
+    <link rel="stylesheet" href="../static/css/crud.css">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
   </head>
   <body>
     <!-- Nav -->
     {% include "navbar.html" %}
 
-    <h1>Rutas</h1>
+    <h1>Camiones</h1>
     {% if data %}
       <table>
         <tr class="ruta_head">
           <th class="header">ID</th> <!-- truck[0] -->
           <th class="header">Nombre</th> <!-- truck[1] -->
           <th class="header">Distancia total</th> <!-- truck[2] -->
-          <th class="header">CO2 Total emitido</th> <!-- truck[3] -->
-          <th class="header">Ditancia promedio</th> <!-- truck[4] -->
-          <th class="header">CO2 promedio emitido</th> <!-- truck[5] -->
-          <th class="header">Latitúd</th> <!-- truck[6] -->
-          <th class="header">Longitúd</th> <!-- truck[7] -->
-
-          <th class="header">Acciones</th>
-          <th class="header">Solicitar en</th>
+          <th class="header">CO<sub>2</sub> total</th> <!-- truck[3] -->
+          <th class="header">Distancia promedio</th> <!-- truck[4] -->
+          <th class="header">CO<sub>2</sub> promedio</th> <!-- truck[5] -->
+          <th class="header">Latitud</th> <!-- truck[6] -->
+          <th class="header">Longitud</th> <!-- truck[7] -->
+          <th class="header"></th>
+          <th class="header"></th>
         </tr>
         {% for truck in trucks %}
           <tr class="ruta">
-            <th class="dato">{{ truck["id"] }}</th>
+            <th class="dato">#{{ truck["id"] }}</th>
             <th class="dato">{{ truck["name"] }}</th>
             <th class="dato">{{ truck["total_distance"] }} km</th>
             <th class="dato">{{ truck["total_CO2"] }} g</th>
             <th class="dato">{{ truck["average_trip_distance"] }} km</th>
             <th class="dato">{{ truck["average_CO2"] }} g</th>
-            <th class="dato">{{ truck["latitude"] }}</th>
-            <th class="dato">{{ truck["longitude"] }}</th>
-
+            {% if truck["latitude"] and truck["longitude"] %}
+              <th class="dato">{{ truck["latitude"] }}</th>
+              <th class="dato">{{ truck["longitude"] }}</th>
+            {% else %}
+              <th class="dato">N/A</th>
+              <th class="dato">N/A</th>
+            {% endif %}
             <th class="dato"><a class="boton editar" href="/admin/truck-edit/{{ truck['id'] }}">Editar</a><a class="boton eliminar" href="/admin/truck-delete/{{ truck['id'] }}">Eliminar</a></th>
             <th class="dato"><a class="boton xml" href="/admin/trucks/xml/{{ truck['id'] }}">XML</a><a class="boton json" href="/admin/trucks/json/{{ truck['id'] }}">JSON</a></th>
           </tr>
@@ -45,7 +48,7 @@
       </table>
       <a class="boton agregar" href="/admin/truck-add-form">Agregar</a>
     {% else %}
-      <h2>Ocurrió un error. Si al recargar la página sigue este mensaje, no hay rutas existentes</h2>
+      <h2>Ocurrió un error. Si al recargar la página sigue este mensaje, no hay camiones existentes</h2>
     {% endif %}
 
     <!-- Notifications -->
