@@ -31,6 +31,19 @@ def handle_connect():
 def handle_connect():
     print("Server has disconnected")
 
+@socketio.on("update")
+def handle_update():
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        UPDATE trucks
+        SET latitude = latitude + (RAND() * 0.01 - 0.005), longitude = longitude + (RAND() * 0.01 - 0.005);
+    """)
+    mysql.connection.commit()
+    cursor.close()
+
+    data = get_truck_locations()
+    socketio.emit("updated", list(data))
+
 # Get locations for a map
 @gps.route("/get-locations", methods=["GET"])
 def get_locations():

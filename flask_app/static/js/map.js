@@ -1,42 +1,32 @@
+// Global variables
 const markers = {};
 let map;
+let timer;
 
 // WebSocket
 const socket = io.connect("http://localhost:5002");
 
 socket.on("connect", () => {
   console.log("Server is listening...");
+  timer = setInterval(() => {
+    socket.emit("update");
+  }, 3000);  // Every 3 seconds
 });
 
 socket.on("disconnect", () => {
   console.log("Server has disconnected");
+  clearInterval(timer);
 });
 
-// Update or add a truck location
-socket.on("location", truckData => {
-  const data = truckData.map(str => parseFloat(str));
-  const marker = markers[String(data[0])];
-
-  if (marker) {  // Update
-    const newPosition = new google.maps.LatLng(data[2], data[3]);
+// Update markers in real time
+socket.on("updated", trucks => {
+  trucks.forEach(truck => {
+    const marker = markers[String(truck[0])];
+    const newPosition = new google.maps.LatLng(truck[2], truck[3]);
     marker.setPosition(newPosition);
-  } else {  // Add
-    const newMarker = new google.maps.Marker({
-      position: { lat: data[2], lng: data[3] },
-      map: map,
-      title: "Ubicación del Camión: " + String(data[1])
-    });
+  });
 
-    const infowindow = new google.maps.InfoWindow({
-      content: "Camión: " + String(data[1])
-    });
-
-    newMarker.addListener("click", () => {
-      infowindow.open(map, newMarker);
-    });
-
-    markers[truckData[0]] = newMarker;
-  }
+  console.log("Trucks' location updated!")
 });
 
 // Google Maps
