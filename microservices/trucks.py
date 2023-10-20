@@ -97,7 +97,7 @@ def delete_truck():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Camión eliminada exitosamente", "error": False}), 200
+    return jsonify({"message": "Camión eliminado exitosamente", "error": False}), 200
 
 """CRUD"""
 
