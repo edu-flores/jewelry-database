@@ -15,20 +15,19 @@
     {% if data %}
       <table>
         <tr class="ruta_head">
-          <th class="header">ID</th> <!-- route[0] -->
-          <th class="header">Nombre</th> <!-- route[1] -->
-          <th class="header">Distancia total</th> <!-- route[2] -->
-          <th class="header">Estado</th> <!-- route[3] -->
-          <th class="header">Velocidad promedio</th> <!-- route[4] -->
-          <th class="header">Tiempo</th> <!-- route[5] -->
-          <th class="header">Camión</th> <!-- route[6] -->
-          <!-- Nombre del camión == route[07] -->
-          <th class="header">Acciones</th>
-          <th class="header">Solicitar en</th>
+          <th class="header">ID</th>
+          <th class="header">Nombre</th>
+          <th class="header">Distancia total</th>
+          <th class="header">Estado</th>
+          <th class="header">Velocidad promedio</th>
+          <th class="header">Tiempo</th>
+          <th class="header">Camión</th>
+          <th class="header"></th>
+          <th class="header"></th>
         </tr>
         {% for route in routes %}
           <tr class="ruta">
-            <th class="dato">{{ route["id"] }}</th>
+            <th class="dato">#{{ route["id"] }}</th>
             <th class="dato">{{ route["name"] }}</th>
             <th class="dato">{{ route["distance"] }} km</th>
             {% if route["active"] %}
