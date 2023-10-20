@@ -77,9 +77,9 @@ def truck_delete(id):
     trucks_data = trucks.json()
 
     if truck.status_code == 200 and trucks.status_code == 200:
-        return redirect(url_for("trucks", msg="Ruta eliminada exitosamente"))
+        return redirect(url_for("trucks", msg="Camión eliminado exitosamente"))
     else:
-        return redirect(url_for("trucks", msg="Ocurrió un error y la ruta no pudo ser eliminada"))
+        return redirect(url_for("trucks", msg="Este camión está siendo utilizado por una ruta, verifique la ruta para eliminarlo"))
 
 """CRUD"""
 
