@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyería Fina</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  </head>
+  <body>
+    {% if error %}
+      <h2>Lo sentimos. Ocurrió un error y no se pudo recuperar la información del camión</h2>
+    {% endif %}
+
+    {% if data %}
+      <h1>Actualizando camión</h1>
+      <form action="/truck-update/{{ truck["truck_id"] }}" method="POST">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required value="{{ truck["name"] }}">
+        <br><br>
+
+        <label for="distance">Distancia recorrida en metros:</label>
+        <input type="text" id="total_distance" name="total_distance" required value="{{ truck["total_distance"] }}">
+        <br><br>
+
+        <label for="distance">Distancia promedio recorrida por viaje en metros:</label>
+        <input type="text" id="average_trip_distance" name="average_trip_distance" required value="{{ truck["average_trip_distance"] }}">
+        <br><br>
+        
+        <div class="location">
+          <label>Localización actual:</label>
+
+          <label for="time">Latitude:</label>
+          <input type="text" id="time" name="time" required value="{{ truck["latitude"] }}">
+          <br><br>
+          
+          <label for="time">Latitude:</label>
+          <input type="text" id="time" name="time" required value="{{ truck["longitude"] }}">
+          <br><br>
+        </div>
+
+        <button type="submit">Actualizar</button>
+      </form>
+    {% else %}
+      <h1>Agregando camión</h1>
+      <form action="/truck-add" method="POST">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+          
+        <label for="distance">Distancia recorrida en metros:</label>
+        <input type="text" id="total_distance" name="total_distance" required>
+        <br><br>
+
+        <label for="distance">Distancia promedio recorrida por viaje en metros:</label>
+        <input type="text" id="average_trip_distance" name="average_trip_distance" required>
+        <br><br>
+        
+        <div class="location">
+          <label>Localización actual:</label>
+
+          <label for="time">Latitude:</label>
+          <input type="text" id="time" name="time" required>
+          <br><br>
+          
+          <label for="time">Latitude:</label>
+          <input type="text" id="time" name="time" required>
+          <br><br>
+        </div>
+
+        <button type="submit">Actualizar</button>
+      </form>
+    {% endif %}
+  </body>
+</html>
