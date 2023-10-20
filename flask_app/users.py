@@ -53,7 +53,6 @@ def register():
     # Attempt auth with microservice
     auth_response = requests.post("http://localhost:5001/new-user", json={"name": name, "lastname": lastname, "username": username, "password": password})
     response_data = auth_response.json()
-    print(response_data)
 
     # Response
     if auth_response.status_code == 200:

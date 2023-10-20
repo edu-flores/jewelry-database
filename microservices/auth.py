@@ -64,7 +64,7 @@ def create_identity(data):
     cursor.execute("""
         INSERT INTO users 
         (firstname, lastname, username, password) VALUES 
-        (%s, %s, %s, %s, 0, current_timestamp(), current_timestamp())
+        (%s, %s, %s, %s)
     """, (data[0], data[1], data[2], data[3]))
     mysql.connection.commit()
     cursor.close()
