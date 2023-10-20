@@ -5,7 +5,7 @@ from flask_app import app, mysql
 # Misc
 import requests
 
-# ROUTES
+# Manage routes
 @app.route("/routes")
 def routes():
     routes = requests.post("http://localhost:5003/retrieve_routes")
@@ -16,15 +16,15 @@ def routes():
     else:
         return render_template("routes.html", data=0, message=request.args.get("msg", ""))
 
-######################################################################## CRUD
-############################################# Cargar formulario para agregar ruta
+"""CRUD"""
+# Add route template
 @app.route("/route_add_form")
 def route_add_form():
     trucks = requests.post("http://localhost:5003/retrieve_trucks")
     trucks_data = trucks.json()
-    return render_template("route_form.html",data=0,trucks=trucks_data)
+    return render_template("route-form.html",data=0,trucks=trucks_data)
 
-############################################# Añadir Ruta
+# Add route into the DB
 @app.route("/route_add", methods=["POST"])
 def route_add():
     name = request.form.get("name")
@@ -40,7 +40,7 @@ def route_add():
 
     return redirect(url_for("routes"))
 
-############################################# Actualizar Ruta
+# Update route in the DB
 @app.route("/route_udpate/<int:id>", methods=["POST"])
 def route_update(id):
     name = request.form.get("name")
@@ -56,7 +56,7 @@ def route_update(id):
     
     return redirect(url_for("routes"))
 
-############################################# Cargar formulario para actualizar ruta
+# Update route template
 @app.route("/route_edit/<int:id>")
 def route_edit(id):
     route = requests.post("http://localhost:5003/retrieve_route", json={"id":id})
@@ -65,11 +65,11 @@ def route_edit(id):
     trucks_data = trucks.json()
 
     if route.status_code == 200 and trucks.status_code == 200:
-        return render_template("route_form.html",data=1,route=route_data,trucks=trucks_data)
+        return render_template("route-form.html",data=1,route=route_data,trucks=trucks_data)
     else:
-        return render_template("route_form.html",error=1)
+        return render_template("route-form.html",error=1)
 
-############################################# Eliminar Ruta
+# Remove route from the DB
 @app.route("/route_delete/<int:id>")
 def route_delete(id):
     route = requests.post("http://localhost:5003/delete_route", json={"id":id})
@@ -87,19 +87,21 @@ def route_delete(id):
             return render_template("routes.html",msg="Ocurrio un error y la ruta no pudo ser eliminada")
         else:
             return render_template("routes.html",msg="Ocurrio un error y la ruta no pudo ser eliminada",data=0)
-######################################################################## Fin de CRUD
+"""CRUD"""
 
-######################################################################## XML & JSON
-############################################# XML
+"""XML & JSON"""
+
+# XML
 @app.route("/routes/xml/<int:id>")
 def xml_route(id):
     xml = requests.post("http://localhost:5003/retrieve_xml", json={"id":id})
 
     return Response(xml, content_type="text/xml")
 
-############################################# JSON
+# JSON
 @app.route("/routes/json/<int:id>")
 def json_route(id):
     json = requests.post("http://localhost:5003/retrieve_json", json={"id":id})
     return Response(json, content_type="text/json")
-######################################################################## Fin de XML & JSON
+
+"""XML & JSON"""
