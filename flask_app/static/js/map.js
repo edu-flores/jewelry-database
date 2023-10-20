@@ -2,7 +2,7 @@ const markers = {};
 let map;
 
 // WebSocket
-const socket = io();
+const socket = io.connect("http://localhost:5002");
 
 socket.on("connect", () => {
   console.log("Server is listening...");

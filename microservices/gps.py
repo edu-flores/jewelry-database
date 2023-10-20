@@ -3,6 +3,7 @@
 # Flask
 from flask import Flask, request, url_for, jsonify
 from flask_mysqldb import MySQL
+from flask_socketio import SocketIO
 
 # Misc
 from dotenv import load_dotenv
@@ -19,6 +20,16 @@ gps.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
 gps.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 
 mysql = MySQL(gps)
+socketio = SocketIO(gps, cors_allowed_origins="http://127.0.0.1:5000")
+
+# WebSocket
+@socketio.on("connect")
+def handle_connect():
+    print("Server is listening...")
+
+@socketio.on("disconnect")
+def handle_connect():
+    print("Server has disconnected")
 
 # Get locations for a map
 @gps.route("/get-locations", methods=["GET"])
@@ -43,4 +54,4 @@ def get_truck_locations():
     return data
 
 if __name__ == "__main__":
-    gps.run(debug=True, host="0.0.0.0", port=5002)
+    socketio.run(gps, debug=True, host="0.0.0.0", port=5002)
