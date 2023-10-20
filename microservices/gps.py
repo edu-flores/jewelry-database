@@ -71,7 +71,7 @@ def get_truck_locations():
 def get_truck_purchases():
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        SELECT t.name, p.purchase_id 
+        SELECT t.name, p.purchase_id, p.status 
         FROM trucks t 
         JOIN purchase p 
         ON t.truck_id = p.truck_id;

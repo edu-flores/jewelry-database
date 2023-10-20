@@ -32,11 +32,13 @@
         <tr>
           <th>Camión</th>
           <th>ID de Orden</th>
+          <th>Estatus</th>
         </tr>
         {% for purchase in purchases %}
           <tr>
             <td>{{ purchase[0] }}</td>
             <td>Orden con ID #{{ purchase[1] }}</td>
+            <td>{{ purchase[2] }}</td>
           </tr>
         {% endfor%}
       </table>
