@@ -25,49 +25,44 @@ CREATE TABLE users (
     PRIMARY KEY (user_id)
 );
 
+
 INSERT INTO users VALUES
 (1, "Raúl", "Morales", "raul.moraless@udem.edu", "666"),
 (2, "Edu", "Flores", "edu@a.a", "123"),
 (3, "Davo", "Zavala", "a", "a");
 
+CREATE TABLE trucks (
+    truck_id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    total_distance INT NOT NULL,
+    average_trip_distance INT NOT NULL,
+    latitude DOUBLE,
+    longitude DOUBLE,
+    PRIMARY KEY (truck_id)
+);
+
+INSERT INTO trucks VALUES
+(1,"SVY-312",21000,10000,25.6691452,-100.3854379),
+(2,"RVW-115",1500,1500,NULL,NULL),
+(3,"SVY-312",4500,4500,25.6914035,-100.2513623);
+
 CREATE TABLE routes (
     route_id INT AUTO_INCREMENT,
-    name VARCHAR(250) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     distance INT NOT NULL,
+    active INT NOT NULL,
+    average_speed INT,
+    time INT,
+    truck_id INT,
+    PRIMARY KEY (route_id),
+    FOREIGN KEY (truck_id) REFERENCES trucks (truck_id)
+);
 
-    PRIMARY KEY (route_id)
-);
-/*
-CREATE TABLE `route` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `distance` float DEFAULT NULL,
-  `average_speed` float DEFAULT NULL,
-  `short_stops_count` int(11) DEFAULT NULL,
-  `time` bigint(20) DEFAULT NULL,
-  `first_stem_distance` double DEFAULT NULL,
-  `first_stem_time` double DEFAULT NULL,
-  `second_stem_distance` double DEFAULT NULL,
-  `second_stem_time` double DEFAULT NULL,
-  `short_stops_time` double DEFAULT NULL,
-  `traveling_time` double DEFAULT NULL,
-  `stops_between_0_5` int(11) DEFAULT NULL,
-  `stops_between_5_15` int(11) DEFAULT NULL,
-  `stops_between_15_30` int(11) DEFAULT NULL,
-  `stops_between_30_60` int(11) DEFAULT NULL,
-  `stops_between_60_120` int(11) DEFAULT NULL,
-  `stops_between_120_plus` int(11) DEFAULT NULL,
-  `average_short_stop_duration` double DEFAULT NULL,
-  `is_valid` int(11) DEFAULT NULL,
-  `fuel_consumption` double DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `aux1` float DEFAULT NULL,
-  `aux2` float DEFAULT NULL,
-  `aux3` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-);
-*/
+INSERT INTO routes VALUES
+(1,"FiftyCent",5500,0,90,180,1),
+(2,"FourtyCent",1500,0,60,40,2),
+(3,"ThirtyCent",15500,1,120,320,1),
+(4,"TwentyCent",4500,1,90,20,3);
 
 CREATE TABLE address (
     address_id INT NOT NULL AUTO_INCREMENT,
