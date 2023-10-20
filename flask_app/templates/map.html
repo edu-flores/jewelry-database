@@ -8,6 +8,8 @@
     <!-- Maps and WebSocket -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ maps_api_key }}&callback=initMap"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/map.css">
   </head>
   <body>
     <!-- Nav -->
@@ -17,7 +19,7 @@
       <h2>Ubicación de Camiones</h2>
 
       <!-- Map Container -->
-      <div id="map" style="width:90%; height: 600px;"></div>
+      <div id="map" style="width:100%; height: 600px;"></div>
       <div id="locations-container" data-locations='{{ locations|tojson }}'></div>
     </main>
 
