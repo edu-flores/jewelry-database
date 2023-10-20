@@ -3,6 +3,9 @@ CREATE DATABASE IF NOT EXISTS jewelry;
 USE jewelry;
 
 -- Drop tables if they exist
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS trucks;
+DROP TABLE IF EXISTS routes;
 DROP TABLE IF EXISTS purchase_detail;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS purchase;
@@ -25,7 +28,6 @@ CREATE TABLE users (
     PRIMARY KEY (user_id)
 );
 
-
 INSERT INTO users VALUES
 (1, "Raúl", "Morales", "raul.moraless@udem.edu", "666"),
 (2, "Edu", "Flores", "edu@a.a", "123"),
@@ -42,9 +44,9 @@ CREATE TABLE trucks (
 );
 
 INSERT INTO trucks VALUES
-(1,"SVY-312",21000,10000,25.6691452,-100.3854379),
-(2,"RVW-115",1500,1500,NULL,NULL),
-(3,"SVY-312",4500,4500,25.6914035,-100.2513623);
+(1, "SVY-312", 21000, 10000, 25.6691452, -100.3854379),
+(2, "RVW-115", 1500, 1500, NULL, NULL),
+(3, "SVY-312", 4500, 4500, 25.6914035, -100.2513623);
 
 CREATE TABLE routes (
     route_id INT AUTO_INCREMENT,
@@ -59,10 +61,10 @@ CREATE TABLE routes (
 );
 
 INSERT INTO routes VALUES
-(1,"FiftyCent",5500,0,90,180,1),
-(2,"FourtyCent",1500,0,60,40,2),
-(3,"ThirtyCent",15500,1,120,320,1),
-(4,"TwentyCent",4500,1,90,20,3);
+(1, "FiftyCent", 5500, 0, 90, 180, 1),
+(2, "FourtyCent", 1500, 0, 60, 40, 2),
+(3, "ThirtyCent", 15500, 1, 120, 320, 1),
+(4, "TwentyCent", 4500, 1, 90, 20, 3);
 
 CREATE TABLE address (
     address_id INT NOT NULL AUTO_INCREMENT,
