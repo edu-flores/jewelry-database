@@ -67,6 +67,47 @@ INSERT INTO routes VALUES
 (3, "Gonzalitos", 15500, 1, 120, 320, 1),
 (4, "La Peligrosa", 4500, 1, 90, 20, 3);
 
+CREATE TABLE gps_data (
+    gps_data_id INT NOT NULL AUTO_INCREMENT,
+    truck_id INT NOT NULL,
+    air_quality INT NOT NULL,
+    contaminants BOOLEAN NOT NULL,
+    latitude DOUBLE NOT NULL,
+    longitude DOUBLE NOT NULL,
+    date DATETIME NOT NULL,
+    PRIMARY KEY (gps_data_id),
+    FOREIGN KEY (truck_id) REFERENCES trucks (truck_id)
+);
+
+INSERT INTO gps_data VALUES
+(1, 1, 100, TRUE, 25.6641452, -100.3851379, "2023-11-01 00:00:00"),
+(2, 3, 150, TRUE, 25.6924035, -100.2533623, "2023-11-01 00:00:00"),
+(3, 3, 40, FALSE, 25.6554035, -100.2563623, "2023-11-01 00:00:00"),
+(4, 1, 200, TRUE, 25.6621452, -100.3857379, "2023-11-01 00:00:00");
+
+CREATE TABLE environmental_data (
+    environmental_data_id INT NOT NULL AUTO_INCREMENT,
+    temperature DOUBLE,
+    humidity DOUBLE,
+    precipitation DOUBLE,
+    wind_speed DOUBLE,
+    pressure DOUBLE,
+    date DATETIME NOT NULL,
+    PRIMARY KEY (environmental_data_id)
+);
+
+INSERT INTO environmental_data VALUES
+(1, 25.5, 55.2, 2.8, 12.1, 1012.3, "2023-11-01 00:00:00"),
+(2, 26.7, 56.3, 3.1, 11.9, 1011.5, "2023-11-01 00:00:00"),
+(3, 25.9, 55.7, 2.7, 12.2, 1012.1, "2023-11-01 00:00:00"),
+(4, 25.2, 54.8, 2.4, 11.6, 1011.8, "2023-11-01 00:00:00"),
+(5, 25.8, 56.1, 3.0, 12.0, 1012.0, "2023-11-01 00:00:00"),
+(6, 25.4, 55.5, 2.6, 11.8, 1011.7, "2023-11-01 00:00:00"),
+(7, 26.1, 56.4, 3.2, 12.3, 1012.2, "2023-11-01 00:00:00"),
+(8, 25.6, 55.8, 2.7, 11.7, 1011.9, "2023-11-01 00:00:00"),
+(9, 25.1, 54.9, 2.5, 11.5, 1011.6, "2023-11-01 00:00:00"),
+(10, 25.7, 56.0, 2.9, 12.0, 1011.9, "2023-11-01 00:00:00");
+
 CREATE TABLE address (
     address_id INT NOT NULL AUTO_INCREMENT,
     street VARCHAR(255) NOT NULL,
