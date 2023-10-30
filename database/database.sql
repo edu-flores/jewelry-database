@@ -184,7 +184,7 @@ DELIMITER //
 -- Get details from a purchase without its products
 CREATE PROCEDURE GetPurchaseDetails(IN id INT)
 BEGIN
-    SELECT 
+    SELECT
         CONCAT(client.first_name, " ", client.last_name) AS client,
         purchase.receiver,
         purchase.purchase_date,
@@ -210,7 +210,7 @@ END;
 -- Get all products from a single purchase
 CREATE PROCEDURE GetPurchaseProducts(IN id INT)
 BEGIN
-    SELECT 
+    SELECT
         product.product_code,
         product.description,
         product.price,
@@ -252,7 +252,7 @@ BEGIN
     DECLARE truck INT;
 
     -- Create a client
-    INSERT INTO client (first_name, last_name, email, password) 
+    INSERT INTO client (first_name, last_name, email, password)
     VALUES (first_name, last_name, email, "");
     SET client_id = LAST_INSERT_ID();
 
@@ -290,6 +290,19 @@ BEGIN
 
     -- Update total
     UPDATE purchase SET total = total_price WHERE purchase_id = purchase_id;
+END;
+
+CREATE PROCEDURE UpdateMap()
+BEGIN
+    -- Add gps data
+    INSERT INTO gps_data (truck_id, air_quality, contaminants, latitude, longitude, date)
+    SELECT truck_id, RAND() * 500, ROUND(RAND()), latitude, longitude, NOW()
+    FROM trucks
+    WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
+
+    -- Move trucks
+    UPDATE trucks
+    SET latitude = latitude + (RAND() * 0.01 - 0.005), longitude = longitude + (RAND() * 0.01 - 0.005);
 END;
 //
 
