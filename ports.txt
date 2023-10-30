@@ -1,19 +1,19 @@
-Main site 
+Main site
     port 5000
     app.py
 
 Users
     port 5001
-    flask_app/microservices/auth.py
+    microservices/auth.py
 
-GPS & Ambiental Data
+GPS
     port 5002
-    flask_app/microservices/gps.py
+    microservices/gps.py
 
 CRUD for Routes & XML and JSON
     port 5003
-    flask_app/microservices/routes.py
+    microservices/routes.py
 
-CRUD for Trucks & XML and JSON
+CRUD for Trucks & XML and JSON - Environmental Data
     port 5004
-    flask_app/microservices/trucks.py
+    microservices/trucks.py
