@@ -11,7 +11,7 @@ def routes():
     if "id" not in session:
         return redirect(url_for("sign_in", msg="Inicio de sesión requerido"))
 
-    routes = requests.post("http://localhost:5003/retrieve-routes")
+    routes = requests.get("http://localhost:5003/retrieve-routes")
     routes_data = routes.json()
 
     if routes.status_code == 200:
@@ -24,7 +24,7 @@ def routes():
 # Add route template
 @app.route("/admin/route-add-form")
 def route_add_form():
-    trucks = requests.post("http://localhost:5003/retrieve-trucks")
+    trucks = requests.get("http://localhost:5003/retrieve-trucks")
     trucks_data = trucks.json()
 
     return render_template("route-form.html", data=0, trucks=trucks_data)
@@ -66,10 +66,10 @@ def route_update(id):
 # Update route template
 @app.route("/admin/route-edit/<int:id>")
 def route_edit(id):
-    route = requests.post("http://localhost:5003/retrieve-route", json={"id":id})
+    route = requests.get("http://localhost:5003/retrieve-route", params={"id": id})
     route_data = route.json()
 
-    trucks = requests.post("http://localhost:5003/retrieve-trucks")
+    trucks = requests.get("http://localhost:5003/retrieve-trucks")
     trucks_data = trucks.json()
 
     if route.status_code == 200 and trucks.status_code == 200:
@@ -82,7 +82,7 @@ def route_edit(id):
 def route_delete(id):
     route = requests.post("http://localhost:5003/delete-route", json={"id": id})
 
-    routes = requests.post("http://localhost:5003/retrieve-routes")
+    routes = requests.get("http://localhost:5003/retrieve-routes")
     routes_data = routes.json()
 
     if route.status_code == 200 and routes.status_code == 200:
@@ -97,14 +97,14 @@ def route_delete(id):
 # XML
 @app.route("/admin/routes/xml/<int:id>")
 def xml_route(id):
-    xml = requests.post("http://localhost:5003/retrieve-xml", json={"id": id})
+    xml = requests.get("http://localhost:5003/retrieve-xml", params={"id": id})
 
-    return Response(xml, content_type="text/xml")
+    return Response(xml, content_type="application/xml")
 
 # JSON
 @app.route("/admin/routes/json/<int:id>")
 def json_route(id):
-    json = requests.post("http://localhost:5003/retrieve-json", json={"id": id})
-    return Response(json, content_type="text/json")
+    json = requests.get("http://localhost:5003/retrieve-json", params={"id": id})
+    return Response(json, content_type="application/json")
 
 """XML & JSON"""

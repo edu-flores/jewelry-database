@@ -25,7 +25,7 @@ mysql = MySQL(routes)
 
 """CRUD"""
 
-@routes.route("/retrieve-routes", methods=["POST"])
+@routes.route("/retrieve-routes", methods=["GET"])
 def retrieve_routes():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, t.name FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id")
@@ -83,10 +83,9 @@ def edit_route():
 
     return jsonify({"message": "Se actualizó correctamente la ruta", "error": False}), 200, {"Content-Type": "application/json"}
 
-@routes.route("/retrieve-route", methods=["POST"])
+@routes.route("/retrieve-route", methods=["GET"])
 def retrieve_route():
-    data = request.get_json()
-    id = data["id"]
+    id = request.args.get("id")
 
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM routes WHERE route_id = %s", (id,))
@@ -98,7 +97,7 @@ def retrieve_route():
     else:
         return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
-@routes.route("/retrieve-trucks", methods=["POST"])
+@routes.route("/retrieve-trucks", methods=["GET"])
 def retrieve_trucks():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT truck_id, name FROM trucks")
@@ -126,10 +125,9 @@ def delete_route():
 """CRUD"""
 
 # XML Format
-@routes.route("/retrieve-xml", methods=["POST"])
+@routes.route("/retrieve-xml", methods=["GET"])
 def retrieve_xml():
-    data = request.get_json()
-    id = data["id"]
+    id = request.args.get("id")
     route = get_route_data(id)
 
     root = ET.Element("Route")
@@ -167,10 +165,9 @@ def retrieve_xml():
     return xml
 
 # JSON Format
-@routes.route("/retrieve-json", methods=["POST"])
+@routes.route("/retrieve-json", methods=["GET"])
 def retrieve_json():
-    data = request.get_json()
-    id = data["id"]
+    id = request.args.get("id")
     route = get_route_data(id)
 
     j = {

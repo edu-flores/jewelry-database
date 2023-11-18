@@ -25,7 +25,7 @@ mysql = MySQL(trucks)
 
 """CRUD"""
 
-@trucks.route("/retrieve-trucks", methods=["POST"])
+@trucks.route("/retrieve-trucks", methods=["GET"])
 def retrieve_trucks():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT t.truck_id, t.name, t.total_distance, ((t.total_distance / 25) * 2.68) AS total_CO2, t.average_trip_distance, ((t.average_trip_distance / 25) * 2.68) AS average_CO2, t.latitude, t.longitude FROM trucks AS t")
@@ -84,10 +84,9 @@ def edit_truck():
 
     return jsonify({"message": "Se actualizó correctamente el camión", "error": False}), 200, {"Content-Type": "application/json"}
 
-@trucks.route("/retrieve-truck", methods=["POST"])
+@trucks.route("/retrieve-truck", methods=["GET"])
 def retrieve_truck():
-    data = request.get_json()
-    id = data["id"]
+    id = request.args.get("id")
 
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM trucks WHERE truck_id = %s", (id,))
@@ -142,10 +141,9 @@ def get_highest_emission_truck():
     return data
 
 # XML Format
-@trucks.route("/retrieve-xml", methods=["POST"])
+@trucks.route("/retrieve-xml", methods=["GET"])
 def retrieve_xml():
-    data = request.get_json()
-    id = data["id"]
+    id = request.args.get("id")
     truck = get_truck_data(id)
 
     root = ET.Element("Truck")
@@ -183,10 +181,9 @@ def retrieve_xml():
     return xml
 
 # JSON Format
-@trucks.route("/retrieve-json", methods=["POST"])
+@trucks.route("/retrieve-json", methods=["GET"])
 def retrieve_json():
-    data = request.get_json()
-    id = data["id"]
+    id = request.args.get("id")
     truck = get_truck_data(id)
 
     j = {

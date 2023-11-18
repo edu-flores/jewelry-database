@@ -11,7 +11,7 @@ def trucks():
     if "id" not in session:
         return redirect(url_for("sign_in", msg="Inicio de sesión requerido"))
 
-    trucks = requests.post("http://localhost:5004/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks")
     trucks_data = trucks.json()
 
     if trucks.status_code == 200:
@@ -57,10 +57,10 @@ def truck_update(id):
 # Update truck template
 @app.route("/admin/truck-edit/<int:id>")
 def truck_edit(id):
-    truck = requests.post("http://localhost:5004/retrieve-truck", json={"id":id})
+    truck = requests.get("http://localhost:5004/retrieve-truck", params={"id":id})
     truck_data = truck.json()
 
-    trucks = requests.post("http://localhost:5004/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks")
     trucks_data = trucks.json()
 
     if truck.status_code == 200 and trucks.status_code == 200:
@@ -73,7 +73,7 @@ def truck_edit(id):
 def truck_delete(id):
     truck = requests.post("http://localhost:5004/delete-truck", json={"id": id})
 
-    trucks = requests.post("http://localhost:5004/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks")
     trucks_data = trucks.json()
 
     if truck.status_code == 200 and trucks.status_code == 200:
@@ -88,15 +88,15 @@ def truck_delete(id):
 # XML
 @app.route("/admin/trucks/xml/<int:id>")
 def xml_truck(id):
-    xml = requests.post("http://localhost:5004/retrieve-xml", json={"id": id})
+    xml = requests.get("http://localhost:5004/retrieve-xml", params={"id": id})
 
-    return Response(xml, content_type="text/xml")
+    return Response(xml, content_type="application/xml")
 
 # JSON
 @app.route("/admin/trucks/json/<int:id>")
 def json_truck(id):
-    json = requests.post("http://localhost:5004/retrieve-json", json={"id": id})
+    json = requests.get("http://localhost:5004/retrieve-json", params={"id": id})
 
-    return Response(json, content_type="text/json")
+    return Response(json, content_type="application/json")
 
 """XML & JSON"""
