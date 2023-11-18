@@ -45,9 +45,9 @@ def retrieve_trucks():
                 "average": environmental_data[1]
             }
         }
-        return jsonify(trucksJSON), 200
+        return jsonify(trucksJSON), 200, {"Content-Type": "application/json"}
     else:
-        return jsonify({"error": True}), 404
+        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @trucks.route("/add-truck", methods=["POST"])
 def add_truck():
@@ -63,7 +63,7 @@ def add_truck():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Se agregó correctamente el camión", "error": False}), 200
+    return jsonify({"message": "Se agregó correctamente el camión", "error": False}), 201, {"Content-Type": "application/json"}
 
 @trucks.route("/edit-truck", methods=["POST"])
 def edit_truck():
@@ -82,7 +82,7 @@ def edit_truck():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Se actualizó correctamente el camión", "error": False}), 200
+    return jsonify({"message": "Se actualizó correctamente el camión", "error": False}), 200, {"Content-Type": "application/json"}
 
 @trucks.route("/retrieve-truck", methods=["POST"])
 def retrieve_truck():
@@ -95,9 +95,9 @@ def retrieve_truck():
     cursor.close()
 
     if truck:
-        return jsonify({"truck_id": truck[0], "name": truck[1], "total_distance": truck[2], "average_trip_distance": truck[3], "latitude": truck[4], "longitude": truck[5]}), 200
+        return jsonify({"truck_id": truck[0], "name": truck[1], "total_distance": truck[2], "average_trip_distance": truck[3], "latitude": truck[4], "longitude": truck[5]}), 200, {"Content-Type": "application/json"}
     else:
-        return jsonify({"error": True}), 404
+        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @trucks.route("/delete-truck", methods=["POST"])
 def delete_truck():
@@ -109,7 +109,7 @@ def delete_truck():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Camión eliminado exitosamente", "error": False}), 200
+    return jsonify({"message": "Camión eliminado exitosamente", "error": False}), 200, {"Content-Type": "application/json"}
 
 """CRUD"""
 

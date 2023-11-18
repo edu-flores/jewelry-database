@@ -34,9 +34,9 @@ def retrieve_routes():
     cursor.close()
     if routes:
         routesJSON = [{"id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_name": route[6], "error": False} for route in routes]
-        return jsonify(routesJSON), 200
+        return jsonify(routesJSON), 200, {"Content-Type": "application/json"}
     else:
-        return jsonify({"error": False}), 401
+        return jsonify({"error": False}), 401, {"Content-Type": "application/json"}
 
 @routes.route("/add-route", methods=["POST"])
 def add_route():
@@ -56,7 +56,7 @@ def add_route():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Se agregó correctamente la ruta", "error": False}), 200
+    return jsonify({"message": "Se agregó correctamente la ruta", "error": False}), 201, {"Content-Type": "application/json"}
 
 @routes.route("/edit-route", methods=["POST"])
 def edit_route():
@@ -81,7 +81,7 @@ def edit_route():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Se actualizó correctamente la ruta", "error": False}), 200
+    return jsonify({"message": "Se actualizó correctamente la ruta", "error": False}), 200, {"Content-Type": "application/json"}
 
 @routes.route("/retrieve-route", methods=["POST"])
 def retrieve_route():
@@ -94,9 +94,9 @@ def retrieve_route():
     cursor.close()
 
     if route:
-        return jsonify({"route_id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_id": route[6]}), 200
+        return jsonify({"route_id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_id": route[6]}), 200, {"Content-Type": "application/json"}
     else:
-        return jsonify({"error": True}), 404
+        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @routes.route("/retrieve-trucks", methods=["POST"])
 def retrieve_trucks():
@@ -107,9 +107,9 @@ def retrieve_trucks():
 
     if trucks:
         trucksJSON = [{"id": truck[0], "name": truck[1]} for truck in trucks]
-        return jsonify(trucksJSON), 200
+        return jsonify(trucksJSON), 200, {"Content-Type": "application/json"}
     else:
-        return jsonify({"error": True}), 404
+        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @routes.route("/delete-route", methods=["POST"])
 def delete_route():
@@ -121,7 +121,7 @@ def delete_route():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Ruta eliminada exitosamente", "error": False}), 200
+    return jsonify({"message": "Ruta eliminada exitosamente", "error": False}), 200, {"Content-Type": "application/json"}
 
 """CRUD"""
 

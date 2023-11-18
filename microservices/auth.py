@@ -33,9 +33,9 @@ def check_auth():
     cursor.close()
 
     if account:
-        return jsonify({"message": "Autenticación exitosa", "id": account[0], "name": account[1], "last": account[2], "error": False}), 200
+        return jsonify({"message": "Autenticación exitosa", "id": account[0], "name": account[1], "last": account[2], "error": False}), 200, {"Content-Type": "application/json"}
     else:
-        return jsonify({"message": "Fallo de autenticación", "error": False}), 401
+        return jsonify({"message": "Fallo de autenticación", "error": False}), 401, {"Content-Type": "application/json"}
 
 # Register a new user into the database
 @auth.route("/new-user", methods=["POST"])
@@ -50,9 +50,9 @@ def register():
     error_message = create_identity(data)
 
     if error_message:
-        return jsonify({"message": error_message, "error": False}), 409
+        return jsonify({"message": error_message, "error": False}), 409, {"Content-Type": "application/json"}
 
-    return jsonify({"message": "Cuenta creada, puede iniciar sesión", "error": False}), 200
+    return jsonify({"message": "Cuenta creada, puede iniciar sesión", "error": False}), 201, {"Content-Type": "application/json"}
 
 # Insert a new identity in the DB
 def create_identity(data):
