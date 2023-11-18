@@ -20,7 +20,7 @@ gps.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
 gps.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 
 mysql = MySQL(gps)
-socketio = SocketIO(gps, cors_allowed_origins="http://127.0.0.1:5000")
+socketio = SocketIO(gps, cors_allowed_origins="http://localhost:5000")
 
 # WebSocket
 @socketio.on("connect")
@@ -71,9 +71,9 @@ def get_truck_locations():
 def get_truck_purchases():
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        SELECT t.name, p.purchase_id, p.status 
-        FROM trucks t 
-        JOIN purchase p 
+        SELECT t.name, p.purchase_id, p.status
+        FROM trucks t
+        JOIN purchase p
         ON t.truck_id = p.truck_id;
     """)
     data = cursor.fetchall()

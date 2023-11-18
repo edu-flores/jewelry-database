@@ -13,32 +13,32 @@ import os
 load_dotenv()
 
 # Microservice app
-truck = Flask(__name__)
+trucks = Flask(__name__)
 
-truck.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT"))
-truck.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
-truck.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
-truck.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
-truck.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
+trucks.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT"))
+trucks.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
+trucks.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
+trucks.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
+trucks.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 
-mysql = MySQL(truck)
+mysql = MySQL(trucks)
 
 """CRUD"""
 
-@truck.route("/retrieve-trucks", methods=["POST"])
+@trucks.route("/retrieve-trucks", methods=["POST"])
 def retrieve_trucks():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT t.truck_id, t.name, t.total_distance, ((t.total_distance / 25) * 2.68) AS total_CO2, t.average_trip_distance, ((t.average_trip_distance / 25) * 2.68) AS average_CO2, t.latitude, t.longitude FROM trucks AS t")
-    trucks = cursor.fetchall()
+    trucks_data = cursor.fetchall()
     cursor.close()
 
     # Environment
     highest_co2_truck = get_highest_emission_truck()
     environmental_data = get_environmental_data()
 
-    if trucks:
+    if trucks_data:
         trucksJSON = {
-            "trucks": [{"id": truck[0], "name": truck[1], "total_distance": truck[2], "total_CO2": truck[3], "average_trip_distance": truck[4], "average_CO2": truck[5], "latitude": truck[6], "longitude": truck[7], "error": False} for truck in trucks],
+            "trucks": [{"id": truck[0], "name": truck[1], "total_distance": truck[2], "total_CO2": truck[3], "average_trip_distance": truck[4], "average_CO2": truck[5], "latitude": truck[6], "longitude": truck[7], "error": False} for truck in trucks_data],
             "environment": {
                 "highest": highest_co2_truck[0],
                 "total": environmental_data[0],
@@ -47,9 +47,9 @@ def retrieve_trucks():
         }
         return jsonify(trucksJSON), 200
     else:
-        return jsonify({"error": False}), 401
+        return jsonify({"error": True}), 404
 
-@truck.route("/add-truck", methods=["POST"])
+@trucks.route("/add-truck", methods=["POST"])
 def add_truck():
     data = request.get_json()
     name = data["name"]
@@ -65,7 +65,7 @@ def add_truck():
 
     return jsonify({"message": "Se agregó correctamente el camión", "error": False}), 200
 
-@truck.route("/edit-truck", methods=["POST"])
+@trucks.route("/edit-truck", methods=["POST"])
 def edit_truck():
     data = request.get_json()
     id = data["id"]
@@ -76,7 +76,7 @@ def edit_truck():
     longitude = data["longitude"]
 
     cursor = mysql.connection.cursor()
-    cursor.execute("""UPDATE trucks SET 
+    cursor.execute("""UPDATE trucks SET
         name=%s, total_distance=%s, average_trip_distance=%s, latitude=%s, longitude=%s
         WHERE truck_id = %s """, (name, total_distance, average_trip_distance, latitude, longitude, id))
     mysql.connection.commit()
@@ -84,11 +84,11 @@ def edit_truck():
 
     return jsonify({"message": "Se actualizó correctamente el camión", "error": False}), 200
 
-@truck.route("/retrieve-truck", methods=["POST"])
+@trucks.route("/retrieve-truck", methods=["POST"])
 def retrieve_truck():
     data = request.get_json()
     id = data["id"]
-    
+
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM trucks WHERE truck_id = %s", (id,))
     truck = cursor.fetchone()
@@ -97,9 +97,9 @@ def retrieve_truck():
     if truck:
         return jsonify({"truck_id": truck[0], "name": truck[1], "total_distance": truck[2], "average_trip_distance": truck[3], "latitude": truck[4], "longitude": truck[5]}), 200
     else:
-        return jsonify({"error", False}), 401
+        return jsonify({"error": True}), 404
 
-@truck.route("/delete-truck", methods=["POST"])
+@trucks.route("/delete-truck", methods=["POST"])
 def delete_truck():
     data = request.get_json()
     id = data["id"]
@@ -117,9 +117,9 @@ def delete_truck():
 def get_environmental_data():
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        SELECT 
-        SUM(((total_distance / 25) * 2.68)) AS total_CO2, 
-        AVG(((average_trip_distance / 25) * 2.68)) AS average_CO2 
+        SELECT
+        SUM(((total_distance / 25) * 2.68)) AS total_CO2,
+        AVG(((average_trip_distance / 25) * 2.68)) AS average_CO2
         FROM trucks
     """)
     data = cursor.fetchone()
@@ -131,9 +131,9 @@ def get_environmental_data():
 def get_highest_emission_truck():
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        SELECT name 
-        FROM trucks 
-        ORDER BY (total_distance / 25) * 2.68 DESC 
+        SELECT name
+        FROM trucks
+        ORDER BY (total_distance / 25) * 2.68 DESC
         LIMIT 1
     """)
     data = cursor.fetchone()
@@ -142,7 +142,7 @@ def get_highest_emission_truck():
     return data
 
 # XML Format
-@truck.route("/retrieve-xml", methods=["POST"])
+@trucks.route("/retrieve-xml", methods=["POST"])
 def retrieve_xml():
     data = request.get_json()
     id = data["id"]
@@ -169,7 +169,7 @@ def retrieve_xml():
 
     average_co2_elem = ET.SubElement(data_elem, "AverageCO2Emitted")
     average_co2_elem.text = str(truck[5])
-    
+
     location_elem = ET.SubElement(root, "Location")
 
     latitude_elem = ET.SubElement(location_elem, "Latitude")
@@ -183,7 +183,7 @@ def retrieve_xml():
     return xml
 
 # JSON Format
-@truck.route("/retrieve-json", methods=["POST"])
+@trucks.route("/retrieve-json", methods=["POST"])
 def retrieve_json():
     data = request.get_json()
     id = data["id"]
@@ -209,13 +209,15 @@ def retrieve_json():
 # Truck data query
 def get_truck_data(id):
     cursor = mysql.connection.cursor()
-    cursor.execute("""SELECT t.truck_id, t.name, t.total_distance, ((t.total_distance / 25) * 2.68) AS total_CO2, t.average_trip_distance, ((t.average_trip_distance / 25) * 2.68) AS average_CO2, t.latitude, t.longitude 
-                   FROM trucks AS t
-                   WHERE t.truck_id = %s""",(id,))
+    cursor.execute("""
+        SELECT t.truck_id, t.name, t.total_distance, ((t.total_distance / 25) * 2.68) AS total_CO2, t.average_trip_distance, ((t.average_trip_distance / 25) * 2.68) AS average_CO2, t.latitude, t.longitude
+        FROM trucks AS t
+        WHERE t.truck_id = %s
+    """, (id,))
     truck = cursor.fetchone()
     cursor.close()
 
     return truck
 
 if __name__ == "__main__":
-    truck.run(debug=True, host="0.0.0.0", port=5004)
+    trucks.run(debug=True, host="0.0.0.0", port=5004)

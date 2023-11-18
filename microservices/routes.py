@@ -71,11 +71,11 @@ def edit_route():
 
     cursor = mysql.connection.cursor()
     if truck_id == -1:
-        cursor.execute("""UPDATE routes SET 
+        cursor.execute("""UPDATE routes SET
             name=%s, distance=%s, active=%s, average_speed=%s, time=%s
             WHERE route_id = %s """, (name, distance, activo, average_speed, time, id))
     else:
-        cursor.execute("""UPDATE routes SET 
+        cursor.execute("""UPDATE routes SET
             name=%s, distance=%s, active=%s, average_speed=%s, time=%s, truck_id=%s
             WHERE route_id = %s """, (name, distance, activo, average_speed, time, truck_id, id))
     mysql.connection.commit()
@@ -87,7 +87,7 @@ def edit_route():
 def retrieve_route():
     data = request.get_json()
     id = data["id"]
-    
+
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM routes WHERE route_id = %s", (id,))
     route = cursor.fetchone()
@@ -96,7 +96,7 @@ def retrieve_route():
     if route:
         return jsonify({"route_id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_id": route[6]}), 200
     else:
-        return jsonify({"error", False}), 401
+        return jsonify({"error": True}), 404
 
 @routes.route("/retrieve-trucks", methods=["POST"])
 def retrieve_trucks():
@@ -109,7 +109,7 @@ def retrieve_trucks():
         trucksJSON = [{"id": truck[0], "name": truck[1]} for truck in trucks]
         return jsonify(trucksJSON), 200
     else:
-        return jsonify({"error", False}), 401
+        return jsonify({"error": True}), 404
 
 @routes.route("/delete-route", methods=["POST"])
 def delete_route():
@@ -195,7 +195,7 @@ def get_route_data(id):
     cursor = mysql.connection.cursor()
     cursor.execute("""
         SELECT routes.*, trucks.truck_id, trucks.name
-        FROM routes JOIN trucks ON routes.truck_id = trucks.truck_id 
+        FROM routes JOIN trucks ON routes.truck_id = trucks.truck_id
         WHERE route_id = %s
     """, (id,))
     route = cursor.fetchone()

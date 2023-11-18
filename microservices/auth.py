@@ -64,8 +64,8 @@ def create_identity(data):
         return "Nombre de usuario ya existente"
 
     cursor.execute("""
-        INSERT INTO users 
-        (firstname, lastname, username, password) VALUES 
+        INSERT INTO users
+        (firstname, lastname, username, password) VALUES
         (%s, %s, %s, %s)
     """, (data[0], data[1], data[2], data[3]))
     mysql.connection.commit()
