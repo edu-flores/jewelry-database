@@ -40,6 +40,7 @@ def login():
 def logout():
     session.pop("id", None)
     session.pop("name", None)
+    session.pop("token", None)
     return redirect(url_for("sign_in", msg="Sesión cerrada"))
 
 # Register a new account

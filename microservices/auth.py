@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager, create_access_token
 from flask_mysqldb import MySQL
 
 # Misc
+from datetime import timedelta
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -19,6 +20,7 @@ auth.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
 auth.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
 auth.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 auth.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+auth.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)
 
 jwt = JWTManager(auth)
 mysql = MySQL(auth)
