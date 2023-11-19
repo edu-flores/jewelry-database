@@ -28,6 +28,7 @@ mysql = MySQL(routes)
 
 """CRUD"""
 
+# Retrieve routes from the database
 @routes.route("/retrieve-routes", methods=["GET"])
 @jwt_required()
 def retrieve_routes():
@@ -66,6 +67,7 @@ def retrieve_routes():
         }
         return jsonify(response), 500, {"Content-Type": "application/json"}
 
+# Add route to the database
 @routes.route("/add-route", methods=["POST"])
 @jwt_required()
 def add_route():
@@ -102,6 +104,7 @@ def add_route():
         }
         return jsonify(response), 500, {"Content-Type": "application/json"}
 
+# Edit route
 @routes.route("/edit-route", methods=["POST"])
 @jwt_required()
 def edit_route():
@@ -135,6 +138,7 @@ def edit_route():
         }
         return jsonify(response), 500, {"Content-Type": "application/json"}
 
+# Retrieve a single route
 @routes.route("/retrieve-route", methods=["GET"])
 @jwt_required()
 def retrieve_route():
@@ -167,6 +171,7 @@ def retrieve_route():
         }
         return jsonify(response), 500, {"Content-Type": "application/json"}
 
+# Delete route from the database
 @routes.route("/delete-route", methods=["POST"])
 @jwt_required()
 def delete_route():
