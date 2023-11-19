@@ -38,10 +38,10 @@ def route_add():
     distance = int(request.form.get("distance"))
     time = int(request.form.get("time"))
     average_speed = int(request.form.get("average_speed"))
-    activo = int(request.form.get("activo"))
+    active = int(request.form.get("active"))
     truck_id = request.form.get("truck")
 
-    route_response = requests.post("http://localhost:5003/add-route", json={"name": name, "distance": distance, "time": time, "average_speed": average_speed, "activo": activo, "truck_id": truck_id})
+    route_response = requests.post("http://localhost:5003/add-route", json={"name": name, "distance": distance, "time": time, "average_speed": average_speed, "active": active, "truck_id": truck_id})
     response_data = route_response.json()
 
     return redirect(url_for("routes", msg=response_data["message"]))
@@ -53,10 +53,10 @@ def route_update(id):
     distance = int(request.form.get("distance"))
     time = int(request.form.get("time"))
     average_speed = int(request.form.get("average_speed"))
-    activo = int(request.form.get("activo"))
+    active = int(request.form.get("active"))
     truck_id = request.form.get("truck")
 
-    route_response = requests.post("http://localhost:5003/edit-route", json={"id": id, "name": name, "distance": distance, "time": time, "average_speed": average_speed, "activo": activo, "truck_id": truck_id})
+    route_response = requests.post("http://localhost:5003/edit-route", json={"id": id, "name": name, "distance": distance, "time": time, "average_speed": average_speed, "active": active, "truck_id": truck_id})
     response_data = route_response.json()
 
     return redirect(url_for("routes", msg=response_data["message"]))

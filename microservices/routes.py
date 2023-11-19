@@ -43,13 +43,13 @@ def add_route():
     data = request.get_json()
     name = data["name"]
     distance = data["distance"]
-    activo = data["activo"]
+    active = data["active"]
     average_speed = data["average_speed"]
     time = data["time"]
     truck_id = data["truck_id"]
 
     cursor = mysql.connection.cursor()
-    cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, activo, average_speed, time, truck_id))
+    cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, active, average_speed, time, truck_id))
 
     # Get the ID of the inserted route
     cursor.execute("SELECT LAST_INSERT_ID()")
@@ -72,7 +72,7 @@ def edit_route():
     id = data["id"]
     name = data["name"]
     distance = data["distance"]
-    activo = data["activo"]
+    active = data["active"]
     average_speed = data["average_speed"]
     time = data["time"]
     truck_id = data["truck_id"]
@@ -81,7 +81,7 @@ def edit_route():
     cursor.execute("""UPDATE routes SET
         name=%s, distance=%s, active=%s, average_speed=%s, time=%s, truck_id=%s
         WHERE route_id = %s
-    """, (name, distance, activo, average_speed, time, truck_id, id))
+    """, (name, distance, active, average_speed, time, truck_id, id))
     mysql.connection.commit()
     cursor.close()
 
