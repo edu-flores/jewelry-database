@@ -41,12 +41,12 @@ def check_auth():
             "error": False
         }
         return jsonify(response), 200, {"Content-Type": "application/json"}
-    else:
-        response = {
-            "message": "Fallo de autenticación",
-            "error": False
-        }
-        return jsonify(response), 401, {"Content-Type": "application/json"}
+
+    response = {
+        "message": "Fallo de autenticación",
+        "error": False
+    }
+    return jsonify(response), 401, {"Content-Type": "application/json"}
 
 # Register a new user into the database
 @auth.route("/new-user", methods=["POST"])

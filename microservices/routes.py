@@ -112,8 +112,8 @@ def retrieve_route():
             "error": False
         }
         return jsonify(response), 200, {"Content-Type": "application/json"}
-    else:
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+
+    return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @routes.route("/delete-route", methods=["POST"])
 def delete_route():

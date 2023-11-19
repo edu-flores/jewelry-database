@@ -118,8 +118,8 @@ def retrieve_truck():
             "error": False
         }
         return jsonify(response), 200, {"Content-Type": "application/json"}
-    else:
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+
+    return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @trucks.route("/delete-truck", methods=["POST"])
 def delete_truck():
