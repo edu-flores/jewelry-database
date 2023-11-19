@@ -50,9 +50,20 @@ def get_locations():
     if request.method == "GET":
         locations = get_truck_locations()
         purchases = get_truck_purchases()
-        return jsonify({"message": "Ubicaciones recuperadas con éxito", "locations": locations, "purchases": purchases, "error": False}), 200, {"Content-Type": "application/json"}
 
-    return jsonify({"message": "Error de método", "error": True}), 404, {"Content-Type": "application/json"}
+        response = {
+            "message": "Ubicaciones recuperadas con éxito",
+            "locations": locations,
+            "purchases": purchases,
+            "error": False
+        }
+        return jsonify(response), 200, {"Content-Type": "application/json"}
+
+    response = {
+        "message": "Error de método",
+        "error": True
+    }
+    return jsonify(response), 404, {"Content-Type": "application/json"}
 
 # Retrieve all trucks' locations from the database
 def get_truck_locations():

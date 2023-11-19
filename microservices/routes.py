@@ -50,10 +50,21 @@ def add_route():
 
     cursor = mysql.connection.cursor()
     cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, activo, average_speed, time, truck_id))
+
+    # Get the ID of the inserted route
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    route_id = cursor.fetchone()[0]
+
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Se agregó correctamente la ruta", "error": False}), 201, {"Content-Type": "application/json"}
+    response = {
+        "message": "Se agregó correctamente la ruta",
+        "route_id": route_id,
+        "error": False
+    }
+
+    return jsonify(response), 201, {"Content-Type": "application/json"}
 
 @routes.route("/edit-route", methods=["POST"])
 def edit_route():
@@ -74,7 +85,11 @@ def edit_route():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Se actualizó correctamente la ruta", "error": False}), 200, {"Content-Type": "application/json"}
+    response = {
+        "message": "Se actualizó correctamente la ruta",
+        "error": False
+    }
+    return jsonify(response), 200, {"Content-Type": "application/json"}
 
 @routes.route("/retrieve-route", methods=["GET"])
 def retrieve_route():
@@ -86,7 +101,17 @@ def retrieve_route():
     cursor.close()
 
     if route:
-        return jsonify({"route_id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_id": route[6]}), 200, {"Content-Type": "application/json"}
+        response = {
+            "route_id": route[0],
+            "name": route[1],
+            "distance": route[2],
+            "active": route[3],
+            "average_speed": route[4],
+            "time": route[5],
+            "truck_id": route[6],
+            "error": False
+        }
+        return jsonify(response), 200, {"Content-Type": "application/json"}
     else:
         return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
@@ -100,7 +125,11 @@ def delete_route():
     mysql.connection.commit()
     cursor.close()
 
-    return jsonify({"message": "Ruta eliminada exitosamente", "error": False}), 200, {"Content-Type": "application/json"}
+    response = {
+        "message": "Ruta eliminada exitosamente",
+        "error": False
+    }
+    return jsonify(response), 200, {"Content-Type": "application/json"}
 
 """CRUD"""
 
