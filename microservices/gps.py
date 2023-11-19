@@ -34,10 +34,7 @@ def handle_connect():
 @socketio.on("update")
 def handle_update():
     cursor = mysql.connection.cursor()
-    cursor.execute("""
-        UPDATE trucks
-        SET latitude = latitude + (RAND() * 0.01 - 0.005), longitude = longitude + (RAND() * 0.01 - 0.005);
-    """)
+    cursor.execute("CALL UpdateMap()")
     mysql.connection.commit()
     cursor.close()
 
