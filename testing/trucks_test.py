@@ -3,6 +3,10 @@ from locust import HttpUser, task, between
 class TrucksMicroserviceUser(HttpUser):
     wait_time = between(1, 3)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.new_truck_id = None
+
     # Simulating retrieving all the trucks
     @task
     def retrieve_trucks(self):

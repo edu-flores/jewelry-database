@@ -3,6 +3,10 @@ from locust import HttpUser, task, between
 class RoutesMicroserviceUser(HttpUser):
     wait_time = between(1, 3)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.new_route_id = None
+
     # Simulating getting all routes
     @task
     def retrieve_routes(self):
