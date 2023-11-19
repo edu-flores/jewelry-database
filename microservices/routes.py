@@ -2,6 +2,7 @@
 
 # Flask
 from flask import Flask, request, jsonify
+from flask_jwt_extended import JWTManager, jwt_required
 from flask_mysqldb import MySQL
 
 # XML generator
@@ -20,12 +21,15 @@ routes.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
 routes.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
 routes.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
 routes.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
+routes.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
+jwt = JWTManager(routes)
 mysql = MySQL(routes)
 
 """CRUD"""
 
 @routes.route("/retrieve-routes", methods=["GET"])
+@jwt_required()
 def retrieve_routes():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, t.name FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id")
@@ -39,6 +43,7 @@ def retrieve_routes():
         return jsonify({"error": False}), 401, {"Content-Type": "application/json"}
 
 @routes.route("/add-route", methods=["POST"])
+@jwt_required()
 def add_route():
     data = request.get_json()
     name = data["name"]
@@ -67,6 +72,7 @@ def add_route():
     return jsonify(response), 201, {"Content-Type": "application/json"}
 
 @routes.route("/edit-route", methods=["POST"])
+@jwt_required()
 def edit_route():
     data = request.get_json()
     id = data["id"]
@@ -92,6 +98,7 @@ def edit_route():
     return jsonify(response), 200, {"Content-Type": "application/json"}
 
 @routes.route("/retrieve-route", methods=["GET"])
+@jwt_required()
 def retrieve_route():
     id = request.args.get("id")
 
@@ -116,6 +123,7 @@ def retrieve_route():
     return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @routes.route("/delete-route", methods=["POST"])
+@jwt_required()
 def delete_route():
     data = request.get_json()
     id = data["id"]

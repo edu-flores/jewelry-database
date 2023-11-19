@@ -2,6 +2,7 @@
 
 # Flask
 from flask import Flask, request, jsonify
+from flask_jwt_extended import JWTManager, jwt_required
 from flask_mysqldb import MySQL
 
 # XML generator
@@ -20,12 +21,15 @@ trucks.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
 trucks.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
 trucks.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
 trucks.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
+trucks.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
+jwt = JWTManager(trucks)
 mysql = MySQL(trucks)
 
 """CRUD"""
 
 @trucks.route("/retrieve-trucks", methods=["GET"])
+@jwt_required()
 def retrieve_trucks():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT t.truck_id, t.name, t.total_distance, ((t.total_distance / 25) * 2.68) AS total_CO2, t.average_trip_distance, ((t.average_trip_distance / 25) * 2.68) AS average_CO2, t.latitude, t.longitude FROM trucks AS t")
@@ -50,6 +54,7 @@ def retrieve_trucks():
         return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @trucks.route("/add-truck", methods=["POST"])
+@jwt_required()
 def add_truck():
     data = request.get_json()
     name = data["name"]
@@ -76,6 +81,7 @@ def add_truck():
     return jsonify(response), 201, {"Content-Type": "application/json"}
 
 @trucks.route("/edit-truck", methods=["POST"])
+@jwt_required()
 def edit_truck():
     data = request.get_json()
     id = data["id"]
@@ -99,6 +105,7 @@ def edit_truck():
     return jsonify(response), 200, {"Content-Type": "application/json"}
 
 @trucks.route("/retrieve-truck", methods=["GET"])
+@jwt_required()
 def retrieve_truck():
     id = request.args.get("id")
 
@@ -122,6 +129,7 @@ def retrieve_truck():
     return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @trucks.route("/delete-truck", methods=["POST"])
+@jwt_required()
 def delete_truck():
     data = request.get_json()
     id = data["id"]

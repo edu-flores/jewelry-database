@@ -11,7 +11,7 @@ def routes():
     if "id" not in session:
         return redirect(url_for("sign_in", msg="Inicio de sesión requerido"))
 
-    routes = requests.get("http://localhost:5003/retrieve-routes")
+    routes = requests.get("http://localhost:5003/retrieve-routes", headers={"Authorization": f"Bearer {session['token']}"})
     routes_data = routes.json()
 
     if routes.status_code == 200:
@@ -24,7 +24,7 @@ def routes():
 # Add route template
 @app.route("/admin/route-add-form")
 def route_add_form():
-    trucks = requests.get("http://localhost:5004/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks", headers={"Authorization": f"Bearer {session['token']}"});
     trucks_data = trucks.json()
 
     # Get only the id and name of the trucks
@@ -41,7 +41,7 @@ def route_add():
     active = int(request.form.get("active"))
     truck_id = request.form.get("truck")
 
-    route_response = requests.post("http://localhost:5003/add-route", json={"name": name, "distance": distance, "time": time, "average_speed": average_speed, "active": active, "truck_id": truck_id})
+    route_response = requests.post("http://localhost:5003/add-route", json={"name": name, "distance": distance, "time": time, "average_speed": average_speed, "active": active, "truck_id": truck_id}, headers={"Authorization": f"Bearer {session['token']}"})
     response_data = route_response.json()
 
     return redirect(url_for("routes", msg=response_data["message"]))
@@ -56,7 +56,7 @@ def route_update(id):
     active = int(request.form.get("active"))
     truck_id = request.form.get("truck")
 
-    route_response = requests.post("http://localhost:5003/edit-route", json={"id": id, "name": name, "distance": distance, "time": time, "average_speed": average_speed, "active": active, "truck_id": truck_id})
+    route_response = requests.post("http://localhost:5003/edit-route", json={"id": id, "name": name, "distance": distance, "time": time, "average_speed": average_speed, "active": active, "truck_id": truck_id}, headers={"Authorization": f"Bearer {session['token']}"})
     response_data = route_response.json()
 
     return redirect(url_for("routes", msg=response_data["message"]))
@@ -64,10 +64,10 @@ def route_update(id):
 # Update route template
 @app.route("/admin/route-edit/<int:id>")
 def route_edit(id):
-    route = requests.get("http://localhost:5003/retrieve-route", params={"id": id})
+    route = requests.get("http://localhost:5003/retrieve-route", params={"id": id}, headers={"Authorization": f"Bearer {session['token']}"})
     route_data = route.json()
 
-    trucks = requests.get("http://localhost:5004/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks", headers={"Authorization": f"Bearer {session['token']}"})
     trucks_data = trucks.json()
 
     # Get only the id and name of the trucks
@@ -81,9 +81,9 @@ def route_edit(id):
 # Remove route from the DB
 @app.route("/admin/route-delete/<int:id>")
 def route_delete(id):
-    route = requests.post("http://localhost:5003/delete-route", json={"id": id})
+    route = requests.post("http://localhost:5003/delete-route", json={"id": id}, headers={"Authorization": f"Bearer {session['token']}"})
 
-    routes = requests.get("http://localhost:5003/retrieve-routes")
+    routes = requests.get("http://localhost:5003/retrieve-routes", headers={"Authorization": f"Bearer {session['token']}"})
     routes_data = routes.json()
 
     if route.status_code == 200 and routes.status_code == 200:

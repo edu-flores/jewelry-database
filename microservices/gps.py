@@ -2,6 +2,7 @@
 
 # Flask
 from flask import Flask, request, url_for, jsonify
+from flask_jwt_extended import JWTManager, jwt_required
 from flask_mysqldb import MySQL
 from flask_socketio import SocketIO
 
@@ -18,7 +19,9 @@ gps.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
 gps.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
 gps.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
 gps.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
+gps.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
+jwt = JWTManager(gps)
 mysql = MySQL(gps)
 socketio = SocketIO(gps, cors_allowed_origins="http://localhost:5000")
 
@@ -43,6 +46,7 @@ def handle_update():
 
 # Get locations for a map
 @gps.route("/get-locations", methods=["GET"])
+@jwt_required()
 def get_locations():
     if request.method == "GET":
         locations = get_truck_locations()

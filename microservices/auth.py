@@ -2,6 +2,7 @@
 
 # Flask
 from flask import Flask, request, url_for, jsonify
+from flask_jwt_extended import JWTManager, create_access_token
 from flask_mysqldb import MySQL
 
 # Misc
@@ -17,7 +18,9 @@ auth.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
 auth.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
 auth.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
 auth.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
+auth.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
+jwt = JWTManager(auth)
 mysql = MySQL(auth)
 
 # Check if the username and password combination is in the database
@@ -33,8 +36,10 @@ def check_auth():
     cursor.close()
 
     if account:
+        access_token = create_access_token(identity=username)
         response = {
             "message": "Autenticación exitosa",
+            "token": access_token,
             "id": account[0],
             "name": account[1],
             "last": account[2],

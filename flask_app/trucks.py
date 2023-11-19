@@ -11,7 +11,7 @@ def trucks():
     if "id" not in session:
         return redirect(url_for("sign_in", msg="Inicio de sesión requerido"))
 
-    trucks = requests.get("http://localhost:5004/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks", headers={"Authorization": f"Bearer {session['token']}"})
     trucks_data = trucks.json()
 
     if trucks.status_code == 200:
@@ -35,7 +35,7 @@ def truck_add():
     latitude = request.form.get("latitude")
     longitude = request.form.get("longitude")
 
-    truck_response = requests.post("http://localhost:5004/add-truck", json={"name": name, "total_distance": total_distance, "average_trip_distance": average_trip_distance, "latitude": latitude, "longitude": longitude})
+    truck_response = requests.post("http://localhost:5004/add-truck", json={"name": name, "total_distance": total_distance, "average_trip_distance": average_trip_distance, "latitude": latitude, "longitude": longitude}, headers={"Authorization": f"Bearer {session['token']}"})
     response_data = truck_response.json()
 
     return redirect(url_for("trucks", msg=response_data["message"]))
@@ -49,7 +49,7 @@ def truck_update(id):
     latitude = request.form.get("latitude")
     longitude = request.form.get("longitude")
 
-    truck_response = requests.post("http://localhost:5004/edit-truck", json={"id": id,"name": name, "total_distance": total_distance, "average_trip_distance": average_trip_distance, "latitude": latitude, "longitude": longitude})
+    truck_response = requests.post("http://localhost:5004/edit-truck", json={"id": id,"name": name, "total_distance": total_distance, "average_trip_distance": average_trip_distance, "latitude": latitude, "longitude": longitude}, headers={"Authorization": f"Bearer {session['token']}"})
     response_data = truck_response.json()
 
     return redirect(url_for("trucks", msg=response_data["message"]))
@@ -57,10 +57,10 @@ def truck_update(id):
 # Update truck template
 @app.route("/admin/truck-edit/<int:id>")
 def truck_edit(id):
-    truck = requests.get("http://localhost:5004/retrieve-truck", params={"id":id})
+    truck = requests.get("http://localhost:5004/retrieve-truck", params={"id":id}, headers={"Authorization": f"Bearer {session['token']}"})
     truck_data = truck.json()
 
-    trucks = requests.get("http://localhost:5004/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks", headers={"Authorization": f"Bearer {session['token']}"})
     trucks_data = trucks.json()
 
     if truck.status_code == 200 and trucks.status_code == 200:
@@ -71,9 +71,9 @@ def truck_edit(id):
 # Remove truck from the DB
 @app.route("/admin/truck-delete/<int:id>")
 def truck_delete(id):
-    truck = requests.post("http://localhost:5004/delete-truck", json={"id": id})
+    truck = requests.post("http://localhost:5004/delete-truck", json={"id": id}, headers={"Authorization": f"Bearer {session['token']}"})
 
-    trucks = requests.get("http://localhost:5004/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks", headers={"Authorization": f"Bearer {session['token']}"})
     trucks_data = trucks.json()
 
     if truck.status_code == 200 and trucks.status_code == 200:
