@@ -49,10 +49,7 @@ def add_route():
     truck_id = data["truck_id"]
 
     cursor = mysql.connection.cursor()
-    if truck_id == -1:
-        cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time) VALUES (%s,%s,%s,%s,%s)", (name, distance, activo, average_speed, time))
-    else:
-        cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, activo, average_speed, time, truck_id))
+    cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, activo, average_speed, time, truck_id))
     mysql.connection.commit()
     cursor.close()
 
@@ -70,14 +67,10 @@ def edit_route():
     truck_id = data["truck_id"]
 
     cursor = mysql.connection.cursor()
-    if truck_id == -1:
-        cursor.execute("""UPDATE routes SET
-            name=%s, distance=%s, active=%s, average_speed=%s, time=%s
-            WHERE route_id = %s """, (name, distance, activo, average_speed, time, id))
-    else:
-        cursor.execute("""UPDATE routes SET
-            name=%s, distance=%s, active=%s, average_speed=%s, time=%s, truck_id=%s
-            WHERE route_id = %s """, (name, distance, activo, average_speed, time, truck_id, id))
+    cursor.execute("""UPDATE routes SET
+        name=%s, distance=%s, active=%s, average_speed=%s, time=%s, truck_id=%s
+        WHERE route_id = %s
+    """, (name, distance, activo, average_speed, time, truck_id, id))
     mysql.connection.commit()
     cursor.close()
 
@@ -94,19 +87,6 @@ def retrieve_route():
 
     if route:
         return jsonify({"route_id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_id": route[6]}), 200, {"Content-Type": "application/json"}
-    else:
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
-
-@routes.route("/retrieve-trucks", methods=["GET"])
-def retrieve_trucks():
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT truck_id, name FROM trucks")
-    trucks = cursor.fetchall()
-    cursor.close()
-
-    if trucks:
-        trucksJSON = [{"id": truck[0], "name": truck[1]} for truck in trucks]
-        return jsonify(trucksJSON), 200, {"Content-Type": "application/json"}
     else:
         return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 

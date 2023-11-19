@@ -24,10 +24,12 @@ def routes():
 # Add route template
 @app.route("/admin/route-add-form")
 def route_add_form():
-    trucks = requests.get("http://localhost:5003/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks")
     trucks_data = trucks.json()
 
-    return render_template("route-form.html", data=0, trucks=trucks_data)
+    # Get only the id and name of the trucks
+    filtered_trucks = [{"id": truck["id"], "name": truck["name"]} for truck in trucks_data["trucks"]]
+    return render_template("route-form.html", data=0, trucks=filtered_trucks)
 
 # Add route into the DB
 @app.route("/route-add", methods=["POST"])
@@ -37,9 +39,7 @@ def route_add():
     time = int(request.form.get("time"))
     average_speed = int(request.form.get("average_speed"))
     activo = int(request.form.get("activo"))
-    truck_id = -1
-    if activo:
-        truck_id = request.form.get("truck")
+    truck_id = request.form.get("truck")
 
     route_response = requests.post("http://localhost:5003/add-route", json={"name": name, "distance": distance, "time": time, "average_speed": average_speed, "activo": activo, "truck_id": truck_id})
     response_data = route_response.json()
@@ -54,9 +54,7 @@ def route_update(id):
     time = int(request.form.get("time"))
     average_speed = int(request.form.get("average_speed"))
     activo = int(request.form.get("activo"))
-    truck_id = -1
-    if activo:
-        truck_id = request.form.get("truck")
+    truck_id = request.form.get("truck")
 
     route_response = requests.post("http://localhost:5003/edit-route", json={"id": id, "name": name, "distance": distance, "time": time, "average_speed": average_speed, "activo": activo, "truck_id": truck_id})
     response_data = route_response.json()
@@ -69,11 +67,14 @@ def route_edit(id):
     route = requests.get("http://localhost:5003/retrieve-route", params={"id": id})
     route_data = route.json()
 
-    trucks = requests.get("http://localhost:5003/retrieve-trucks")
+    trucks = requests.get("http://localhost:5004/retrieve-trucks")
     trucks_data = trucks.json()
 
+    # Get only the id and name of the trucks
+    filtered_trucks = [{"id": truck["id"], "name": truck["name"]} for truck in trucks_data["trucks"]]
+
     if route.status_code == 200 and trucks.status_code == 200:
-        return render_template("route-form.html", data=1, route=route_data, trucks=trucks_data)
+        return render_template("route-form.html", data=1, route=route_data, trucks=filtered_trucks)
     else:
         return render_template("route-form.html", error=1)
 
