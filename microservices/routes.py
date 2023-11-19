@@ -31,191 +31,261 @@ mysql = MySQL(routes)
 @routes.route("/retrieve-routes", methods=["GET"])
 @jwt_required()
 def retrieve_routes():
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, t.name FROM routes AS r LEFT JOIN trucks AS t ON r.truck_id = t.truck_id")
-    routes = cursor.fetchall()
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, t.name
+            FROM routes AS r
+            LEFT JOIN trucks AS t
+            ON r.truck_id = t.truck_id
+        """)
+        routes = cursor.fetchall()
 
-    cursor.close()
-    if routes:
-        routesJSON = [{"id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_name": route[6], "error": False} for route in routes]
-        return jsonify(routesJSON), 200, {"Content-Type": "application/json"}
+        cursor.close()
+        if routes:
+            response = {
+                "routes": [{
+                    "id": route[0],
+                    "name": route[1],
+                    "distance": route[2],
+                    "active": route[3],
+                    "average_speed": route[4],
+                    "time": route[5],
+                    "truck_name": route[6]
+                } for route in routes],
+                "error": False
+            }
 
-    return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+            return jsonify(response), 200, {"Content-Type": "application/json"}
+
+        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+    except Exception as e:
+        response = {
+            "message": f"Internal Server Error: {str(e)}",
+            "error": True
+        }
+        return jsonify(response), 500, {"Content-Type": "application/json"}
 
 @routes.route("/add-route", methods=["POST"])
 @jwt_required()
 def add_route():
-    data = request.get_json()
-    name = data["name"]
-    distance = data["distance"]
-    active = data["active"]
-    average_speed = data["average_speed"]
-    time = data["time"]
-    truck_id = data["truck_id"]
+    try:
+        data = request.get_json()
+        name = data["name"]
+        distance = data["distance"]
+        active = data["active"]
+        average_speed = data["average_speed"]
+        time = data["time"]
+        truck_id = data["truck_id"]
 
-    cursor = mysql.connection.cursor()
-    cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, active, average_speed, time, truck_id))
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, active, average_speed, time, truck_id))
 
-    # Get the ID of the inserted route
-    cursor.execute("SELECT LAST_INSERT_ID()")
-    route_id = cursor.fetchone()[0]
+        # Get the ID of the inserted route
+        cursor.execute("SELECT LAST_INSERT_ID()")
+        route_id = cursor.fetchone()[0]
 
-    mysql.connection.commit()
-    cursor.close()
+        mysql.connection.commit()
+        cursor.close()
 
-    response = {
-        "message": "Se agregó correctamente la ruta",
-        "route_id": route_id,
-        "error": False
-    }
+        response = {
+            "message": "Se agregó correctamente la ruta",
+            "route_id": route_id,
+            "error": False
+        }
 
-    return jsonify(response), 201, {"Content-Type": "application/json"}
+        return jsonify(response), 201, {"Content-Type": "application/json"}
+    except Exception as e:
+        response = {
+            "message": f"Internal Server Error: {str(e)}",
+            "error": True
+        }
+        return jsonify(response), 500, {"Content-Type": "application/json"}
 
 @routes.route("/edit-route", methods=["POST"])
 @jwt_required()
 def edit_route():
-    data = request.get_json()
-    id = data["id"]
-    name = data["name"]
-    distance = data["distance"]
-    active = data["active"]
-    average_speed = data["average_speed"]
-    time = data["time"]
-    truck_id = data["truck_id"]
+    try:
+        data = request.get_json()
+        id = data["id"]
+        name = data["name"]
+        distance = data["distance"]
+        active = data["active"]
+        average_speed = data["average_speed"]
+        time = data["time"]
+        truck_id = data["truck_id"]
 
-    cursor = mysql.connection.cursor()
-    cursor.execute("""UPDATE routes SET
-        name=%s, distance=%s, active=%s, average_speed=%s, time=%s, truck_id=%s
-        WHERE route_id = %s
-    """, (name, distance, active, average_speed, time, truck_id, id))
-    mysql.connection.commit()
-    cursor.close()
+        cursor = mysql.connection.cursor()
+        cursor.execute("""UPDATE routes SET
+            name=%s, distance=%s, active=%s, average_speed=%s, time=%s, truck_id=%s
+            WHERE route_id = %s
+        """, (name, distance, active, average_speed, time, truck_id, id))
+        mysql.connection.commit()
+        cursor.close()
 
-    response = {
-        "message": "Se actualizó correctamente la ruta",
-        "error": False
-    }
-    return jsonify(response), 200, {"Content-Type": "application/json"}
+        response = {
+            "message": "Se actualizó correctamente la ruta",
+            "error": False
+        }
+        return jsonify(response), 200, {"Content-Type": "application/json"}
+    except Exception as e:
+        response = {
+            "message": f"Internal Server Error: {str(e)}",
+            "error": True
+        }
+        return jsonify(response), 500, {"Content-Type": "application/json"}
 
 @routes.route("/retrieve-route", methods=["GET"])
 @jwt_required()
 def retrieve_route():
-    id = request.args.get("id")
+    try:
+        id = request.args.get("id")
 
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM routes WHERE route_id = %s", (id,))
-    route = cursor.fetchone()
-    cursor.close()
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT * FROM routes WHERE route_id = %s", (id,))
+        route = cursor.fetchone()
+        cursor.close()
 
-    if route:
+        if route:
+            response = {
+                "route_id": route[0],
+                "name": route[1],
+                "distance": route[2],
+                "active": route[3],
+                "average_speed": route[4],
+                "time": route[5],
+                "truck_id": route[6],
+                "error": False
+            }
+            return jsonify(response), 200, {"Content-Type": "application/json"}
+
+        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+    except Exception as e:
         response = {
-            "route_id": route[0],
-            "name": route[1],
-            "distance": route[2],
-            "active": route[3],
-            "average_speed": route[4],
-            "time": route[5],
-            "truck_id": route[6],
-            "error": False
+            "message": f"Internal Server Error: {str(e)}",
+            "error": True
         }
-        return jsonify(response), 200, {"Content-Type": "application/json"}
-
-    return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+        return jsonify(response), 500, {"Content-Type": "application/json"}
 
 @routes.route("/delete-route", methods=["POST"])
 @jwt_required()
 def delete_route():
-    data = request.get_json()
-    id = data["id"]
+    try:
+        data = request.get_json()
+        id = data["id"]
 
-    cursor = mysql.connection.cursor()
-    cursor.execute("DELETE FROM routes WHERE route_id = %s", (id,))
-    mysql.connection.commit()
-    cursor.close()
+        cursor = mysql.connection.cursor()
+        cursor.execute("DELETE FROM routes WHERE route_id = %s", (id,))
+        mysql.connection.commit()
+        cursor.close()
 
-    response = {
-        "message": "Ruta eliminada exitosamente",
-        "error": False
-    }
-    return jsonify(response), 200, {"Content-Type": "application/json"}
+        response = {
+            "message": "Ruta eliminada exitosamente",
+            "error": False
+        }
+        return jsonify(response), 200, {"Content-Type": "application/json"}
+    except Exception as e:
+        response = {
+            "message": f"Internal Server Error: {str(e)}",
+            "error": True
+        }
+        return jsonify(response), 500, {"Content-Type": "application/json"}
 
 """CRUD"""
 
 # XML Format
 @routes.route("/retrieve-xml", methods=["GET"])
 def retrieve_xml():
-    id = request.args.get("id")
-    route = get_route_data(id)
+    try:
+        id = request.args.get("id")
+        route = get_route_data(id)
 
-    root = ET.Element("Route")
+        root = ET.Element("Route")
 
-    route_id_elem = ET.SubElement(root, "ID")
-    route_id_elem.text = str(route[0])
+        route_id_elem = ET.SubElement(root, "ID")
+        route_id_elem.text = str(route[0])
 
-    data_elem = ET.SubElement(root, "Data")
+        data_elem = ET.SubElement(root, "Data")
 
-    route_name_elem = ET.SubElement(data_elem, "Name")
-    route_name_elem.text = str(route[1])
+        route_name_elem = ET.SubElement(data_elem, "Name")
+        route_name_elem.text = str(route[1])
 
-    distance_elem = ET.SubElement(data_elem, "Distance")
-    distance_elem.text = str(route[2])
+        distance_elem = ET.SubElement(data_elem, "Distance")
+        distance_elem.text = str(route[2])
 
-    route_name_elem = ET.SubElement(data_elem, "Active")
-    route_name_elem.text = str(route[3])
+        route_name_elem = ET.SubElement(data_elem, "Active")
+        route_name_elem.text = str(route[3])
 
-    average_speed_elem = ET.SubElement(data_elem, "AverageSpeed")
-    average_speed_elem.text = str(route[4])
+        average_speed_elem = ET.SubElement(data_elem, "AverageSpeed")
+        average_speed_elem.text = str(route[4])
 
-    time_elem = ET.SubElement(data_elem, "Time")
-    time_elem.text = str(route[5])
+        time_elem = ET.SubElement(data_elem, "Time")
+        time_elem.text = str(route[5])
 
-    truck_elem = ET.SubElement(root, "Truck")
+        truck_elem = ET.SubElement(root, "Truck")
 
-    truck_id_elem = ET.SubElement(truck_elem, "TruckID")
-    truck_id_elem.text = str(route[7])
+        truck_id_elem = ET.SubElement(truck_elem, "TruckID")
+        truck_id_elem.text = str(route[7])
 
-    truck_name_elem = ET.SubElement(truck_elem, "TruckName")
-    truck_name_elem.text = str(route[8])
+        truck_name_elem = ET.SubElement(truck_elem, "TruckName")
+        truck_name_elem.text = str(route[8])
 
-    xml = ET.tostring(root)
+        xml = ET.tostring(root)
 
-    return xml
+        return xml
+    except Exception as e:
+        response = {
+            "message": f"Internal Server Error: {str(e)}",
+            "error": True
+        }
+        return jsonify(response), 500, {"Content-Type": "application/json"}
 
 # JSON Format
 @routes.route("/retrieve-json", methods=["GET"])
 def retrieve_json():
-    id = request.args.get("id")
-    route = get_route_data(id)
+    try:
+        id = request.args.get("id")
+        route = get_route_data(id)
 
-    j = {
-        "id": route[0],
-        "data": {
-            "name": route[1],
-            "distance": route[2],
-            "active": route[3] == "1",
-            "averageSpeed": route[4],
-            "time": route[5]
-        },
-        "truck": {
-            "id": route[7],
-            "name": route[8]
+        j = {
+            "id": route[0],
+            "data": {
+                "name": route[1],
+                "distance": route[2],
+                "active": route[3] == "1",
+                "averageSpeed": route[4],
+                "time": route[5]
+            },
+            "truck": {
+                "id": route[7],
+                "name": route[8]
+            }
         }
-    }
 
-    return j
+        return jsonify(j)
+    except Exception as e:
+        response = {
+            "message": f"Internal Server Error: {str(e)}",
+            "error": True
+        }
+        return jsonify(response), 500, {"Content-Type": "application/json"}
 
 # Route data query
 def get_route_data(id):
-    cursor = mysql.connection.cursor()
-    cursor.execute("""
-        SELECT routes.*, trucks.truck_id, trucks.name
-        FROM routes JOIN trucks ON routes.truck_id = trucks.truck_id
-        WHERE route_id = %s
-    """, (id,))
-    route = cursor.fetchone()
-    cursor.close()
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            SELECT routes.*, trucks.truck_id, trucks.name
+            FROM routes JOIN trucks ON routes.truck_id = trucks.truck_id
+            WHERE route_id = %s
+        """, (id,))
+        route = cursor.fetchone()
+        cursor.close()
 
-    return route
+        return route
+    except Exception as e:
+        print(f"Error in get_route_data: {str(e)}")
+        return None
 
 if __name__ == "__main__":
     routes.run(debug=True, host="0.0.0.0", port=5003)

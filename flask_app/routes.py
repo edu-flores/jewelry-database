@@ -15,7 +15,7 @@ def routes():
     routes_data = routes.json()
 
     if routes.status_code == 200:
-        return render_template("routes.html", data=1, message=request.args.get("msg", ""), routes=routes_data)
+        return render_template("routes.html", data=1, message=request.args.get("msg", ""), routes=routes_data["routes"])
     else:
         return render_template("routes.html", data=0, message=request.args.get("msg", ""))
 
