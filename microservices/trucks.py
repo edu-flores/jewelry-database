@@ -50,8 +50,8 @@ def retrieve_trucks():
             }
         }
         return jsonify(trucksJSON), 200, {"Content-Type": "application/json"}
-    else:
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+
+    return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @trucks.route("/add-truck", methods=["POST"])
 @jwt_required()

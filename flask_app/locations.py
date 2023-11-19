@@ -15,7 +15,10 @@ def truck_map():
         return redirect(url_for("sign_in", msg="Inicio de sesión requerido"))
 
     # Access GPS microservice
-    gps_response = requests.get("http://localhost:5002/get-locations", headers={"Authorization": f"Bearer {session['token']}"})
-    response_data = gps_response.json()
+    locations_response = requests.get("http://localhost:5002/get-locations", headers={"Authorization": f"Bearer {session['token']}"})
+    purchases_response = requests.get("http://localhost:5002/get-purchases", headers={"Authorization": f"Bearer {session['token']}"})
 
-    return render_template("map.html", maps_api_key=os.getenv("GOOGLE_MAPS_API_KEY"), locations=response_data["locations"], purchases=response_data["purchases"])
+    locations_data = locations_response.json()
+    purchases_data = purchases_response.json()
+
+    return render_template("map.html", maps_api_key=os.getenv("GOOGLE_MAPS_API_KEY"), locations=locations_data["locations"], purchases=purchases_data["purchases"])

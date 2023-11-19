@@ -39,8 +39,8 @@ def retrieve_routes():
     if routes:
         routesJSON = [{"id": route[0], "name": route[1], "distance": route[2], "active": route[3], "average_speed": route[4], "time": route[5], "truck_name": route[6], "error": False} for route in routes]
         return jsonify(routesJSON), 200, {"Content-Type": "application/json"}
-    else:
-        return jsonify({"error": False}), 401, {"Content-Type": "application/json"}
+
+    return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 @routes.route("/add-route", methods=["POST"])
 @jwt_required()

@@ -48,23 +48,33 @@ def handle_update():
 @gps.route("/get-locations", methods=["GET"])
 @jwt_required()
 def get_locations():
-    if request.method == "GET":
-        locations = get_truck_locations()
-        purchases = get_truck_purchases()
+    locations = get_truck_locations()
 
+    if locations:
         response = {
             "message": "Ubicaciones recuperadas con éxito",
             "locations": locations,
+            "error": False
+        }
+        return jsonify(response), 200, {"Content-Type": "application/json"}
+
+    return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+
+# Get purchases and their statuses
+@gps.route("/get-purchases", methods=["GET"])
+@jwt_required()
+def get_purchases():
+    purchases = get_truck_purchases()
+
+    if purchases:
+        response = {
+            "message": "Compras recuperadas con éxito",
             "purchases": purchases,
             "error": False
         }
         return jsonify(response), 200, {"Content-Type": "application/json"}
 
-    response = {
-        "message": "Error de método",
-        "error": True
-    }
-    return jsonify(response), 404, {"Content-Type": "application/json"}
+    return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
 
 # Retrieve all trucks' locations from the database
 def get_truck_locations():
