@@ -41,10 +41,6 @@ def retrieve_trucks():
         trucks = cursor.fetchall()
         cursor.close()
 
-        # Environment
-        highest_co2_truck = get_highest_emission_truck()
-        environmental_data = get_environmental_data()
-
         if trucks:
             response = {
                 "trucks": [{
@@ -57,11 +53,7 @@ def retrieve_trucks():
                     "latitude": truck[6],
                     "longitude": truck[7]
                 } for truck in trucks],
-                "environment": {
-                    "highest": highest_co2_truck[0],
-                    "total": environmental_data[0],
-                    "average": environmental_data[1]
-                },
+                "message": "Camiones recuperados con éxito",
                 "error": False
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
@@ -199,6 +191,34 @@ def delete_truck():
         return jsonify(response), 500, {"Content-Type": "application/json"}
 
 """CRUD"""
+
+# Get environmental data
+@trucks.route("/get-conditions")
+@jwt_required()
+def get_conditions():
+    try:
+        highest_co2_truck = get_highest_emission_truck()
+        environmental_data = get_environmental_data()
+
+        if highest_co2_truck and environmental_data:
+            response = {
+                "environment": {
+                    "highest": highest_co2_truck[0],
+                    "total": environmental_data[0],
+                    "average": environmental_data[1]
+                },
+                "message": "Datos recuperadas con éxito",
+                "error": False
+            }
+            return jsonify(response), 200, {"Content-Type": "application/json"}
+
+        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+    except Exception as e:
+        response = {
+            "message": f"Internal Server Error: {str(e)}",
+            "error": True
+        }
+        return jsonify(response), 500, {"Content-Type": "application/json"}
 
 # Total CO2 and average CO2 by all trucks
 def get_environmental_data():

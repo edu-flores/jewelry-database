@@ -12,10 +12,13 @@ def trucks():
         return redirect(url_for("sign_in", msg="Inicio de sesión requerido"))
 
     trucks = requests.get("http://localhost:5004/retrieve-trucks", headers={"Authorization": f"Bearer {session['token']}"})
+    conditions = requests.get("http://localhost:5004/get-conditions", headers={"Authorization": f"Bearer {session['token']}"})
+
     trucks_data = trucks.json()
+    conditions_data = conditions.json()
 
     if trucks.status_code == 200:
-        return render_template("trucks.html", data=1, message=request.args.get("msg", ""), trucks=trucks_data["trucks"], environment=trucks_data["environment"])
+        return render_template("trucks.html", data=1, message=request.args.get("msg", ""), trucks=trucks_data["trucks"], environment=conditions_data["environment"])
     else:
         return render_template("trucks.html", data=0, message=request.args.get("msg", ""))
 
