@@ -58,7 +58,11 @@ def retrieve_trucks():
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
 
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+        response = {
+            "message": "No se encontraron camiones",
+            "error": True
+        }
+        return jsonify(response), 404, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",
@@ -157,7 +161,11 @@ def retrieve_truck():
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
 
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+        response = {
+            "message": "No se encontró el camión",
+            "error": True
+        }
+        return jsonify(response), 404, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",
@@ -212,7 +220,11 @@ def get_conditions():
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
 
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+        response = {
+            "message": "No se encontraron datos",
+            "error": True
+        }
+        return jsonify(response), 404, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",

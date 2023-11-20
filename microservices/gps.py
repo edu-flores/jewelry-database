@@ -62,7 +62,11 @@ def get_locations():
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
 
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+        response = {
+            "message": "No se encontraron ubicaciones",
+            "error": True
+        }
+        return jsonify(response), 404, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",
@@ -85,7 +89,11 @@ def get_purchases():
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
 
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+        response = {
+            "message": "No se encontraron compras",
+            "error": True
+        }
+        return jsonify(response), 404, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",

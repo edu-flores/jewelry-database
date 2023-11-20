@@ -59,7 +59,11 @@ def retrieve_routes():
 
             return jsonify(response), 200, {"Content-Type": "application/json"}
 
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+        response = {
+            "message": "No se encontraron rutas",
+            "error": True
+        }
+        return jsonify(response), 404, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",
@@ -163,7 +167,11 @@ def retrieve_route():
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
 
-        return jsonify({"error": True}), 404, {"Content-Type": "application/json"}
+        response = {
+            "message": "No se encontró la ruta",
+            "error": True
+        }
+        return jsonify(response), 404, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",
