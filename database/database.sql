@@ -12,11 +12,17 @@ DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS purchase;
 DROP TABLE IF EXISTS client;
 DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS gps_data;
+DROP TABLE IF EXISTS environmental_data;
+DROP TABLE IF EXISTS samples;
+DROP TABLE IF EXISTS short_stops;
+DROP TABLE IF EXISTS long_stops;
 
 -- Drop stored procedures if they exist
 DROP PROCEDURE IF EXISTS GetPurchaseDetails;
 DROP PROCEDURE IF EXISTS GetPurchaseProducts;
 DROP PROCEDURE IF EXISTS CreatePurchase;
+DROP PROCEDURE IF EXISTS UpdateMap;
 
 -- Tables and sample data
 
@@ -48,7 +54,14 @@ CREATE TABLE trucks (
 INSERT INTO trucks VALUES
 (1, "SVY-312", 21000, 10000, 25.6691452, -100.3854379),
 (2, "RVW-115", 1500, 1500, NULL, NULL),
-(3, "KFX-842", 4500, 4500, 25.6914035, -100.2513623);
+(3, "KFX-842", 4500, 4500, 25.6914035, -100.2513623),
+(4, "GHZ-452", 6500, 5500, 25.6514035, -100.2413623),
+(5, "HDW-763", 8500, 6500, 25.7414035, -100.2613623),
+(6, "HVS-532", 42500, 8500, 25.7214035, -100.2713623),
+(7, "DEU-346", 34500, 9500, 25.6314035, -100.3313623),
+(8, "LJG-563", 15500, 7500, 25.6614035, -100.3213623),
+(9, "YFZ-258", 75500, 8500, 25.6714035, -100.2813623),
+(10, "FKT-975", 85500, 10500, 25.6814035, -100.2113623);
 
 CREATE TABLE routes (
     route_id INT AUTO_INCREMENT,
@@ -63,10 +76,94 @@ CREATE TABLE routes (
 );
 
 INSERT INTO routes VALUES
-(1, "FiftyCent", 5500, 1, 90, 180, 1),
+(1, "Ruta Común", 5500, 1, 90, 180, 1),
 (2, "Route 923", 1500, 0, 60, 40, 2),
 (3, "Gonzalitos", 15500, 1, 120, 320, 1),
-(4, "La Peligrosa", 4500, 1, 90, 20, 3);
+(4, "La Peligrosa", 4500, 1, 90, 200, 3),
+(5, "Consitución", 7500, 1, 100, 392, 5),
+(6, "Larga", 12500, 1, 120, 853, 3),
+(7, "Corta", 3500, 1, 60, 284, 6),
+(8, "Norte", 28500, 1, 95, 683, 7),
+(9, "Sur", 13500, 1, 78, 274, 8),
+(10, "Route 392", 8400, 1, 83, 683, 9);
+
+CREATE TABLE samples (
+    sample_id INT NOT NULL AUTO_INCREMENT,
+    latitude DOUBLE NOT NULL,
+    longitude DOUBLE NOT NULL,
+    datetime DATETIME NOT NULL,
+    route_id INT NOT NULL,
+    truck_id INT NOT NULL,
+    distance INT NOT NULL,
+    speed DOUBLE NOT NULL,
+    PRIMARY KEY (sample_id),
+    FOREIGN KEY (route_id) REFERENCES routes (route_id),
+    FOREIGN KEY (truck_id) REFERENCES trucks (truck_id)
+);
+
+INSERT INTO samples (latitude, longitude, datetime, route_id, truck_id, distance, speed)
+SELECT
+    RAND() * (25.8 - 25.6) + 25.6 AS latitude,
+    RAND() * (-100.1 - (-100.5)) - 100.5 AS longitude,
+    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR AS datetime,
+    FLOOR(RAND() * 10) + 1 AS route_id,
+    FLOOR(RAND() * 10) + 1 AS truck_id,
+    FLOOR(RAND() * 1000) + 1 AS distance,
+    RAND() * 100 + 1 AS speed
+FROM
+    information_schema.tables t1,
+    information_schema.tables t2
+LIMIT 10000;
+
+CREATE TABLE short_stops (
+    short_stop_id INT NOT NULL AUTO_INCREMENT,
+    route_id INT NOT NULL,
+    latitude DOUBLE NOT NULL,
+    longitude DOUBLE NOT NULL,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    duration INT NOT NULL,
+    PRIMARY KEY (short_stop_id),
+    FOREIGN KEY (route_id) REFERENCES routes (route_id)
+);
+
+INSERT INTO short_stops (route_id, latitude, longitude, start_time, end_time, duration)
+SELECT
+    FLOOR(RAND() * 10) + 1 AS route_id,
+    RAND() * (25.8 - 25.6) + 25.6 AS latitude,
+    RAND() * (-100.1 - (-100.5)) - 100.5 AS longitude,
+    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR AS start_time,
+    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR AS end_time,
+    RAND() * 100 + 1 AS duration
+FROM
+    information_schema.tables t1,
+    information_schema.tables t2
+LIMIT 10000;
+
+CREATE TABLE long_stops (
+    long_stop_id INT NOT NULL AUTO_INCREMENT,
+    route_id INT NOT NULL,
+    latitude DOUBLE NOT NULL,
+    longitude DOUBLE NOT NULL,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    duration INT NOT NULL,
+    PRIMARY KEY (long_stop_id),
+    FOREIGN KEY (route_id) REFERENCES routes (route_id)
+);
+
+INSERT INTO long_stops (route_id, latitude, longitude, start_time, end_time, duration)
+SELECT
+    FLOOR(RAND() * 10) + 1 AS route_id,
+    RAND() * (25.8 - 25.6) + 25.6 AS latitude,
+    RAND() * (-100.1 - (-100.5)) - 100.5 AS longitude,
+    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR AS start_time,
+    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR AS end_time,
+    RAND() * 100 + 1 AS duration
+FROM
+    information_schema.tables t1,
+    information_schema.tables t2
+LIMIT 10000;
 
 CREATE TABLE gps_data (
     gps_data_id INT NOT NULL AUTO_INCREMENT,
@@ -80,11 +177,18 @@ CREATE TABLE gps_data (
     FOREIGN KEY (truck_id) REFERENCES trucks (truck_id)
 );
 
-INSERT INTO gps_data VALUES
-(1, 1, 100, 1, 25.6641452, -100.3851379, "2023-11-01 00:00:00"),
-(2, 3, 150, 1, 25.6924035, -100.2533623, "2023-11-01 00:00:00"),
-(3, 3, 40, 0, 25.6554035, -100.2563623, "2023-11-01 00:00:00"),
-(4, 1, 200, 1, 25.6621452, -100.3857379, "2023-11-01 00:00:00");
+INSERT INTO gps_data (truck_id, air_quality, contaminants, latitude, longitude, date)
+SELECT
+    FLOOR(RAND() * 10) + 1 AS truck_id,
+    FLOOR(RAND() * 500) AS air_quality,
+    FLOOR(RAND() * 2) AS contaminants,
+    RAND() * (25.8 - 25.6) + 25.6 AS latitude,
+    RAND() * (-100.1 - (-100.5)) - 100.5 AS longitude,
+    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR AS date
+FROM
+    information_schema.tables t1,
+    information_schema.tables t2
+LIMIT 100;
 
 CREATE TABLE environmental_data (
     environmental_data_id INT NOT NULL AUTO_INCREMENT,
@@ -97,17 +201,18 @@ CREATE TABLE environmental_data (
     PRIMARY KEY (environmental_data_id)
 );
 
-INSERT INTO environmental_data VALUES
-(1, 25.5, 55.2, 2.8, 12.1, 1012.3, "2023-11-01 00:00:00"),
-(2, 26.7, 56.3, 3.1, 11.9, 1011.5, "2023-11-01 00:00:00"),
-(3, 25.9, 55.7, 2.7, 12.2, 1012.1, "2023-11-01 00:00:00"),
-(4, 25.2, 54.8, 2.4, 11.6, 1011.8, "2023-11-01 00:00:00"),
-(5, 25.8, 56.1, 3.0, 12.0, 1012.0, "2023-11-01 00:00:00"),
-(6, 25.4, 55.5, 2.6, 11.8, 1011.7, "2023-11-01 00:00:00"),
-(7, 26.1, 56.4, 3.2, 12.3, 1012.2, "2023-11-01 00:00:00"),
-(8, 25.6, 55.8, 2.7, 11.7, 1011.9, "2023-11-01 00:00:00"),
-(9, 25.1, 54.9, 2.5, 11.5, 1011.6, "2023-11-01 00:00:00"),
-(10, 25.7, 56.0, 2.9, 12.0, 1011.9, "2023-11-01 00:00:00");
+INSERT INTO environmental_data (temperature, humidity, precipitation, wind_speed, pressure, date)
+SELECT
+    RAND() * (40 - 10) + 10 AS temperature,
+    RAND() * 100 AS humidity,
+    RAND() * 1000 AS precipitation,
+    RAND() * (30 - 5) + 5 AS wind_speed,
+    RAND() * (1100 - 1000) + 1000 AS pressure,
+    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR AS date
+FROM
+    information_schema.tables t1,
+    information_schema.tables t2
+LIMIT 10000;
 
 CREATE TABLE address (
     address_id INT NOT NULL AUTO_INCREMENT,
@@ -153,7 +258,9 @@ CREATE TABLE purchase (
 );
 
 INSERT INTO purchase VALUES
-(1, "2023-08-09 18:00:00", 1, 1, 2, "En camino", "Frida Montiel", "Me urge la entrega para mañana, es el cumpleaños de mi esposa.", 1, 12500);
+(1, "2023-08-09 18:00:00", 1, 1, 2, "En camino", "Frida Montiel", "Me urge la entrega para mañana, es el cumpleaños de mi esposa.", 1, 12500),
+(2, "2023-09-25 12:00:00", 1, 1, 2, "En camino", "Gabriel Morales", "Cuidado con el empaque.", 1, 1000),
+(3, "2023-11-18 05:00:00", 1, 1, 2, "En camino", "Raúl Salinas", "Todo bien.", 1, 10500);
 
 CREATE TABLE product (
     product_code VARCHAR(255) NOT NULL,
@@ -177,7 +284,9 @@ CREATE TABLE purchase_detail (
 
 INSERT INTO purchase_detail VALUES
 (1, "872-AA", 1, 10500),
-(1, "926-FH", 2, 2000);
+(1, "926-FH", 2, 1000),
+(2, "926-FH", 1, 1000),
+(3, "872-AA", 1, 10500);
 
 -- Stored Procedures
 
