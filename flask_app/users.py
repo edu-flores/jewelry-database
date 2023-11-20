@@ -31,9 +31,10 @@ def login():
         session["id"] = response_data["id"]
         session["name"] = response_data["name"] + " " + response_data["last"]
         session["token"] = response_data["token"]
+        session["admin"] = response_data["admin"] == 1
         return redirect("/admin/map")
-    else:
-        return redirect(url_for("sign_in", msg="Credenciales incorrectas"))
+
+    return redirect(url_for("sign_in", msg="Credenciales incorrectas"))
 
 # Logout user
 @app.route("/logout")
@@ -41,6 +42,7 @@ def logout():
     session.pop("id", None)
     session.pop("name", None)
     session.pop("token", None)
+    session.pop("admin", None)
     return redirect(url_for("sign_in", msg="Sesión cerrada"))
 
 # Register a new account

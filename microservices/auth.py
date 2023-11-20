@@ -8,6 +8,7 @@ from flask_mysqldb import MySQL
 # Misc
 from datetime import timedelta
 from dotenv import load_dotenv
+import bcrypt
 import os
 load_dotenv()
 
@@ -34,11 +35,11 @@ def check_auth():
         password = data["password"]
 
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
         account = cursor.fetchone()
         cursor.close()
 
-        if account:
+        if account and bcrypt.checkpw(password.encode("utf-8"), account[4].encode("utf-8")):
             access_token = create_access_token(identity=username)
             response = {
                 "message": "Autenticación exitosa",
@@ -46,6 +47,7 @@ def check_auth():
                 "id": account[0],
                 "name": account[1],
                 "last": account[2],
+                "admin": account[5],
                 "error": False
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
@@ -102,11 +104,14 @@ def create_identity(name, lastname, username, password):
         if existing_user:
             return "Nombre de usuario ya existente"
 
+        # Hash and salt the password before storing it
+        hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
         cursor.execute("""
             INSERT INTO users
-            (firstname, lastname, username, password) VALUES
-            (%s, %s, %s, %s)
-        """, (name, lastname, username, password))
+            (firstname, lastname, username, password, admin) VALUES
+            (%s, %s, %s, %s, 1)
+        """, (name, lastname, username, hashed_password))
         mysql.connection.commit()
         cursor.close()
 

@@ -26,13 +26,14 @@ CREATE TABLE users (
     lastname VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    admin INT NOT NULL,
     PRIMARY KEY (user_id)
 );
 
 INSERT INTO users VALUES
-(1, "Raúl", "Morales", "raul.moraless@udem.edu", "666"),
-(2, "Edu", "Flores", "edu@a.a", "123"),
-(3, "Davo", "Zavala", "a", "a");
+(1, "Raúl", "Morales", "raul.moraless@udem.edu", "$2b$12$yBT88X2fDv8mSpE1n9jGwOSK80aE6462CBPC8azTmebFQr9fSeKnu", 0),
+(2, "Edu", "Flores", "edu@a.a", "$2b$12$/hBABipOFwuzEL1GC44z2.c9aBX3py1mnoV3cFgx7Nx7crKiqv8/i", 1),
+(3, "Davo", "Zavala", "a", "$2b$12$OKcFl.kRaYlFojUpp9lLHuQt06J1CGtRZbXwLjwk5nuJ/wkzHL77W", 1);
 
 CREATE TABLE trucks (
     truck_id INT NOT NULL AUTO_INCREMENT,
@@ -71,7 +72,7 @@ CREATE TABLE gps_data (
     gps_data_id INT NOT NULL AUTO_INCREMENT,
     truck_id INT NOT NULL,
     air_quality INT NOT NULL,
-    contaminants BOOLEAN NOT NULL,
+    contaminants INT NOT NULL,
     latitude DOUBLE NOT NULL,
     longitude DOUBLE NOT NULL,
     date DATETIME NOT NULL,
@@ -80,10 +81,10 @@ CREATE TABLE gps_data (
 );
 
 INSERT INTO gps_data VALUES
-(1, 1, 100, TRUE, 25.6641452, -100.3851379, "2023-11-01 00:00:00"),
-(2, 3, 150, TRUE, 25.6924035, -100.2533623, "2023-11-01 00:00:00"),
-(3, 3, 40, FALSE, 25.6554035, -100.2563623, "2023-11-01 00:00:00"),
-(4, 1, 200, TRUE, 25.6621452, -100.3857379, "2023-11-01 00:00:00");
+(1, 1, 100, 1, 25.6641452, -100.3851379, "2023-11-01 00:00:00"),
+(2, 3, 150, 1, 25.6924035, -100.2533623, "2023-11-01 00:00:00"),
+(3, 3, 40, 0, 25.6554035, -100.2563623, "2023-11-01 00:00:00"),
+(4, 1, 200, 1, 25.6621452, -100.3857379, "2023-11-01 00:00:00");
 
 CREATE TABLE environmental_data (
     environmental_data_id INT NOT NULL AUTO_INCREMENT,
