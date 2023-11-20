@@ -1,6 +1,6 @@
 # Flask
 from flask import Response, redirect, url_for
-from flask_app import app, mysql
+from interface import app, mysql
 
 # XML
 import xml.etree.ElementTree as ET
@@ -103,7 +103,7 @@ def generate_xsl(id, details, products):
     xml = ET.tostring(tree.getroot(), encoding="UTF-8")
 
     # XSLT
-    xslt = etree.parse("./flask_app/static/html/purchase.xsl")
+    xslt = etree.parse("./interface/static/html/purchase.xsl")
     transform = etree.XSLT(xslt)
     result = str(transform(etree.fromstring(xml)))
 

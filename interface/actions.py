@@ -1,6 +1,6 @@
 # Flask
 from flask import request, render_template, redirect, url_for
-from flask_app import app, mysql
+from interface import app, mysql
 
 # Flask routes
 @app.route("/")

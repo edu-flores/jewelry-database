@@ -1,6 +1,6 @@
 # Flask
 from flask import render_template, redirect, url_for, session
-from flask_app import app
+from interface import app
 
 # Misc
 import requests

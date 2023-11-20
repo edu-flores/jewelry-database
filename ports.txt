@@ -4,16 +4,16 @@ Main site
 
 Users
     port 5001
-    microservices/auth.py
+    services/auth.py
 
 GPS
     port 5002
-    microservices/gps.py
+    services/gps.py
 
-CRUD for Routes & XML and JSON
+Routes
     port 5003
-    microservices/routes.py
+    services/routes.py
 
-CRUD for Trucks & XML and JSON - Environmental Data
+Trucks
     port 5004
-    microservices/trucks.py
+    services/trucks.py

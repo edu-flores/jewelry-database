@@ -1,6 +1,6 @@
 # Flask
 from flask import request, render_template, redirect, url_for, session, Response
-from flask_app import app, mysql
+from interface import app, mysql
 
 # Misc
 import requests
