@@ -259,8 +259,8 @@ CREATE TABLE purchase (
 
 INSERT INTO purchase VALUES
 (1, "2023-08-09 18:00:00", 1, 1, 2, "En camino", "Frida Montiel", "Me urge la entrega para mañana, es el cumpleaños de mi esposa.", 1, 12500),
-(2, "2023-09-25 12:00:00", 1, 1, 2, "En camino", "Gabriel Morales", "Cuidado con el empaque.", 1, 1000),
-(3, "2023-11-18 05:00:00", 1, 1, 2, "En camino", "Raúl Salinas", "Todo bien.", 1, 10500);
+(2, "2023-09-25 12:00:00", 1, 1, 2, "En camino", "Gabriel Morales", "Cuidado con el empaque.", 2, 1000),
+(3, "2023-11-18 05:00:00", 1, 1, 2, "En camino", "Raúl Salinas", "Todo bien.", 3, 10500);
 
 CREATE TABLE product (
     product_code VARCHAR(255) NOT NULL,

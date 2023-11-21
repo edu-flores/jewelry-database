@@ -24,18 +24,18 @@
 
     <!-- Purchases Table -->
     <h2>Órdenes de los Camiones</h2>
-    {% if purchases %}
+    {% if purchases["purchases"] %}
       <table>
         <tr>
           <th>Camión</th>
           <th>ID de Orden</th>
           <th>Estatus</th>
         </tr>
-        {% for purchase in purchases %}
+        {% for purchase in purchases["purchases"] %}
           <tr>
-            <td>{{ purchase[0] }}</td>
-            <td>Orden con ID #{{ purchase[1] }}</td>
-            <td>{{ purchase[2] }}</td>
+            <td>{{ purchase["truck"] }}</td>
+            <td>Orden con ID #{{ purchase["id"] }}</td>
+            <td>{{ purchase["status"] }}</td>
           </tr>
         {% endfor%}
       </table>

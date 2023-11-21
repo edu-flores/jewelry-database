@@ -21,4 +21,4 @@ def truck_map():
     locations_data = locations_response.json()
     purchases_data = purchases_response.json()
 
-    return render_template("map.html", maps_api_key=os.getenv("GOOGLE_MAPS_API_KEY"), locations=locations_data["locations"], purchases=purchases_data["purchases"])
+    return render_template("map.html", maps_api_key=os.getenv("GOOGLE_MAPS_API_KEY"), locations=locations_data, purchases=purchases_data)
