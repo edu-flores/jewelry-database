@@ -43,7 +43,22 @@ def handle_update():
         cursor.close()
 
         data = get_truck_locations()
-        socketio.emit("updated", list(data))
+        trucks = [{
+            "id": truck[0],
+            "name": truck[1],
+            "latitude": truck[2],
+            "longitude": truck[3]
+        } for truck in data]
+
+        data = get_gps_data()
+        air = [{
+            "quality": record[0],
+            "contaminants": record[1] == 1,
+            "latitude": record[2],
+            "longitude": record[3]
+        } for record in data]
+
+        socketio.emit("updated", {"trucks": trucks, "air": air})
     except Exception as e:
         print(f"Error in handle_update: {str(e)}")
 

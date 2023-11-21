@@ -1,5 +1,6 @@
 // Global variables
-const markers = {};
+const truckMarkers = {};
+const airCircles = [];
 let map;
 let timer;
 
@@ -19,14 +20,17 @@ socket.on("disconnect", () => {
 });
 
 // Update markers in real time
-socket.on("updated", trucks => {
+socket.on("updated", ({ trucks, air }) => {
   trucks.forEach(truck => {
-    const marker = markers[String(truck[0])];
-    const newPosition = new google.maps.LatLng(truck[2], truck[3]);
+    const marker = truckMarkers[truck.id];
+    const newPosition = new google.maps.LatLng(truck.latitude, truck.longitude);
     marker.setPosition(newPosition);
   });
 
-  console.log("Trucks' location updated!")
+  removeAllCircles();
+  placeCircles(air);
+
+  console.log("Map updated!")
 });
 
 // Google Maps
@@ -46,6 +50,7 @@ function initMap() {
 
   // Add markers to the map
   const locations = JSON.parse(document.getElementById("dataset").dataset.locations);
+  console.log(locations);
   const trucks = locations.trucks;
   const air = locations.air;
 
@@ -69,24 +74,29 @@ function initMap() {
       infowindow.open(map, marker);
     });
 
-    markers[String(truck.id)] = marker;
+    truckMarkers[truck.id] = marker;
   });
 
   // Air quality
-  air.forEach(record => {
+  placeCircles(air);
+}
+
+// Function to place circles on the map
+const placeCircles = data => {
+  data.forEach(record => {
     const circle = new google.maps.Circle({
       map: map,
       fillColor: getColorForQuality(record.quality),
       fillOpacity: 0.15,
       strokeOpacity: 0,
       center: { lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) },
-      radius: 3000
+      radius: 5000
     });
 
     const infowindow = new google.maps.InfoWindow({
       content: `
         <div style="font-size: 14px; color: #333;">
-          <strong>Quality:</strong> ${record.quality}<br>
+          <strong>Quality:</strong> ${record.quality} ICA<br>
           <strong>Has Contaminants:</strong> ${record.contaminants ? "Yes" : "No"}
         </div>
       `
@@ -96,11 +106,21 @@ function initMap() {
       infowindow.setPosition(event.latLng);
       infowindow.open(map);
     });
-  });
+
+    airCircles.push(circle);
+  })
 }
 
 // Function to get color based on quality
-function getColorForQuality(quality) {
+const getColorForQuality = quality => {
   const hue = (1 - quality / 500) * 120;
   return `hsl(${hue}, 100%, 50%)`;
+}
+
+// Function to remove all circles from the map
+const removeAllCircles = () => {
+  airCircles.forEach(circle => {
+    circle.setMap(null);
+  });
+  airCircles.length = 0;
 }
