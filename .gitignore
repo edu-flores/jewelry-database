@@ -1,3 +1,26 @@
+# compiled output
+dist/
+tmp/
+app/**/*.js
+app/**/*.js.map
+
+# misc
+.sass-cache/
+connect.lock/
+coverage/
+libpeerconnection.log/
+npm-debug.log
+testem.log
+typings/
+.angular/
+
+# e2e
+e2e/*.js
+e2e/*.map
+
+# System Files
+.DS_Store/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
