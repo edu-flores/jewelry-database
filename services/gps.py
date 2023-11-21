@@ -64,36 +64,29 @@ def handle_update():
 
 # Get locations for a map
 @gps.route("/get-locations", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_locations():
     try:
         trucks = get_truck_locations()
         air_data = get_gps_data()
 
-        if trucks and air_data:
-            response = {
-                "message": "Ubicaciones recuperadas con éxito",
-                "trucks": [{
-                    "id": truck[0],
-                    "name": truck[1],
-                    "latitude": truck[2],
-                    "longitude": truck[3]
-                } for truck in trucks],
-                "air": [{
-                    "quality": record[0],
-                    "contaminants": record[1] == 1,
-                    "latitude": record[2],
-                    "longitude": record[3]
-                } for record in air_data],
-                "error": False
-            }
-            return jsonify(response), 200, {"Content-Type": "application/json"}
-
         response = {
-            "message": "No se encontraron ubicaciones",
-            "error": True
+            "message": "Ubicaciones recuperadas con éxito",
+            "trucks": [{
+                "id": truck[0],
+                "name": truck[1],
+                "latitude": truck[2],
+                "longitude": truck[3]
+            } for truck in trucks],
+            "air": [{
+                "quality": record[0],
+                "contaminants": record[1] == 1,
+                "latitude": record[2],
+                "longitude": record[3]
+            } for record in air_data],
+            "error": False
         }
-        return jsonify(response), 404, {"Content-Type": "application/json"}
+        return jsonify(response), 200, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",

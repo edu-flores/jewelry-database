@@ -41,28 +41,21 @@ def retrieve_trucks():
         trucks = cursor.fetchall()
         cursor.close()
 
-        if trucks:
-            response = {
-                "trucks": [{
-                    "id": truck[0],
-                    "name": truck[1],
-                    "total_distance": truck[2],
-                    "total_CO2": truck[3],
-                    "average_trip_distance": truck[4],
-                    "average_CO2": truck[5],
-                    "latitude": truck[6],
-                    "longitude": truck[7]
-                } for truck in trucks],
-                "message": "Camiones recuperados con éxito",
-                "error": False
-            }
-            return jsonify(response), 200, {"Content-Type": "application/json"}
-
         response = {
-            "message": "No se encontraron camiones",
-            "error": True
+            "trucks": [{
+                "id": truck[0],
+                "name": truck[1],
+                "total_distance": truck[2],
+                "total_CO2": truck[3],
+                "average_trip_distance": truck[4],
+                "average_CO2": truck[5],
+                "latitude": truck[6],
+                "longitude": truck[7]
+            } for truck in trucks],
+            "message": "Camiones recuperados con éxito",
+            "error": False
         }
-        return jsonify(response), 404, {"Content-Type": "application/json"}
+        return jsonify(response), 200, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",

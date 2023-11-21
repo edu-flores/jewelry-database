@@ -41,29 +41,21 @@ def retrieve_routes():
             ON r.truck_id = t.truck_id
         """)
         routes = cursor.fetchall()
-
         cursor.close()
-        if routes:
-            response = {
-                "routes": [{
-                    "id": route[0],
-                    "name": route[1],
-                    "distance": route[2],
-                    "active": route[3],
-                    "average_speed": route[4],
-                    "time": route[5],
-                    "truck_name": route[6]
-                } for route in routes],
-                "error": False
-            }
-
-            return jsonify(response), 200, {"Content-Type": "application/json"}
 
         response = {
-            "message": "No se encontraron rutas",
-            "error": True
+            "routes": [{
+                "id": route[0],
+                "name": route[1],
+                "distance": route[2],
+                "active": route[3],
+                "average_speed": route[4],
+                "time": route[5],
+                "truck_name": route[6]
+            } for route in routes],
+            "error": False
         }
-        return jsonify(response), 404, {"Content-Type": "application/json"}
+        return jsonify(response), 200, {"Content-Type": "application/json"}
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",
