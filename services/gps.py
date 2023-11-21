@@ -64,7 +64,7 @@ def handle_update():
 
 # Get locations for a map
 @gps.route("/get-locations", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_locations():
     try:
         trucks = get_truck_locations()
