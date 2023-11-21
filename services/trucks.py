@@ -208,7 +208,7 @@ def get_conditions():
                     "total": environmental_data[0],
                     "average": environmental_data[1]
                 },
-                "message": "Datos recuperadas con éxito",
+                "message": "Datos recuperados con éxito",
                 "error": False
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
