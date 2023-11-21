@@ -62,6 +62,12 @@ class TrucksMicroserviceUser(HttpUser):
         else:
             print("No truck ID available to delete.")
 
+    # Simulate getting conditions
+    @task
+    def get_conditions(self):
+        response = self.client.get("/get-conditions")
+        print(f"Response status code for /get-conditions: {response.status_code}")
+
     # Simulating getting the XML representation of a truck
     @task
     def retrieve_xml(self):
