@@ -52,12 +52,24 @@ def handle_update():
 @jwt_required()
 def get_locations():
     try:
-        locations = get_truck_locations()
+        trucks = get_truck_locations()
+        air_data = get_gps_data()
 
-        if locations:
+        if trucks and air_data:
             response = {
                 "message": "Ubicaciones recuperadas con éxito",
-                "locations": locations,
+                "trucks": [{
+                    "id": truck[0],
+                    "name": truck[1],
+                    "latitude": truck[2],
+                    "longitude": truck[3]
+                } for truck in trucks],
+                "air": [{
+                    "quality": record[0],
+                    "contaminants": record[1] == 1,
+                    "latitude": record[2],
+                    "longitude": record[3]
+                } for record in air_data],
                 "error": False
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
@@ -84,7 +96,11 @@ def get_purchases():
         if purchases:
             response = {
                 "message": "Compras recuperadas con éxito",
-                "purchases": purchases,
+                "purchases": [{
+                    "truck": purchase[0],
+                    "id": purchase[1],
+                    "status": purchase[2]
+                } for purchase in purchases],
                 "error": False
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}
@@ -109,6 +125,23 @@ def get_truck_locations():
             SELECT truck_id, name, latitude, longitude
             FROM trucks
             WHERE latitude IS NOT NULL AND longitude IS NOT NULL
+        """)
+        data = cursor.fetchall()
+        cursor.close()
+
+        return data
+    except Exception as e:
+        print(f"Error in get_truck_locations: {str(e)}")
+        return []
+
+# Retrieve all trucks' locations from the database
+def get_gps_data():
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            SELECT air_quality, contaminants, latitude, longitude
+            FROM gps_data
+            WHERE date > NOW() - INTERVAL 20 SECOND
         """)
         data = cursor.fetchall()
         cursor.close()

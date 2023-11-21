@@ -46,21 +46,42 @@ function initMap() {
 
   // Add markers to the map
   const locations = JSON.parse(document.getElementById("dataset").dataset.locations);
-  locations.forEach(location => {
+  const trucks = locations.trucks;
+  const air = locations.air;
+
+  trucks.forEach(truck => {
     const marker = new google.maps.Marker({
-      position: { lat: parseFloat(location[2]), lng: parseFloat(location[3]) },
+      position: { lat: parseFloat(truck.latitude), lng: parseFloat(truck.longitude) },
       map: map,
-      title: "Ubicación del Camión: " + String(location[1])
+      title: "Ubicación del Camión: " + String(truck.name)
     });
 
     const infowindow = new google.maps.InfoWindow({
-      content: "Camión: " + String(location[1])
+      content: "Camión: " + String(truck.name)
     });
 
     marker.addListener("click", () => {
       infowindow.open(map, marker);
     });
 
-    markers[String(location[0])] = marker;
+    markers[String(truck.id)] = marker;
   });
+
+  // air.forEach(record => {
+  //   const marker = new google.maps.Marker({
+  //     position: { lat: parseFloat(truck[2]), lng: parseFloat(truck[3]) },
+  //     map: map,
+  //     title: "Ubicación del Camión: " + String(truck[1])
+  //   });
+
+  //   const infowindow = new google.maps.InfoWindow({
+  //     content: "Camión: " + String(truck[1])
+  //   });
+
+  //   marker.addListener("click", () => {
+  //     infowindow.open(map, marker);
+  //   });
+
+  //   markers[String(truck[0])] = marker;
+  // })
 }
