@@ -37,7 +37,7 @@ function initMap() {
   });
 
   // Get coords
-  google.maps.event.addListener(map, "rightclick", function(event) {
+  google.maps.event.addListener(map, "rightclick", event => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
 
@@ -49,15 +49,20 @@ function initMap() {
   const trucks = locations.trucks;
   const air = locations.air;
 
+  // Truck's location
   trucks.forEach(truck => {
     const marker = new google.maps.Marker({
       position: { lat: parseFloat(truck.latitude), lng: parseFloat(truck.longitude) },
       map: map,
-      title: "Ubicación del Camión: " + String(truck.name)
+      title: `Ubicación del Camión: ${truck.name}`
     });
 
     const infowindow = new google.maps.InfoWindow({
-      content: "Camión: " + String(truck.name)
+      content: `
+        <div style="font-size: 14px; color: #333;">
+          <strong>Camión:</strong> ${truck.name} ICA<br>
+        </div>
+      `
     });
 
     marker.addListener("click", () => {
@@ -67,21 +72,35 @@ function initMap() {
     markers[String(truck.id)] = marker;
   });
 
-  // air.forEach(record => {
-  //   const marker = new google.maps.Marker({
-  //     position: { lat: parseFloat(truck[2]), lng: parseFloat(truck[3]) },
-  //     map: map,
-  //     title: "Ubicación del Camión: " + String(truck[1])
-  //   });
+  // Air quality
+  air.forEach(record => {
+    const circle = new google.maps.Circle({
+      map: map,
+      fillColor: getColorForQuality(record.quality),
+      fillOpacity: 0.15,
+      strokeOpacity: 0,
+      center: { lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) },
+      radius: 3000
+    });
 
-  //   const infowindow = new google.maps.InfoWindow({
-  //     content: "Camión: " + String(truck[1])
-  //   });
+    const infowindow = new google.maps.InfoWindow({
+      content: `
+        <div style="font-size: 14px; color: #333;">
+          <strong>Quality:</strong> ${record.quality}<br>
+          <strong>Has Contaminants:</strong> ${record.contaminants ? "Yes" : "No"}
+        </div>
+      `
+    });
 
-  //   marker.addListener("click", () => {
-  //     infowindow.open(map, marker);
-  //   });
+    google.maps.event.addListener(circle, "click", event => {
+      infowindow.setPosition(event.latLng);
+      infowindow.open(map);
+    });
+  });
+}
 
-  //   markers[String(truck[0])] = marker;
-  // })
+// Function to get color based on quality
+function getColorForQuality(quality) {
+  const hue = (1 - quality / 500) * 120;
+  return `hsl(${hue}, 100%, 50%)`;
 }
