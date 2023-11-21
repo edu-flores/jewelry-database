@@ -27,7 +27,7 @@ socket.on("updated", ({ trucks, air }) => {
     marker.setPosition(newPosition);
   });
 
-  removeAllCircles();
+  removeCircles();
   placeCircles(air);
 
   console.log("Map updated!")
@@ -50,7 +50,6 @@ function initMap() {
 
   // Add markers to the map
   const locations = JSON.parse(document.getElementById("dataset").dataset.locations);
-  console.log(locations);
   const trucks = locations.trucks;
   const air = locations.air;
 
@@ -118,7 +117,7 @@ const getColorForQuality = quality => {
 }
 
 // Function to remove all circles from the map
-const removeAllCircles = () => {
+const removeCircles = () => {
   airCircles.forEach(circle => {
     circle.setMap(null);
   });
