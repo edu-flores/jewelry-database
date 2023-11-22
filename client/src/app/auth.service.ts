@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:5001';
-  private accessToken = 'authToken';
+  private token = 'accessToken';
 
   constructor(private http: HttpClient) {}
 
@@ -17,10 +17,10 @@ export class AuthService {
   }
 
   signOut(): void {
-    localStorage.removeItem(this.accessToken);
+    localStorage.removeItem(this.token);
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem(this.accessToken);
+    return !!localStorage.getItem(this.token);
   }
 }
