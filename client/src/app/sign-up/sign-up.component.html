@@ -1,5 +1,5 @@
 <form (ngSubmit)="signUp()" class="h-screen flex flex-column align-items-center justify-content-center">
-  <h2 class="mb-4">Crear una cuenta nueva</h2>
+  <h2 class="mb-5">Crear una cuenta nueva</h2>
 
   <div class="flex flex-column gap-5 mb-3 w-25rem">
     <!-- Name -->
@@ -9,7 +9,7 @@
       </span>
       <span class="p-float-label">
         <input type="text" pInputText [(ngModel)]="name" name="name" required />
-        <label htmlFor="username">Nombre</label>
+        <label htmlFor="name">Nombre</label>
       </span>
     </div>
 
@@ -19,8 +19,8 @@
         <i class="pi pi-pencil"></i>
       </span>
       <span class="p-float-label">
-        <input type="password" pInputText [(ngModel)]="lastname" name="lastname" required />
-        <label htmlFor="password">Apellido</label>
+        <input type="text" pInputText [(ngModel)]="lastname" name="lastname" required />
+        <label htmlFor="lastname">Apellido</label>
       </span>
     </div>
 
@@ -54,5 +54,5 @@
   </div>
 
   <!-- Message -->
-  <p class="mt-5 text-green-500">{{message}}</p>
+  <p class="mt-5 text-cyan-500">{{message}}</p>
 </form>

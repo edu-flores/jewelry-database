@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   styleUrl: './sign-in.component.scss'
 })
 export class SignInComponent {
-  message = 'as';
+  message = '';
   username = '';
   password = '';
   loading = false;
