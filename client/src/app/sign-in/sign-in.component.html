@@ -1,1 +1,31 @@
-<p>sign-in works!</p>
+<form (ngSubmit)="signIn()" class="h-screen flex flex-column align-items-center justify-content-center">
+  <div class="flex flex-column gap-5 mb-3 w-25rem">
+    <!-- Username -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-user"></i>
+      </span>
+      <span class="p-float-label">
+        <input type="text" pInputText [(ngModel)]="username" name="username" required />
+        <label htmlFor="username">Usuario</label>
+      </span>
+    </div>
+
+    <!-- Password -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-lock"></i>
+      </span>
+      <span class="p-float-label">
+        <input type="password" pInputText [(ngModel)]="password" name="password" required />
+        <label htmlFor="password">Contraseña</label>
+      </span>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex gap-4">
+    <p-button type="button" label="Crear Cuenta" styleClass="p-button-secondary"></p-button>
+    <p-button type="submit" label="Iniciar Sesión" [loading]="loading" [disabled]="!username || !password"></p-button>
+  </div>
+</form>
