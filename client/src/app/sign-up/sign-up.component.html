@@ -1,1 +1,58 @@
-<p>sign-up works!</p>
+<form (ngSubmit)="signUp()" class="h-screen flex flex-column align-items-center justify-content-center">
+  <h2 class="mb-4">Crear una cuenta nueva</h2>
+
+  <div class="flex flex-column gap-5 mb-3 w-25rem">
+    <!-- Name -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-pencil"></i>
+      </span>
+      <span class="p-float-label">
+        <input type="text" pInputText [(ngModel)]="name" name="name" required />
+        <label htmlFor="username">Nombre</label>
+      </span>
+    </div>
+
+    <!-- Last Name -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-pencil"></i>
+      </span>
+      <span class="p-float-label">
+        <input type="password" pInputText [(ngModel)]="lastname" name="lastname" required />
+        <label htmlFor="password">Apellido</label>
+      </span>
+    </div>
+
+    <!-- Username -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-user"></i>
+      </span>
+      <span class="p-float-label">
+        <input type="text" pInputText [(ngModel)]="username" name="username" required />
+        <label htmlFor="username">Usuario</label>
+      </span>
+    </div>
+
+    <!-- Password -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-lock"></i>
+      </span>
+      <span class="p-float-label">
+        <input type="password" pInputText [(ngModel)]="password" name="password" required />
+        <label htmlFor="password">Contraseña</label>
+      </span>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex gap-4">
+    <p-button type="button" label="Regresar" styleClass="p-button-secondary" (click)="navigateToSignIn()"></p-button>
+    <p-button type="submit" label="Registrarse" [loading]="loading" [disabled]="!name || !lastname || !username || !password"></p-button>
+  </div>
+
+  <!-- Message -->
+  <p class="mt-5 text-green-500">{{message}}</p>
+</form>

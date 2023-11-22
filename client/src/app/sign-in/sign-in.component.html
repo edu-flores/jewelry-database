@@ -1,4 +1,6 @@
 <form (ngSubmit)="signIn()" class="h-screen flex flex-column align-items-center justify-content-center">
+  <h2 class="mb-4">Iniciar sesión</h2>
+
   <div class="flex flex-column gap-5 mb-3 w-25rem">
     <!-- Username -->
     <div class="p-inputgroup">
@@ -25,7 +27,10 @@
 
   <!-- Buttons -->
   <div class="flex gap-4">
-    <p-button type="button" label="Crear Cuenta" styleClass="p-button-secondary"></p-button>
+    <p-button type="button" label="Crear Cuenta" styleClass="p-button-secondary" (click)="navigateToSignUp()"></p-button>
     <p-button type="submit" label="Iniciar Sesión" [loading]="loading" [disabled]="!username || !password"></p-button>
   </div>
+
+  <!-- Message -->
+  <p class="mt-5 text-red-500">{{message}}</p>
 </form>

@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   styleUrl: './sign-in.component.scss'
 })
 export class SignInComponent {
-  message = "";
+  message = 'as';
   username = '';
   password = '';
   loading = false;
@@ -36,11 +36,20 @@ export class SignInComponent {
         this.router.navigate(['/map']);
       },
       (error) => {
-        console.log("pensdf");
-        
         console.error('Authentication failed', error);
         this.loading = false;
+
+        if (error.status === 401) {
+          this.message = 'Credenciales incorrectas';
+        } else {
+          this.message = 'Error de autenticación';
+        }
       }
     );
+  }
+
+  // Navigate to the signup page
+  navigateToSignUp(): void {
+    this.router.navigate(['/signup']);
   }
 }
