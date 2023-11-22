@@ -4,6 +4,7 @@
 from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token
 from flask_mysqldb import MySQL
+from flask_cors import CORS
 
 # Misc
 from datetime import timedelta
@@ -14,6 +15,7 @@ load_dotenv()
 
 # Microservice app
 auth = Flask(__name__)
+cors = CORS(auth, resources={r"/*": {"origins": "http://localhost:4200"}})
 
 auth.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT"))
 auth.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")

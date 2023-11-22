@@ -4,6 +4,7 @@
 from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, jwt_required
 from flask_mysqldb import MySQL
+from flask_cors import CORS
 
 # XML generator
 import xml.etree.ElementTree as ET
@@ -15,6 +16,7 @@ load_dotenv()
 
 # Microservice app
 trucks = Flask(__name__)
+cors = CORS(trucks, resources={r"/*": {"origins": "http://localhost:4200"}})
 
 trucks.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT"))
 trucks.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")

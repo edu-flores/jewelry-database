@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, jwt_required
 from flask_mysqldb import MySQL
 from flask_socketio import SocketIO
+from flask_cors import CORS
 
 # Misc
 from dotenv import load_dotenv
@@ -13,6 +14,7 @@ load_dotenv()
 
 # Microservice app
 gps = Flask(__name__)
+cors = CORS(gps, resources={r"/*": {"origins": "http://localhost:4200"}})
 
 gps.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT"))
 gps.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
