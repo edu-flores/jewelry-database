@@ -32,7 +32,12 @@ export class SignInComponent {
 
     this.authService.signIn(this.username, this.password).subscribe(
       (response) => {
+        // Set user data
         localStorage.setItem('accessToken', response.token);
+        localStorage.setItem('name', response.name);
+        localStorage.setItem('last', response.last);
+        localStorage.setItem('admin', response.admin == 1 ? 'true' : 'false');
+
         this.router.navigate(['/map']);
       },
       (error) => {
