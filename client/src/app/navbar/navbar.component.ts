@@ -25,7 +25,7 @@ export class NavbarComponent {
       { label: 'Análisis de Datos', icon: 'pi pi-fw pi-chart-bar', command: () => { this.router.navigate(['/data']) } },
       { label: 'Cerrar sesión', icon: 'pi pi-fw pi-power-off', command: () => {
         localStorage.removeItem('accessToken');
-        this.router.navigate(['/map']);
+        this.router.navigate(['/signin']);
        }
       }
     ];
