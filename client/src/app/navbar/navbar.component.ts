@@ -20,11 +20,45 @@ export class NavbarComponent {
 
   constructor(private authService: AuthService, private router: Router) {
     this.items = [
-      { label: 'Mapa en Tiempo Real', icon: 'pi pi-fw pi-map', command: () => { this.router.navigate(['/map']) } },
-      { label: 'Rutas de la Empresa', icon: 'pi pi-fw pi-arrows-h', command: () => { this.router.navigate(['/routes']) } },
-      { label: 'Camiones de la Empresa', icon: 'pi pi-fw pi-truck', command: () => { this.router.navigate(['/trucks']) } },
-      { label: 'Análisis de Datos', icon: 'pi pi-fw pi-chart-bar', command: () => { this.router.navigate(['/data']) } },
-      { label: 'Cerrar Sesión', icon: 'pi pi-fw pi-sign-out', command: () => { this.authService.signOut() } }
+      {
+        label: 'Mapa en Tiempo Real',
+        icon: 'pi pi-fw pi-map',
+        routerLink: '/map',
+        command: () => {
+          this.router.navigate(['/map']);
+        },
+      },
+      {
+        label: 'Rutas de la Empresa',
+        icon: 'pi pi-fw pi-arrows-h',
+        routerLink: '/routes',
+        command: () => {
+          this.router.navigate(['/routes']);
+        },
+      },
+      {
+        label: 'Camiones de la Empresa',
+        icon: 'pi pi-fw pi-truck',
+        routerLink: '/trucks',
+        command: () => {
+          this.router.navigate(['/trucks']);
+        },
+      },
+      {
+        label: 'Análisis de Datos',
+        icon: 'pi pi-fw pi-chart-bar',
+        routerLink: '/data',
+        command: () => {
+          this.router.navigate(['/data']);
+        },
+      },
+      {
+        label: 'Cerrar Sesión',
+        icon: 'pi pi-fw pi-sign-out',
+        command: () => {
+          this.authService.signOut();
+        },
+      },
     ];
   }
 }
