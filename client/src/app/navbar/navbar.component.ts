@@ -24,7 +24,7 @@ export class NavbarComponent {
       { label: 'Rutas de la Empresa', icon: 'pi pi-fw pi-arrows-h', command: () => { this.router.navigate(['/routes']) } },
       { label: 'Camiones de la Empresa', icon: 'pi pi-fw pi-truck', command: () => { this.router.navigate(['/trucks']) } },
       { label: 'Análisis de Datos', icon: 'pi pi-fw pi-chart-bar', command: () => { this.router.navigate(['/data']) } },
-      { label: 'Cerrar sesión', icon: 'pi pi-fw pi-power-off', command: () => { this.authService.signOut() } }
+      { label: 'Cerrar Sesión', icon: 'pi pi-fw pi-sign-out', command: () => { this.authService.signOut() } }
     ];
   }
 }
