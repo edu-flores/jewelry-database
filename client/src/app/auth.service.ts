@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:5001';
-  private token = 'accessToken';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -18,11 +17,14 @@ export class AuthService {
   }
 
   signOut(): void {
-    localStorage.removeItem(this.token);
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("name");
+    localStorage.removeItem("last");
+    localStorage.removeItem("admin");
     this.router.navigate(['/signin']);
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem(this.token);
+    return !!localStorage.getItem("accessToken");
   }
 }
