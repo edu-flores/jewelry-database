@@ -90,8 +90,8 @@ export class GoogleMapComponent implements AfterViewInit {
         const infowindow = new google.maps.InfoWindow({
           content: `
             <div style="font-size: 14px; color: #333;">
-              <strong>Quality:</strong> ${record.quality} ICA<br>
-              <strong>Has Contaminants:</strong> ${record.contaminants ? "Yes" : "No"}
+              <strong>Calidad:</strong> ${record.quality} ICA<br>
+              <strong>Contaminantes:</strong> ${record.contaminants ? "Sí" : "No"}
             </div>
           `
         });
@@ -139,8 +139,8 @@ export class GoogleMapComponent implements AfterViewInit {
       const infowindow = new google.maps.InfoWindow({
         content: `
           <div style="font-size: 14px; color: #333;">
-            <strong>Quality:</strong> ${record.quality} ICA<br>
-            <strong>Has Contaminants:</strong> ${record.contaminants ? "Yes" : "No"}
+            <strong>Calidad:</strong> ${record.quality} ICA<br>
+            <strong>Contaminantes:</strong> ${record.contaminants ? "Sí" : "No"}
           </div>
         `
       });
