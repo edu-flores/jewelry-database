@@ -53,8 +53,10 @@ export class NavbarComponent {
         },
       },
       {
-        label: 'Cerrar Sesión',
+        label: `${localStorage.getItem('name')} ${localStorage.getItem('last')}`,
+        style: { "margin-left": "auto" },
         icon: 'pi pi-fw pi-sign-out',
+        routerLink: '/signin',
         command: () => {
           this.authService.signOut();
         },
