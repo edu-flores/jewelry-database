@@ -25,7 +25,7 @@ gps.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
 jwt = JWTManager(gps)
 mysql = MySQL(gps)
-socketio = SocketIO(gps, cors_allowed_origins="http://localhost:5000")
+socketio = SocketIO(gps, cors_allowed_origins="http://localhost:4200")
 
 # WebSocket
 @socketio.on("connect")

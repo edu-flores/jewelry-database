@@ -1,6 +1,22 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { WebsocketService } from '../websocket.service';
+
+interface Truck {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+}
+
+interface Record {
+  id: number;
+  latitude: number;
+  longitude: number;
+  quality: number;
+  contaminants: number;
+}
 
 @Component({
   selector: 'app-google-map',
@@ -12,7 +28,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrl: './google-map.component.scss'
 })
 export class GoogleMapComponent implements AfterViewInit {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private websocketService: WebsocketService) { }
 
   @ViewChild('mapContainer', { static: false }) gmap!: ElementRef;
   map: google.maps.Map | undefined;
@@ -41,21 +57,59 @@ export class GoogleMapComponent implements AfterViewInit {
         console.error('Error fetching data:', error);
       }
     );
+
+    // Send update signals every 3 seconds
+    this.timer = setInterval(() => {
+      this.websocketService.sendUpdate();
+    }, 3000)
+
+    // Update markers in real time
+    this.websocketService.getUpdates().subscribe(({ trucks, air }) => {
+      trucks.forEach((truck: Truck) => {
+        const marker = this.truckMarkers[truck.id];
+        const newPosition = new google.maps.LatLng(truck.latitude, truck.longitude);
+        marker.setPosition(newPosition);
+      });
+      this.removeCircles();
+      air.forEach((record: Record) => {
+        const circle = new google.maps.Circle({
+          map: this.map,
+          fillColor: this.getColorForQuality(record.quality),
+          fillOpacity: 0.15,
+          strokeOpacity: 0,
+          center: { lat: record.latitude, lng: record.longitude },
+          radius: 5000
+        });
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div style="font-size: 14px; color: #333;">
+              <strong>Quality:</strong> ${record.quality} ICA<br>
+              <strong>Has Contaminants:</strong> ${record.contaminants ? "Yes" : "No"}
+            </div>
+          `
+        });
+        google.maps.event.addListener(circle, "click", event => {
+          infowindow.setPosition(event.latLng);
+          infowindow.open(this.map);
+        });
+        this.airCircles.push(circle);
+      })
+    });
   }
 
   // Place locations on the map
   private placeLocations = (response: any) => {
     // Company trucks
-    response.trucks.forEach((truck: any) => {
+    response.trucks.forEach((truck: Truck) => {
       const marker = new google.maps.Marker({
-        position: { lat: parseFloat(truck.latitude), lng: parseFloat(truck.longitude) },
+        position: { lat: truck.latitude, lng: truck.longitude },
         map: this.map,
         title: `Ubicación del Camión: ${truck.name}`
       });
       const infowindow = new google.maps.InfoWindow({
         content: `
           <div style="font-size: 14px; color: #333;">
-            <strong>Camión:</strong> ${truck.name} ICA<br>
+            <strong>Camión:</strong> ${truck.name}<br>
           </div>
         `
       });
@@ -66,13 +120,13 @@ export class GoogleMapComponent implements AfterViewInit {
     });
 
     // Air quality
-    response.air.forEach((record: any) => {
+    response.air.forEach((record: Record) => {
       const circle = new google.maps.Circle({
         map: this.map,
         fillColor: this.getColorForQuality(record.quality),
         fillOpacity: 0.15,
         strokeOpacity: 0,
-        center: { lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) },
+        center: { lat: record.latitude, lng: record.longitude },
         radius: 5000
       });
       const infowindow = new google.maps.InfoWindow({
