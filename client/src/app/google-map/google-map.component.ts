@@ -11,7 +11,6 @@ interface Truck {
 }
 
 interface Record {
-  id: number;
   latitude: number;
   longitude: number;
   quality: number;
@@ -41,6 +40,14 @@ export class GoogleMapComponent implements AfterViewInit {
     this.map = new google.maps.Map(this.gmap.nativeElement, {
       center: { lat: 25.687, lng: -100.318 },
       zoom: 11
+    });
+
+    // Get coords
+    google.maps.event.addListener(this.map, "rightclick", event => {
+      const lat = event.latLng.lat();
+      const lng = event.latLng.lng();
+
+      alert("Latitud = " + lat + "\nLongitud = " + lng);
     });
 
     // Call GPS API service
