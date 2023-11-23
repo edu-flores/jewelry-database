@@ -1,0 +1,28 @@
+<p-table
+  [value]="purchases"
+  styleClass="p-datatable-striped"
+  [paginator]="true"
+  [rows]="5"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="truck">Camión <p-sortIcon field="truck"></p-sortIcon></th>
+      <th pSortableColumn="id">Identificador <p-sortIcon field="id"></p-sortIcon></th>
+      <th pSortableColumn="status">Estatus <p-sortIcon field="status"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-purchase>
+    <tr>
+      <td>{{ purchase.truck }}</td>
+      <td>Orden con ID <strong>#{{ purchase.id }}</strong></td>
+      <td><p-tag [value]="purchase.status"></p-tag></td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="3">No hay órdenes.</td>
+    </tr>
+  </ng-template>
+</p-table>
