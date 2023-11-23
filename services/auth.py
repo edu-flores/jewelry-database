@@ -7,7 +7,7 @@ from flask_mysqldb import MySQL
 from flask_cors import CORS
 
 # Misc
-from datetime import timedelta
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import bcrypt
 import os
@@ -42,10 +42,15 @@ def check_auth():
         cursor.close()
 
         if account and bcrypt.checkpw(password.encode("utf-8"), account[4].encode("utf-8")):
+            # JWT
             access_token = create_access_token(identity=username)
+            expires = auth.config["JWT_ACCESS_TOKEN_EXPIRES"]
+            expiration_time = (auth.config["JWT_ACCESS_TOKEN_EXPIRES"] + datetime.utcnow()).isoformat()
+
             response = {
                 "message": "Autenticación exitosa",
                 "token": access_token,
+                "expires": expiration_time,
                 "id": account[0],
                 "name": account[1],
                 "last": account[2],

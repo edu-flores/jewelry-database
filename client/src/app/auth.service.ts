@@ -17,14 +17,21 @@ export class AuthService {
   }
 
   signOut(): void {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("name");
-    localStorage.removeItem("last");
-    localStorage.removeItem("admin");
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('name');
+    localStorage.removeItem('last');
+    localStorage.removeItem('admin');
     this.router.navigate(['/signin']);
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem('accessToken');
+    const expirationDate = localStorage.getItem('expires');
+
+    if (!accessToken || !expirationDate) {
+      return false;
+    }
+
+    return new Date() <= new Date(expirationDate);
   }
 }
