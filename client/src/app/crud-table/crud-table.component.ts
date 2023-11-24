@@ -18,6 +18,7 @@ interface Route {
 interface TableHeader {
   field: string;
   title: string;
+  units: string;
 }
 
 @Component({

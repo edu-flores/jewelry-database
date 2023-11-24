@@ -22,6 +22,7 @@ interface ResponseData {
 interface TableHeader {
   field: string;
   title: string;
+  units: string;
 }
 
 @Component({
@@ -40,34 +41,13 @@ export class RoutesPageComponent {
     routes: [],
   };
   tableHeaders: TableHeader[] = [
-    {
-      field: 'id',
-      title: 'ID',
-    },
-    {
-      field: 'name',
-      title: 'Nombre',
-    },
-    {
-      field: 'distance',
-      title: 'Distancia',
-    },
-    {
-      field: 'active',
-      title: 'Estado',
-    },
-    {
-      field: 'averageSpeed',
-      title: 'Velocidad (x̅)',
-    },
-    {
-      field: 'time',
-      title: 'Tiempo',
-    },
-    {
-      field: 'truckName',
-      title: 'Camión',
-    },
+    { field: 'id', title: 'ID', units: '' },
+    { field: 'name', title: 'Nombre', units: '' },
+    { field: 'distance', title: 'Distancia', units: 'km' },
+    { field: 'active', title: 'Estado', units: '' },
+    { field: 'averageSpeed', title: 'Velocidad (x̅)', units: 'km/h' },
+    { field: 'time', title: 'Tiempo', units: 'min' },
+    { field: 'truckName', title: 'Camión', units: '' },
   ];
 
   ngOnInit() {

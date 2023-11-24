@@ -32,44 +32,23 @@
       <th></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-route>
+  <ng-template pTemplate="body" let-item>
     <tr>
-      <td>{{ route.id }}</td>
-      <td>{{ route.name }}</td>
-      <td>{{ route.distance }} km</td>
+      <ng-container *ngFor="let header of headers">
+        <td *ngIf="header.field !== 'active'; else tagColumn">{{ item[header.field] + ' ' + header.units }}</td>
+        <ng-template #tagColumn>
+          <td>
+            <p-tag pTag [value]="item.active ? 'Activa' : 'Inactiva'" [severity]="item.active ? 'success' : 'danger'"></p-tag>
+          </td>
+        </ng-template>
+      </ng-container>
       <td>
-        <p-tag pTag [value]="route.active ? 'Activa' : 'Inactiva'" [severity]="route.active ? 'success' : 'danger'"></p-tag>
-      </td>
-      <td>{{ route.averageSpeed }} km/h</td>
-      <td>{{ route.time }} min(s)</td>
-      <td>{{ route.truckName }}</td>
-      <td>
-        <button
-          pButton
-          pRipple
-          icon="pi pi-pencil"
-          class="p-button-rounded p-button-warning mr-2"
-        ></button>
-        <button
-          pButton
-          pRipple
-          icon="pi pi-trash"
-          class="p-button-rounded p-button-danger"
-        ></button>
+        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2"></button>
+        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"></button>
       </td>
       <td>
-        <button
-          pButton
-          pRipple
-          label="JSON"
-          class="p-button p-button-success mr-2"
-        ></button>
-        <button
-          pButton
-          pRipple
-          label="XML"
-          class="p-button p-button-info"
-        ></button>
+        <button pButton pRipple label="JSON" class="p-button p-button-success mr-2"></button>
+        <button pButton pRipple label="XML" class="p-button p-button-info"></button>
       </td>
     </tr>
   </ng-template>
