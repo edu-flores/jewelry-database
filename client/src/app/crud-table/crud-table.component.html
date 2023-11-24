@@ -1,0 +1,99 @@
+<p-table
+  #dt
+  [value]="routes"
+  [rows]="5"
+  [paginator]="true"
+  [globalFilterFields]="['id', 'name', 'distance', 'active', 'averageSpeed', 'time', 'truckName']"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+  [showCurrentPageReport]="true"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex align-items-center justify-content-between">
+      <h5 class="m-0">Administrar rutas</h5>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="Filtrar..."
+        />
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="id">
+        ID <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="name">
+        Nombre <p-sortIcon field="price"></p-sortIcon>
+      </th>
+      <th pSortableColumn="distance">
+        Distancia <p-sortIcon field="price"></p-sortIcon>
+      </th>
+      <th pSortableColumn="active">
+        Estado <p-sortIcon field="category"></p-sortIcon>
+      </th>
+      <th pSortableColumn="averageSpeed">
+        Velocidad (x̅)<p-sortIcon field="rating"></p-sortIcon>
+      </th>
+      <th pSortableColumn="time">
+        Tiempo <p-sortIcon field="inventoryStatus"></p-sortIcon>
+      </th>
+      <th pSortableColumn="truckName">
+        Camión <p-sortIcon field="inventoryStatus"></p-sortIcon>
+      </th>
+      <th></th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-route>
+    <tr>
+      <td>{{ route.id }}</td>
+      <td>{{ route.name }}</td>
+      <td>{{ route.distance }} km</td>
+      <td>
+        <p-tag pTag [value]="route.active ? 'Activa' : 'Inactiva'" [severity]="route.active ? 'success' : 'danger'"></p-tag>
+      </td>
+      <td>{{ route.averageSpeed }} km/h</td>
+      <td>{{ route.time }} min(s)</td>
+      <td>{{ route.truckName }}</td>
+      <td>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button-warning mr-2"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-trash"
+          class="p-button-rounded p-button-danger"
+        ></button>
+      </td>
+      <td>
+        <button
+          pButton
+          pRipple
+          label="JSON"
+          class="p-button p-button-success mr-2"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="XML"
+          class="p-button p-button-info"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="flex align-items-center justify-content-between">
+      En total hay {{ routes ? routes.length : 0 }} rutas.
+    </div>
+  </ng-template>
+</p-table>
