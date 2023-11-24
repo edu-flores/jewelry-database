@@ -51,9 +51,9 @@ def retrieve_routes():
                 "name": route[1],
                 "distance": route[2],
                 "active": route[3],
-                "average_speed": route[4],
+                "averageSpeed": route[4],
                 "time": route[5],
-                "truck_name": route[6]
+                "truckName": route[6]
             } for route in routes],
             "error": False
         }

@@ -91,6 +91,11 @@
       </td>
     </tr>
   </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="20">No hay rutas.</td>
+    </tr>
+  </ng-template>
   <ng-template pTemplate="summary">
     <div class="flex align-items-center justify-content-between">
       En total hay {{ routes ? routes.length : 0 }} rutas.

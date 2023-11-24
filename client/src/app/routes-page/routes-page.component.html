@@ -4,7 +4,9 @@
     <div class="col-12">
       <!-- CRUD Table -->
       <h2 class="mb-3">Tabla de Rutas</h2>
-      <app-crud-table></app-crud-table>
+      <app-crud-table
+        [routes]="responseData.routes"
+      ></app-crud-table>
     </div>
   </div>
 </div>
