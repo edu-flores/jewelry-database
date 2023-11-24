@@ -19,37 +19,73 @@ interface ResponseData {
   routes: Route[];
 }
 
+interface TableHeader {
+  field: string;
+  title: string;
+}
+
 @Component({
   selector: 'app-routes-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    CrudTableComponent
-  ],
+  imports: [CommonModule, NavbarComponent, CrudTableComponent],
   templateUrl: './routes-page.component.html',
-  styleUrl: './routes-page.component.scss'
+  styleUrl: './routes-page.component.scss',
 })
 export class RoutesPageComponent {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
+
+  // Props passed to CrudTable
   responseData: ResponseData = {
     error: false,
-    routes: []
+    routes: [],
   };
+  tableHeaders: TableHeader[] = [
+    {
+      field: 'id',
+      title: 'ID',
+    },
+    {
+      field: 'name',
+      title: 'Nombre',
+    },
+    {
+      field: 'distance',
+      title: 'Distancia',
+    },
+    {
+      field: 'active',
+      title: 'Estado',
+    },
+    {
+      field: 'averageSpeed',
+      title: 'Velocidad (x̅)',
+    },
+    {
+      field: 'time',
+      title: 'Tiempo',
+    },
+    {
+      field: 'truckName',
+      title: 'Camión',
+    },
+  ];
 
   ngOnInit() {
     // Call Routes API service
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     });
 
-    this.http.get('http://localhost:5003/retrieve-routes', { headers }).subscribe(
-      (response: any) => {
-        console.log('Data from API:', response);
-        this.responseData = response;
-      }, (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
+    this.http
+      .get('http://localhost:5003/retrieve-routes', { headers })
+      .subscribe(
+        (response: any) => {
+          console.log('Data from API:', response);
+          this.responseData = response;
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
   }
 }

@@ -12,7 +12,7 @@
 >
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
-      <h5 class="m-0">Administrar rutas</h5>
+      <h5 class="m-0">Administrar {{ items }}</h5>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input
@@ -25,26 +25,8 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="id">
-        ID <p-sortIcon field="name"></p-sortIcon>
-      </th>
-      <th pSortableColumn="name">
-        Nombre <p-sortIcon field="price"></p-sortIcon>
-      </th>
-      <th pSortableColumn="distance">
-        Distancia <p-sortIcon field="price"></p-sortIcon>
-      </th>
-      <th pSortableColumn="active">
-        Estado <p-sortIcon field="category"></p-sortIcon>
-      </th>
-      <th pSortableColumn="averageSpeed">
-        Velocidad (x̅)<p-sortIcon field="rating"></p-sortIcon>
-      </th>
-      <th pSortableColumn="time">
-        Tiempo <p-sortIcon field="inventoryStatus"></p-sortIcon>
-      </th>
-      <th pSortableColumn="truckName">
-        Camión <p-sortIcon field="inventoryStatus"></p-sortIcon>
+      <th *ngFor="let header of headers" pSortableColumn="{{ header.field }}">
+        {{ header.title }} <p-sortIcon [field]="header.field"></p-sortIcon>
       </th>
       <th></th>
       <th></th>
@@ -93,12 +75,12 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="20">No hay rutas.</td>
+      <td colspan="20">No hay {{ items }}.</td>
     </tr>
   </ng-template>
   <ng-template pTemplate="summary">
     <div class="flex align-items-center justify-content-between">
-      En total hay {{ routes ? routes.length : 0 }} rutas.
+      En total hay {{ routes ? routes.length : 0 }} {{ items }}.
     </div>
   </ng-template>
 </p-table>

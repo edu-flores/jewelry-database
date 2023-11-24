@@ -5,7 +5,9 @@
       <!-- CRUD Table -->
       <h2 class="mb-3">Tabla de Rutas</h2>
       <app-crud-table
+        [items]="'rutas'"
         [routes]="responseData.routes"
+        [headers]="tableHeaders"
       ></app-crud-table>
     </div>
   </div>

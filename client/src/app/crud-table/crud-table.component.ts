@@ -15,6 +15,11 @@ interface Route {
   truckName: string;
 }
 
+interface TableHeader {
+  field: string;
+  title: string;
+}
+
 @Component({
   selector: 'app-crud-table',
   standalone: true,
@@ -29,5 +34,7 @@ interface Route {
   styleUrl: './crud-table.component.scss'
 })
 export class CrudTableComponent {
+  @Input() items: string = '';
   @Input() routes: Route[] = [];
+  @Input() headers: TableHeader[] = [];
 }
