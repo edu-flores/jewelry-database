@@ -152,6 +152,11 @@ export class GoogleMapComponent implements AfterViewInit {
     })
   }
 
+  // Remove interval after destroying component
+  ngOnDestroy() {
+    clearInterval(this.timer);
+  }
+
   // Function to get color based on quality
   private getColorForQuality = (quality: number) => {
     const hue = (1 - quality / 500) * 120;
