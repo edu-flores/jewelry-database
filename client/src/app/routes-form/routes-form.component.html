@@ -1,1 +1,95 @@
-<p>routes-form works!</p>
+<form (ngSubmit)="addRoute()" class="h-screen flex flex-column align-items-center justify-content-center">
+  <h2 class="mb-5">Agregar una ruta</h2>
+
+  <div class="flex flex-column gap-5 mb-3 w-25rem">
+    <!-- Name -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-arrows-h"></i>
+      </span>
+      <span class="p-float-label">
+        <input type="text" pInputText [(ngModel)]="name" name="name" required />
+        <label htmlFor="name">Nombre de la Ruta</label>
+      </span>
+    </div>
+
+    <!-- Distance -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-forward"></i>
+      </span>
+      <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" [(ngModel)]="distance" name="distance" [required]="true"></p-inputNumber>
+        <label htmlFor="distance">Distancia en Metros</label>
+      </span>
+    </div>
+
+    <!-- Time -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-clock"></i>
+      </span>
+      <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" [(ngModel)]="time" name="time" [required]="true"></p-inputNumber>
+        <label htmlFor="time">Tiempo en Minutos</label>
+      </span>
+    </div>
+
+    <!-- Speed -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-fast-forward"></i>
+      </span>
+      <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" [(ngModel)]="speed" name="speed" [required]="true"></p-inputNumber>
+        <label htmlFor="speed">Velocidad Promedio (km/h)</label>
+      </span>
+    </div>
+
+    <!-- Active -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-power-off"></i>
+      </span>
+      <p-dropdown
+        [options]="[{ id: 0, name: 'No' }, { id: 1, name: 'Sí' }]"
+        [(ngModel)]="active"
+        name="active"
+        optionValue="id"
+        optionLabel="name"
+        autoWidth="false"
+        placeholder="¿Está activa la ruta?"
+        [style]="{'width':'100%'}"
+        [required]="true"
+      ></p-dropdown>
+    </div>
+
+    <!-- Truck -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-truck"></i>
+      </span>
+      <p-dropdown
+        emptyFilterMessage="No hay camiones"
+        [options]="trucks"
+        [(ngModel)]="truck"
+        name="truck"
+        optionValue="id"
+        optionLabel="name"
+        autoWidth="false"
+        placeholder="¿Qué camión pasa por la ruta?"
+        [style]="{'width':'100%'}"
+        [required]="true"
+      ></p-dropdown>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex gap-4">
+    <p-button type="button" label="Regresar" styleClass="p-button-secondary" (click)="navigateToRoutes()"></p-button>
+    <p-button type="submit" label="Agregar" [loading]="loading" [disabled]="!name || !distance || !time || !speed || !truck"></p-button>
+  </div>
+
+  <!-- Message -->
+  <p class="mt-5 text-cyan-500">{{message}}</p>
+</form>

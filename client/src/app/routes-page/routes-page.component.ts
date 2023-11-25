@@ -5,6 +5,7 @@ import { MessagesModule } from 'primeng/messages';
 import { Message } from 'primeng/api';
 import { CrudTableComponent } from '../crud-table/crud-table.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Route {
   id: number;
@@ -40,7 +41,7 @@ interface TableHeader {
   styleUrl: './routes-page.component.scss',
 })
 export class RoutesPageComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
   messages: Message[] = []
   headers = new HttpHeaders({
     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -69,7 +70,7 @@ export class RoutesPageComponent {
 
   // Handle CRUD actions
   onAddClick() {
-    console.log('Add clicked');
+    this.router.navigate(['routes-form']);
   }
   onEditClick(route: Route) {
     console.log('Edit clicked for route:', route);

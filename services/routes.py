@@ -74,9 +74,9 @@ def add_route():
         name = data["name"]
         distance = data["distance"]
         active = data["active"]
-        average_speed = data["average_speed"]
+        average_speed = data["averageSpeed"]
         time = data["time"]
-        truck_id = data["truck_id"]
+        truck_id = data["truckId"]
 
         cursor = mysql.connection.cursor()
         cursor.execute("INSERT INTO routes (name, distance, active, average_speed, time, truck_id) VALUES (%s,%s,%s,%s,%s,%s)", (name, distance, active, average_speed, time, truck_id))
