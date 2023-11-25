@@ -47,39 +47,30 @@
     </div>
 
     <!-- Active -->
-    <div class="p-inputgroup">
-      <span class="p-inputgroup-addon">
-        <i class="pi pi-power-off"></i>
-      </span>
-      <p-dropdown
-        [options]="[{ id: 0, name: 'No' }, { id: 1, name: 'Sí' }]"
-        [(ngModel)]="active"
-        name="active"
-        optionValue="id"
-        optionLabel="name"
-        autoWidth="false"
-        placeholder="¿Está activa la ruta?"
-        [style]="{'width':'100%'}"
-      ></p-dropdown>
-    </div>
+    <p-dropdown
+      [options]="[{ id: 0, name: 'No' }, { id: 1, name: 'Sí' }]"
+      [(ngModel)]="active"
+      name="active"
+      optionValue="id"
+      optionLabel="name"
+      autoWidth="false"
+      placeholder="¿Está activa la ruta?"
+      [style]="{'width':'100%'}"
+    ></p-dropdown>
 
     <!-- Truck -->
-    <div class="p-inputgroup">
-      <span class="p-inputgroup-addon">
-        <i class="pi pi-truck"></i>
-      </span>
-      <p-dropdown
-        emptyFilterMessage="No hay camiones"
-        [options]="trucks"
-        [(ngModel)]="truck"
-        name="truck"
-        optionValue="id"
-        optionLabel="name"
-        autoWidth="false"
-        placeholder="¿Qué camión pasa por la ruta?"
-        [style]="{'width':'100%'}"
-      ></p-dropdown>
-    </div>
+    <p-dropdown
+      emptyFilterMessage="No hay camiones"
+      [options]="trucks"
+      [(ngModel)]="truck"
+      name="truck"
+      optionValue="id"
+      optionLabel="name"
+      placeholder="¿Qué camión pasa por la ruta?"
+      [style]="{'width': '100%'}"
+      [filter]="true"
+      filterBy="name"
+    ></p-dropdown>
   </div>
 
   <!-- Buttons -->
