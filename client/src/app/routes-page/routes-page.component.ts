@@ -45,6 +45,7 @@ export class RoutesPageComponent {
   headers = new HttpHeaders({
     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
   });
+  loading = true;
 
   // Props passed to CrudTable
   responseData: ResponseData = {
@@ -103,13 +104,16 @@ export class RoutesPageComponent {
 
   // API
   private getRoutes() {
+    this.loading = true;
     this.http.get('http://localhost:5003/retrieve-routes', { headers: this.headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
         this.responseData = response;
+        this.loading = false;
       },
       (error) => {
         console.error('Error fetching data:', error);
+        this.loading = false;
       }
     );
   }

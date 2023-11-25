@@ -48,6 +48,7 @@ export class CrudTableComponent {
   @Input() items: string = '';
   @Input() routes: Route[] = [];
   @Input() headers: TableHeader[] = [];
+  @Input() loading: boolean = false;
 
   // Events
   @Output() addClicked = new EventEmitter<any>();

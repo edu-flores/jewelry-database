@@ -24,6 +24,7 @@ interface Purchase {
 export class PurchasesTableComponent {
   constructor(private http: HttpClient) {}
   purchases: Purchase[] = [];
+  loading = true;
 
   ngOnInit() {
     // Call GPS API service
@@ -35,9 +36,11 @@ export class PurchasesTableComponent {
       (response) => {
         console.log('Data from API:', response);
         this.purchases = response.purchases;
+        this.loading = false;
       },
       (error) => {
         console.error('Error fetching data:', error);
+        this.loading = false;
       }
     );
   }
