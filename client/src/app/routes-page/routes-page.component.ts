@@ -50,22 +50,37 @@ export class RoutesPageComponent {
     { field: 'truckName', title: 'Camión', units: '' },
   ];
 
+  // Call Routes API service
   ngOnInit() {
-    // Call Routes API service
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     });
 
-    this.http
-      .get('http://localhost:5003/retrieve-routes', { headers })
-      .subscribe(
-        (response: any) => {
-          console.log('Data from API:', response);
-          this.responseData = response;
-        },
-        (error) => {
-          console.error('Error fetching data:', error);
-        }
-      );
+    this.http.get('http://localhost:5003/retrieve-routes', { headers }).subscribe(
+      (response: any) => {
+        console.log('Data from API:', response);
+        this.responseData = response;
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  // Handle CRUD actions
+  onEditClick(route: Route) {
+    console.log('Edit clicked for route:', route);
+  }
+
+  onDeleteClick(route: Route) {
+    console.log('Delete clicked for route:', route);
+  }
+
+  onJsonClick(route: Route) {
+    console.log('JSON clicked for route:', route);
+  }
+
+  onXmlClick(route: Route) {
+    console.log('XML clicked for route:', route);
   }
 }

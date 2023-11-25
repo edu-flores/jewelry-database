@@ -3,8 +3,7 @@
   [value]="routes"
   [rows]="5"
   [paginator]="true"
-  [globalFilterFields]="['id', 'name', 'distance', 'active', 'averageSpeed', 'time', 'truckName']"
-  [tableStyle]="{ 'min-width': '75rem' }"
+  [globalFilterFields]="filterFields"
   [rowHover]="true"
   dataKey="id"
   currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
@@ -18,6 +17,7 @@
         <input
           pInputText
           type="text"
+          (input)="applyFilterGlobal($event, 'contains')"
           placeholder="Filtrar..."
         />
       </span>
@@ -43,12 +43,12 @@
         </ng-template>
       </ng-container>
       <td>
-        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2"></button>
-        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"></button>
+        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="onEditClick(item)"></button>
+        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="onDeleteClick(item)"></button>
       </td>
       <td>
-        <button pButton pRipple label="JSON" class="p-button p-button-success mr-2"></button>
-        <button pButton pRipple label="XML" class="p-button p-button-info"></button>
+        <button pButton pRipple label="JSON" class="p-button p-button-success mr-2" (click)="onJsonClick(item)"></button>
+        <button pButton pRipple label="XML" class="p-button p-button-info" (click)="onXmlClick(item)"></button>
       </td>
     </tr>
   </ng-template>

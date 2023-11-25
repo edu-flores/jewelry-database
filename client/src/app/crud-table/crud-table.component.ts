@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
@@ -35,7 +35,37 @@ interface TableHeader {
   styleUrl: './crud-table.component.scss'
 })
 export class CrudTableComponent {
+  // Table
+  @ViewChild('dt') dt: any;
+
+  // Props
+  @Input() filterFields: string[] = [];
   @Input() items: string = '';
   @Input() routes: Route[] = [];
   @Input() headers: TableHeader[] = [];
+
+  // Events
+  @Output() editClicked = new EventEmitter<any>();
+  @Output() deleteClicked = new EventEmitter<any>();
+  @Output() jsonClicked = new EventEmitter<any>();
+  @Output() xmlClicked = new EventEmitter<any>();
+
+  // Filtering table
+  applyFilterGlobal($event: any, val: any) {
+    this.dt!.filterGlobal(($event.target as HTMLInputElement).value, val);
+  }
+
+  // Handle CRUD actions
+  onEditClick(item: any) {
+    this.editClicked.emit(item);
+  }
+  onDeleteClick(item: any) {
+    this.deleteClicked.emit(item);
+  }
+  onJsonClick(item: any) {
+    this.jsonClicked.emit(item);
+  }
+  onXmlClick(item: any) {
+    this.xmlClicked.emit(item);
+  }
 }

@@ -5,9 +5,14 @@
       <!-- CRUD Table -->
       <h2 class="mb-3">Tabla de Rutas</h2>
       <app-crud-table
+        [filterFields]="['id', 'name', 'distance', 'averageSpeed', 'time', 'truckName']"
         [items]="'rutas'"
         [routes]="responseData.routes"
         [headers]="tableHeaders"
+        (editClicked)="onEditClick($event)"
+        (deleteClicked)="onDeleteClick($event)"
+        (jsonClicked)="onJsonClick($event)"
+        (xmlClicked)="onXmlClick($event)"
       ></app-crud-table>
     </div>
   </div>
