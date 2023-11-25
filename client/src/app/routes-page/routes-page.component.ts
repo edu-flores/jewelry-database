@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { CrudTableComponent } from '../crud-table/crud-table.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Route {
   id: number;
@@ -33,7 +34,10 @@ interface TableHeader {
   styleUrl: './routes-page.component.scss',
 })
 export class RoutesPageComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
+  headers = new HttpHeaders({
+    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+  });
 
   // Props passed to CrudTable
   responseData: ResponseData = {
@@ -52,11 +56,7 @@ export class RoutesPageComponent {
 
   // Call Routes API service
   ngOnInit() {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    });
-
-    this.http.get('http://localhost:5003/retrieve-routes', { headers }).subscribe(
+    this.http.get('http://localhost:5003/retrieve-routes', { headers: this.headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
         this.responseData = response;
@@ -77,10 +77,10 @@ export class RoutesPageComponent {
   }
 
   onJsonClick(route: Route) {
-    console.log('JSON clicked for route:', route);
+    window.open(`http://localhost:5003/retrieve-json?id=${route.id}`, '_blank');
   }
 
   onXmlClick(route: Route) {
-    console.log('XML clicked for route:', route);
+    window.open(`http://localhost:5003/retrieve-xml?id=${route.id}`, '_blank');
   }
 }
