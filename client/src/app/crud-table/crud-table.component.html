@@ -1,3 +1,15 @@
+<!-- Modal -->
+<p-confirmDialog #cd [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+    <h3>Alerta</h3>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+    <button type="button" pButton icon="pi pi-check" label="Sí" (click)="cd.accept()"></button>
+  </ng-template>
+</p-confirmDialog>
+
+<!-- Main table -->
 <p-table
   #dt
   [value]="routes"

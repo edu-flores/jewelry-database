@@ -4,6 +4,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 interface Route {
   id: number;
@@ -29,12 +31,15 @@ interface TableHeader {
     InputTextModule,
     TableModule,
     TagModule,
-    ButtonModule
+    ButtonModule,
+    ConfirmDialogModule
   ],
   templateUrl: './crud-table.component.html',
   styleUrl: './crud-table.component.scss'
 })
 export class CrudTableComponent {
+  constructor(private confirmationService: ConfirmationService) {}
+
   // Table
   @ViewChild('dt') dt: any;
 
@@ -60,7 +65,12 @@ export class CrudTableComponent {
     this.editClicked.emit(item);
   }
   onDeleteClick(item: any) {
-    this.deleteClicked.emit(item);
+    this.confirmationService.confirm({
+      message: '¿Seguro que deseas eliminar este item?',
+      accept: () => {
+        this.deleteClicked.emit(item);
+      }
+    });
   }
   onJsonClick(item: any) {
     this.jsonClicked.emit(item);
