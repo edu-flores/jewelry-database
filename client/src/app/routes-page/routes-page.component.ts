@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { MessagesModule } from 'primeng/messages';
+import { Message } from 'primeng/api';
 import { CrudTableComponent } from '../crud-table/crud-table.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
 
 interface Route {
   id: number;
@@ -29,12 +30,18 @@ interface TableHeader {
 @Component({
   selector: 'app-routes-page',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, CrudTableComponent],
+  imports: [
+    CommonModule,
+    NavbarComponent,
+    MessagesModule,
+    CrudTableComponent
+  ],
   templateUrl: './routes-page.component.html',
   styleUrl: './routes-page.component.scss',
 })
 export class RoutesPageComponent {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
+  messages: Message[] = []
   headers = new HttpHeaders({
     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
   });
@@ -68,9 +75,19 @@ export class RoutesPageComponent {
       (response: any) => {
         console.log('Data from API:', response);
         this.getRoutes();
+        this.messages = [{
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Ruta eliminada',
+        }];
       },
       (error) => {
         console.error('Error:', error);
+        this.messages = [{
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar la ruta',
+        }]
       }
     );
   }
