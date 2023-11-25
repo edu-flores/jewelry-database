@@ -1,7 +1,7 @@
 ################### PORT 5003 ###################
 
 # Flask
-from flask import Flask, request, jsonify
+from flask import Flask, Response, request, jsonify
 from flask_jwt_extended import JWTManager, jwt_required
 from flask_mysqldb import MySQL
 from flask_cors import CORS
@@ -239,7 +239,7 @@ def retrieve_xml():
 
         xml = ET.tostring(root)
 
-        return xml
+        return Response(xml, content_type="application/xml")
     except Exception as e:
         response = {
             "message": f"Internal Server Error: {str(e)}",
