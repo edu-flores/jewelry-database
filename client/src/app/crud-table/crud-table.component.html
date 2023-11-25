@@ -23,7 +23,7 @@
 >
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
-      <h5 class="m-0">Administrar {{ items }}</h5>
+      <button pButton pRipple label="Agregar" icon="pi pi-plus" class="p-button-success mr-2" (click)="onAddClick()"></button>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input

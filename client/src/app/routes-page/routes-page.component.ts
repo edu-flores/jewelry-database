@@ -67,6 +67,9 @@ export class RoutesPageComponent {
   }
 
   // Handle CRUD actions
+  onAddClick() {
+    console.log('Add clicked');
+  }
   onEditClick(route: Route) {
     console.log('Edit clicked for route:', route);
   }

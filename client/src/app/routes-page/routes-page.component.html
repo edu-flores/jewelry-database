@@ -11,6 +11,7 @@
         [items]="'rutas'"
         [routes]="responseData.routes"
         [headers]="tableHeaders"
+        (addClicked)="onAddClick()"
         (editClicked)="onEditClick($event)"
         (deleteClicked)="onDeleteClick($event)"
         (jsonClicked)="onJsonClick($event)"

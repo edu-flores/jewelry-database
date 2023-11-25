@@ -50,6 +50,7 @@ export class CrudTableComponent {
   @Input() headers: TableHeader[] = [];
 
   // Events
+  @Output() addClicked = new EventEmitter<any>();
   @Output() editClicked = new EventEmitter<any>();
   @Output() deleteClicked = new EventEmitter<any>();
   @Output() jsonClicked = new EventEmitter<any>();
@@ -61,6 +62,9 @@ export class CrudTableComponent {
   }
 
   // Handle CRUD actions
+  onAddClick() {
+    this.addClicked.emit();
+  }
   onEditClick(item: any) {
     this.editClicked.emit(item);
   }
