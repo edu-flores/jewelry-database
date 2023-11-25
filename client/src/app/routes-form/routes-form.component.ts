@@ -67,12 +67,23 @@ export class RoutesFormComponent {
           console.log('Data from API:', response);
           this.message = response.message;
           this.loading = false;
+          this.clearFields();
         },
         (error) => {
           console.error('Error:', error);
           this.message = 'Error al crear la ruta';
           this.loading = false;
         });
+  }
+
+  // Reset all form fields
+  private clearFields() {
+    this.name = null;
+    this.distance = null;
+    this.time = null;
+    this.speed = null;
+    this.active = null;
+    this.truck = null;
   }
 
   // Return to CRUD table page

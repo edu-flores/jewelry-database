@@ -8,7 +8,7 @@
         <i class="pi pi-arrows-h"></i>
       </span>
       <span class="p-float-label">
-        <input type="text" pInputText [(ngModel)]="name" name="name" required />
+        <input type="text" pInputText [(ngModel)]="name" name="name" />
         <label htmlFor="name">Nombre de la Ruta</label>
       </span>
     </div>
@@ -19,7 +19,7 @@
         <i class="pi pi-forward"></i>
       </span>
       <span class="p-float-label">
-        <p-inputNumber inputId="integeronly" [(ngModel)]="distance" name="distance" [required]="true"></p-inputNumber>
+        <p-inputNumber inputId="integeronly" [(ngModel)]="distance" name="distance"></p-inputNumber>
         <label htmlFor="distance">Distancia en Metros</label>
       </span>
     </div>
@@ -30,7 +30,7 @@
         <i class="pi pi-clock"></i>
       </span>
       <span class="p-float-label">
-        <p-inputNumber inputId="integeronly" [(ngModel)]="time" name="time" [required]="true"></p-inputNumber>
+        <p-inputNumber inputId="integeronly" [(ngModel)]="time" name="time"></p-inputNumber>
         <label htmlFor="time">Tiempo en Minutos</label>
       </span>
     </div>
@@ -41,7 +41,7 @@
         <i class="pi pi-fast-forward"></i>
       </span>
       <span class="p-float-label">
-        <p-inputNumber inputId="integeronly" [(ngModel)]="speed" name="speed" [required]="true"></p-inputNumber>
+        <p-inputNumber inputId="integeronly" [(ngModel)]="speed" name="speed"></p-inputNumber>
         <label htmlFor="speed">Velocidad Promedio (km/h)</label>
       </span>
     </div>
@@ -60,7 +60,6 @@
         autoWidth="false"
         placeholder="¿Está activa la ruta?"
         [style]="{'width':'100%'}"
-        [required]="true"
       ></p-dropdown>
     </div>
 
@@ -79,7 +78,6 @@
         autoWidth="false"
         placeholder="¿Qué camión pasa por la ruta?"
         [style]="{'width':'100%'}"
-        [required]="true"
       ></p-dropdown>
     </div>
   </div>
