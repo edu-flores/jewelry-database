@@ -47,10 +47,10 @@ def retrieve_trucks():
             "trucks": [{
                 "id": truck[0],
                 "name": truck[1],
-                "total_distance": truck[2],
-                "total_CO2": truck[3],
-                "average_trip_distance": truck[4],
-                "average_CO2": truck[5],
+                "totalDistance": truck[2],
+                "totalCO2": float(truck[3]),
+                "averageTripDistance": truck[4],
+                "averageCO2": float(truck[5]),
                 "latitude": truck[6],
                 "longitude": truck[7]
             } for truck in trucks],
@@ -108,8 +108,8 @@ def edit_truck():
         data = request.get_json()
         id = data["id"]
         name = data["name"]
-        total_distance = data["total_distance"]
-        average_trip_distance = data["average_trip_distance"]
+        total_distance = data["totalDistance"]
+        average_trip_distance = data["averageTripDistance"]
         latitude = data["latitude"]
         longitude = data["longitude"]
 
@@ -148,8 +148,8 @@ def retrieve_truck():
             response = {
                 "truck_id": truck[0],
                 "name": truck[1],
-                "total_distance": truck[2],
-                "average_trip_distance": truck[3],
+                "totalDistance": truck[2],
+                "averageTripDistance": truck[3],
                 "latitude": truck[4],
                 "longitude": truck[5],
                 "error": False

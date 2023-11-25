@@ -1,7 +1,7 @@
-<form (ngSubmit)="addRoute()" class="h-screen flex flex-column align-items-center justify-content-center">
-  <h2 class="mb-5">Agregar una ruta</h2>
+<form (ngSubmit)="edit ? editRoute() : addRoute()" class="h-screen flex flex-column align-items-center justify-content-center">
+  <h2 class="mb-6">{{ edit ? 'Editar Ruta' : 'Agregar  Ruta' }}</h2>
 
-  <div class="flex flex-column gap-5 mb-3 w-25rem">
+  <div class="flex flex-column gap-5 mb-5 w-25rem">
     <!-- Name -->
     <div class="p-inputgroup">
       <span class="p-inputgroup-addon">
@@ -85,7 +85,7 @@
   <!-- Buttons -->
   <div class="flex gap-4">
     <p-button type="button" label="Regresar" styleClass="p-button-secondary" (click)="navigateToRoutes()"></p-button>
-    <p-button type="submit" label="Agregar" [loading]="loading" [disabled]="!name || !distance || !time || !speed || !truck"></p-button>
+    <p-button type="submit" [label]="edit ? 'Editar' : 'Agregar'" [loading]="loading" [disabled]="!name || !distance || !time || !speed || !truck"></p-button>
   </div>
 
   <!-- Message -->

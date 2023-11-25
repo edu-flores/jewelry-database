@@ -14,6 +14,7 @@ interface Route {
   active: number;
   averageSpeed: number;
   time: string;
+  truckId: number;
   truckName: string;
 }
 
@@ -70,10 +71,10 @@ export class RoutesPageComponent {
 
   // Handle CRUD actions
   onAddClick() {
-    this.router.navigate(['routes-form']);
+    this.router.navigate(['routes-form'], { state: { route: null } });
   }
   onEditClick(route: Route) {
-    console.log('Edit clicked for route:', route);
+    this.router.navigate(['routes-form'], { state: { route: route } });
   }
   onDeleteClick(route: Route) {
     this.http.post('http://localhost:5003/delete-route', { id: route.id }, { headers: this.headers }).subscribe(

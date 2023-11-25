@@ -37,7 +37,7 @@ def retrieve_routes():
     try:
         cursor = mysql.connection.cursor()
         cursor.execute("""
-            SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, t.name
+            SELECT r.route_id, r.name, r.distance, r.active, r.average_speed, r.time, t.truck_id, t.name
             FROM routes AS r
             LEFT JOIN trucks AS t
             ON r.truck_id = t.truck_id
@@ -53,7 +53,8 @@ def retrieve_routes():
                 "active": route[3],
                 "averageSpeed": route[4],
                 "time": route[5],
-                "truckName": route[6]
+                "truckId": route[6],
+                "truckName": route[7]
             } for route in routes],
             "error": False
         }
@@ -112,9 +113,9 @@ def edit_route():
         name = data["name"]
         distance = data["distance"]
         active = data["active"]
-        average_speed = data["average_speed"]
+        average_speed = data["averageSpeed"]
         time = data["time"]
-        truck_id = data["truck_id"]
+        truck_id = data["truckId"]
 
         cursor = mysql.connection.cursor()
         cursor.execute("""UPDATE routes SET
@@ -150,13 +151,13 @@ def retrieve_route():
 
         if route:
             response = {
-                "route_id": route[0],
+                "routeId": route[0],
                 "name": route[1],
                 "distance": route[2],
                 "active": route[3],
-                "average_speed": route[4],
+                "averageSpeed": route[4],
                 "time": route[5],
-                "truck_id": route[6],
+                "truckId": route[6],
                 "error": False
             }
             return jsonify(response), 200, {"Content-Type": "application/json"}

@@ -7,6 +7,34 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
+
+interface State {
+  route: Route;
+  navigationId: number;
+}
+
+interface Route {
+  id: number;
+  name: string;
+  distance: number;
+  active: number;
+  averageSpeed: number;
+  time: number;
+  truckId: number;
+  truckName: string;
+}
+
+interface Truck {
+  id: number;
+  name: string;
+  totalDistance: number;
+  totalCO2: number;
+  averageTripDistance: number;
+  averageCO2: number;
+  latitude: number;
+  longitude: number;
+}
 
 @Component({
   selector: 'app-routes-form',
@@ -23,17 +51,33 @@ import { Router } from '@angular/router';
   styleUrl: './routes-form.component.scss',
 })
 export class RoutesFormComponent {
-  name = null;
-  distance = null;
-  time = null;
-  speed = null;
-  active = null;
-  truck = null;
+  id: number | null = null;
+  name: string | null = null;
+  distance: number | null = null;
+  time: number | null = null;
+  speed: number | null = null;
+  active: number | null = null;
+  truck: number | null = null;
   message = '';
   loading = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
-  trucks: any[] = [];
+  // Determine if editing or adding
+  constructor(private http: HttpClient, private router: Router, private location: Location) {
+    console.log(location.getState());
+    if ((location.getState() as State).route) {
+      this.edit = true;
+      const { route } = (location.getState() as State);
+      this.id = route.id;
+      this.name = route.name;
+      this.distance = route.distance;
+      this.time = route.time;
+      this.speed = route.averageSpeed;
+      this.active = route.active;
+      this.truck = route.truckId;
+    }
+  }
+  edit = false;
+  trucks: Truck[] = [];
   headers = new HttpHeaders({
     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
   });
@@ -72,6 +116,31 @@ export class RoutesFormComponent {
         (error) => {
           console.error('Error:', error);
           this.message = 'Error al crear la ruta';
+          this.loading = false;
+        });
+  }
+
+  // Edit existing route
+  editRoute() {
+    this.loading = true;
+    this.http
+      .post('http://localhost:5003/edit-route', {
+        id: this.id,
+        name: this.name,
+        distance: this.distance,
+        time: this.time,
+        averageSpeed: this.speed,
+        active: this.active ?? 0,
+        truckId: this.truck,
+      }, { headers: this.headers }).subscribe(
+        (response: any) => {
+          console.log('Data from API:', response);
+          this.message = response.message;
+          this.loading = false;
+        },
+        (error) => {
+          console.error('Error:', error);
+          this.message = 'Error al editar la ruta';
           this.loading = false;
         });
   }
