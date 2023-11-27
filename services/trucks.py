@@ -72,8 +72,8 @@ def add_truck():
     try:
         data = request.get_json()
         name = data["name"]
-        total_distance = data["total_distance"]
-        average_trip_distance = data["average_trip_distance"]
+        total_distance = data["totalDistance"]
+        average_trip_distance = data["averageTripDistance"]
         latitude = data["latitude"]
         longitude = data["longitude"]
 

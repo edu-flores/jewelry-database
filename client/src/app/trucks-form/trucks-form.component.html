@@ -1,1 +1,69 @@
-<p>trucks-form works!</p>
+<form (ngSubmit)="edit ? editTruck() : addTruck()" class="h-screen flex flex-column align-items-center justify-content-center">
+  <h2 class="mb-6">{{ edit ? 'Editar Camión' : 'Agregar  Camión' }}</h2>
+
+  <div class="flex flex-column gap-5 mb-5 w-25rem">
+    <!-- Name -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-truck"></i>
+      </span>
+      <span class="p-float-label">
+        <input type="text" pInputText [(ngModel)]="name" name="name" />
+        <label htmlFor="name">Nombre del Camión</label>
+      </span>
+    </div>
+
+    <!-- Total Distance -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-forward"></i>
+      </span>
+      <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" [(ngModel)]="totalDistance" name="totalDistance"></p-inputNumber>
+        <label htmlFor="totalDistance">Distancia Total en Kilometros</label>
+      </span>
+    </div>
+
+    <!-- Average Distance -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-forward"></i>
+      </span>
+      <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" [(ngModel)]="averageTripDistance" name="averageTripDistance"></p-inputNumber>
+        <label htmlFor="averageTripDistance">Distancia Promedio en Kilometros</label>
+      </span>
+    </div>
+
+    <!-- Latitude -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-arrows-v"></i>
+      </span>
+      <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" [(ngModel)]="latitude" name="latitude"></p-inputNumber>
+        <label htmlFor="latitude">Latitud</label>
+      </span>
+    </div>
+
+    <!-- Longitude -->
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-arrows-h"></i>
+      </span>
+      <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" [(ngModel)]="longitude" name="longitude"></p-inputNumber>
+        <label htmlFor="longitude">Longitud</label>
+      </span>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex gap-4">
+    <p-button type="button" label="Regresar" styleClass="p-button-secondary" (click)="navigateToTrucks()"></p-button>
+    <p-button type="submit" [label]="edit ? 'Editar' : 'Agregar'" [loading]="loading" [disabled]="!name || !totalDistance || !averageTripDistance || !latitude || !longitude"></p-button>
+  </div>
+
+  <!-- Message -->
+  <p class="mt-5 text-cyan-500">{{message}}</p>
+</form>

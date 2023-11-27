@@ -75,7 +75,7 @@ export class TrucksPageComponent {
     this.router.navigate(['trucks-form'], { state: { route: null } });
   }
   onEditClick(truck: Truck) {
-    this.router.navigate(['trucks-form'], { state: { route: truck } });
+    this.router.navigate(['trucks-form'], { state: { truck: truck } });
   }
   onDeleteClick(truck: Truck) {
     this.http.post('http://localhost:5004/delete-truck', { id: truck.id }, { headers: this.headers }).subscribe(
@@ -85,7 +85,7 @@ export class TrucksPageComponent {
         this.messages = [{
           severity: 'success',
           summary: 'Éxito',
-          detail: 'Camión eliminada',
+          detail: 'Camión eliminado',
         }];
       },
       (error) => {
