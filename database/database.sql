@@ -106,7 +106,7 @@ SELECT
     NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR AS datetime,
     FLOOR(RAND() * 10) + 1 AS route_id,
     FLOOR(RAND() * 10) + 1 AS truck_id,
-    FLOOR(RAND() * 1000) + 1 AS distance,
+    FLOOR(RAND() * 10) + 1 AS distance,
     RAND() * 100 + 1 AS speed
 FROM
     information_schema.tables t1,
@@ -408,6 +408,12 @@ BEGIN
     -- Move trucks
     UPDATE trucks
     SET latitude = latitude + (RAND() * 0.01 - 0.005), longitude = longitude + (RAND() * 0.01 - 0.005);
+
+    -- Add sample data
+    INSERT INTO samples (latitude, longitude, datetime, route_id, truck_id, distance, speed)
+    SELECT latitude, longitude, NOW(), FLOOR(RAND() * 10) + 1, truck_id, FLOOR(RAND() * 10) + 1, RAND() * 100 + 1
+    FROM trucks
+    WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
 END;
 //
 
