@@ -3,6 +3,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
 
@@ -11,6 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideRouter(routes),
     provideHttpClient(),
-    ConfirmationService
+    ConfirmationService,
+    MessageService
   ]
 };
