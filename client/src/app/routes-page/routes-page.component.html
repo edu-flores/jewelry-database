@@ -9,7 +9,7 @@
       <app-crud-table
         [filterFields]="['id', 'name', 'distance', 'averageSpeed', 'time', 'truckName']"
         [items]="'rutas'"
-        [routes]="responseData.routes"
+        [data]="responseData.routes"
         [headers]="tableHeaders"
         (addClicked)="onAddClick()"
         (editClicked)="onEditClick($event)"

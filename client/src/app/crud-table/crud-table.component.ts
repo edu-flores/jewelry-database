@@ -17,6 +17,17 @@ interface Route {
   truckName: string;
 }
 
+interface Truck {
+  id: number;
+  name: string;
+  totalDistance: number;
+  totalCO2: number;
+  averageTripDistance: number;
+  averageCO2: number;
+  latitude: number;
+  longitude: number;
+}
+
 interface TableHeader {
   field: string;
   title: string;
@@ -46,7 +57,7 @@ export class CrudTableComponent {
   // Props
   @Input() filterFields: string[] = [];
   @Input() items: string = '';
-  @Input() routes: Route[] = [];
+  @Input() data: Route[] | Truck[] = [];
   @Input() headers: TableHeader[] = [];
   @Input() loading: boolean = false;
 

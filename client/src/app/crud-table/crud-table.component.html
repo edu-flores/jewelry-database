@@ -12,7 +12,7 @@
 <!-- Main table -->
 <p-table
   #dt
-  [value]="routes"
+  [value]="data"
   [rows]="5"
   [paginator]="true"
   [globalFilterFields]="filterFields"
@@ -48,7 +48,7 @@
   <ng-template pTemplate="body" let-item>
     <tr>
       <ng-container *ngFor="let header of headers">
-        <td *ngIf="header.field !== 'active'; else tagColumn">{{ item[header.field] + ' ' + header.units }}</td>
+        <td *ngIf="header.field !== 'active'; else tagColumn">{{ (item[header.field] || 'N/A') + ' ' + header.units }}</td>
         <ng-template #tagColumn>
           <td>
             <p-tag pTag [value]="item.active ? 'Activa' : 'Inactiva'" [severity]="item.active ? 'success' : 'danger'"></p-tag>
@@ -72,7 +72,7 @@
   </ng-template>
   <ng-template pTemplate="summary">
     <div class="flex align-items-center justify-content-between">
-      En total hay {{ routes ? routes.length : 0 }} {{ items }}.
+      En total hay {{ data ? data.length : 0 }} {{ items }}.
     </div>
   </ng-template>
 </p-table>
