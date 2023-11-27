@@ -96,9 +96,7 @@ CREATE TABLE samples (
     truck_id INT NOT NULL,
     distance INT NOT NULL,
     speed DOUBLE NOT NULL,
-    PRIMARY KEY (sample_id),
-    FOREIGN KEY (route_id) REFERENCES routes (route_id),
-    FOREIGN KEY (truck_id) REFERENCES trucks (truck_id)
+    PRIMARY KEY (sample_id)
 );
 
 INSERT INTO samples (latitude, longitude, datetime, route_id, truck_id, distance, speed)
@@ -123,8 +121,7 @@ CREATE TABLE short_stops (
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
     duration INT NOT NULL,
-    PRIMARY KEY (short_stop_id),
-    FOREIGN KEY (route_id) REFERENCES routes (route_id)
+    PRIMARY KEY (short_stop_id)
 );
 
 INSERT INTO short_stops (route_id, latitude, longitude, start_time, end_time, duration)
@@ -148,8 +145,7 @@ CREATE TABLE long_stops (
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
     duration INT NOT NULL,
-    PRIMARY KEY (long_stop_id),
-    FOREIGN KEY (route_id) REFERENCES routes (route_id)
+    PRIMARY KEY (long_stop_id)
 );
 
 INSERT INTO long_stops (route_id, latitude, longitude, start_time, end_time, duration)
@@ -173,8 +169,7 @@ CREATE TABLE gps_data (
     latitude DOUBLE NOT NULL,
     longitude DOUBLE NOT NULL,
     date DATETIME NOT NULL,
-    PRIMARY KEY (gps_data_id),
-    FOREIGN KEY (truck_id) REFERENCES trucks (truck_id)
+    PRIMARY KEY (gps_data_id)
 );
 
 INSERT INTO gps_data (truck_id, air_quality, contaminants, latitude, longitude, date)
