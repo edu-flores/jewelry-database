@@ -85,7 +85,6 @@ export class DataPageComponent {
     }
   }
   private setLinesData(data: any) {
-    console.log(data);
     this.linesData = {
       labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       datasets: [
