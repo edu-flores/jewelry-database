@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ChartModule } from 'primeng/chart';
@@ -23,23 +24,7 @@ export class DataPageComponent {
   linesData: any;
   barsData: any;
 
-  constructor(private messageService: MessageService) {
-    // Warnings
-    setTimeout(() => {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Alerta',
-        detail: 'Emisiones altas de CO2',
-        sticky: true
-      });
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Aviso',
-        detail: 'Es necesario reducir la producción de CO2',
-        sticky: true
-      });
-    }, 300);
-
+  constructor(private http: HttpClient, private messageService: MessageService) {
     // Chart settings
     this.doughnutData = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -85,5 +70,34 @@ export class DataPageComponent {
         }
       ]
     }
+  }
+
+  // Get all the data from the API
+  ngOnInit() {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    });
+    this.http.get('http://localhost:5004/get-conditions', { headers: headers }).subscribe(
+      (response: any) => {
+        console.log('Data from API:', response);
+        if (response.warning) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Alerta',
+            detail: 'Emisiones altas de CO2',
+            sticky: true
+          });
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Aviso',
+            detail: 'Es necesario reducir la producción de CO2',
+            sticky: true
+          });
+        }
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
 }

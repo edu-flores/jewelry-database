@@ -195,21 +195,48 @@ def delete_truck():
 
 """CRUD"""
 
-# Get environmental data
+# Get ambient conditions
 @trucks.route("/get-conditions")
 @jwt_required()
 def get_conditions():
     try:
-        highest_co2_truck = get_highest_emission_truck()
+        trucks_co2 = get_trucks_co2()
+        short_long_stops = get_short_long_stops()
+        samples_data = get_samples_data()
         environmental_data = get_environmental_data()
 
-        if highest_co2_truck and environmental_data:
+        if trucks_co2 and short_long_stops and samples_data and environmental_data:
             response = {
-                "environment": {
-                    "highest": highest_co2_truck[0],
-                    "total": environmental_data[0],
-                    "average": environmental_data[1]
+                "ambient": {
+                    "trucksCO2": [{
+                        "name": truck[0],
+                        "totalCO2": float(truck[1])
+                    } for truck in trucks_co2],
+                    "shortLongStops": {
+                        "short": [{
+                            "time": short[0],
+                            "count": short[1]
+                        } for short in short_long_stops[0]],
+                        "long": [{
+                            "time": long[0],
+                            "count": long[1]
+                        } for long in short_long_stops[1]],
+                    },
+                    "samplesData": [{
+                        "time": sample[0],
+                        "distance": int(sample[1]),
+                        "speed": sample[2]
+                    } for sample in samples_data],
+                    "environmentalData": [{
+                        "time": record[0],
+                        "temperature": record[1],
+                        "humidity": record[2],
+                        "precipitation": record[3],
+                        "windSpeed": record[4],
+                        "pressure": record[5]
+                    } for record in environmental_data]
                 },
+                "warning": sum(float(truck[1]) for truck in trucks_co2) >= 30000,
                 "message": "Datos recuperados con éxito",
                 "error": False
             }
@@ -227,40 +254,83 @@ def get_conditions():
         }
         return jsonify(response), 500, {"Content-Type": "application/json"}
 
-# Total CO2 and average CO2 by all trucks
+# Get CO2 per truck
+def get_trucks_co2():
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT name, ((total_distance / 25) * 2.68) AS total_CO2 FROM trucks")
+        trucks_co2 = cursor.fetchall()
+        cursor.close()
+
+        return trucks_co2
+    except Exception as e:
+        return None
+
+# Get short and long stops
+def get_short_long_stops():
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            SELECT DATE_FORMAT(start_time, '%Y-%m') AS month, COUNT(*) AS number_of_short_stops
+            FROM short_stops
+            WHERE YEAR(start_time) = YEAR(CURDATE())
+            GROUP BY month;
+        """)
+        short = cursor.fetchall()
+        cursor.execute("""
+            SELECT DATE_FORMAT(start_time, '%Y-%m') AS month, COUNT(*) AS number_of_long_stops
+            FROM long_stops
+            WHERE YEAR(start_time) = YEAR(CURDATE())
+            GROUP BY month
+        """)
+        long = cursor.fetchall()
+        cursor.close()
+
+        return short, long
+    except Exception as e:
+        return None
+
+# Get samples data
+def get_samples_data():
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            SELECT DATE_FORMAT(datetime, '%Y-%m') AS month, SUM(distance) AS total_distance, AVG(speed) AS average_speed
+            FROM samples
+            WHERE YEAR(datetime) = YEAR(CURDATE())
+            GROUP BY month
+        """)
+        samples_data = cursor.fetchall()
+        cursor.close()
+
+        return samples_data
+    except Exception as e:
+        return None
+
+# Get environmental data
 def get_environmental_data():
     try:
         cursor = mysql.connection.cursor()
         cursor.execute("""
             SELECT
-            SUM(((total_distance / 25) * 2.68)) AS total_CO2,
-            AVG(((average_trip_distance / 25) * 2.68)) AS average_CO2
-            FROM trucks
+                DATE_FORMAT(date, '%Y-%m') AS month,
+                AVG(temperature) AS avg_temperature,
+                AVG(humidity) AS avg_humidity,
+                AVG(precipitation) AS avg_precipitation,
+                AVG(wind_speed) AS avg_wind_speed,
+                AVG(pressure) AS avg_pressure
+            FROM
+                environmental_data
+            WHERE
+                YEAR(date) = YEAR(CURDATE())
+            GROUP BY
+                month
         """)
-        data = cursor.fetchone()
+        environmental_data = cursor.fetchall()
         cursor.close()
 
-        return data
+        return environmental_data
     except Exception as e:
-        print(f"Error in get_environmental_data: {str(e)}")
-        return None
-
-# Retrieve the truck with the most CO2 emitted
-def get_highest_emission_truck():
-    try:
-        cursor = mysql.connection.cursor()
-        cursor.execute("""
-            SELECT name
-            FROM trucks
-            ORDER BY (total_distance / 25) * 2.68 DESC
-            LIMIT 1
-        """)
-        data = cursor.fetchone()
-        cursor.close()
-
-        return data
-    except Exception as e:
-        print(f"Error in get_highest_emission_truck: {str(e)}")
         return None
 
 # XML Format
