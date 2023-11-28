@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ChartModule } from 'primeng/chart';
+import { EnvironmentalTableComponent } from '../environmental-table/environmental-table.component';
 
 @Component({
   selector: 'app-data-page',
@@ -13,7 +14,8 @@ import { ChartModule } from 'primeng/chart';
     CommonModule,
     NavbarComponent,
     ToastModule,
-    ChartModule
+    ChartModule,
+    EnvironmentalTableComponent
   ],
   templateUrl: './data-page.component.html',
   styleUrl: './data-page.component.scss'
@@ -23,6 +25,7 @@ export class DataPageComponent {
   doughnutData: any;
   linesData: any;
   barsData: any;
+  environmentalData: any;
 
   constructor(private http: HttpClient, private messageService: MessageService) {}
 
@@ -44,6 +47,9 @@ export class DataPageComponent {
         this.setDoughnutData(response.ambient.trucksCO2);
         this.setLinesData(response.ambient.samplesData);
         this.setBarsData({ short: response.ambient.shortLongStops.short, long: response.ambient.shortLongStops.long });
+
+        // Table
+        this.environmentalData = response.ambient.environmentalData;
       },
       (error) => {
         console.error('Error fetching data:', error);

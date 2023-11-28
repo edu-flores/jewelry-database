@@ -1,0 +1,32 @@
+<p-table [value]="[data]" styleClass="p-datatable-striped">
+  <ng-template pTemplate="header">
+    <tr>
+      <th></th>
+      <th pSortableColumn="temperature">
+        Temperatura <p-sortIcon field="temperature"></p-sortIcon>
+      </th>
+      <th pSortableColumn="humidity">
+        Humedad <p-sortIcon field="humidity"></p-sortIcon>
+      </th>
+      <th pSortableColumn="precipitation">
+        Precipitación <p-sortIcon field="precipitation"></p-sortIcon>
+      </th>
+      <th pSortableColumn="windSpeed">
+        Viento <p-sortIcon field="windSpeed"></p-sortIcon>
+      </th>
+      <th pSortableColumn="pressure">
+        Presión <p-sortIcon field="pressure"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body">
+    <tr *ngFor="let record of data; index as i">
+      <td><strong>{{ months[i] }}</strong></td>
+      <td>{{ record.temperature | number: '1.2-2' }} °C</td>
+      <td>{{ record.humidity | number: '1.2-2' }} g/m<sup>3</sup></td>
+      <td>{{ record.precipitation | number: '1.2-2' }} mm</td>
+      <td>{{ record.windSpeed | number: '1.2-2' }} m/s</td>
+      <td>{{ record.pressure | number: '1.2-2' }} hPa</td>
+    </tr>
+  </ng-template>
+</p-table>
