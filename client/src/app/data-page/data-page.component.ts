@@ -24,53 +24,7 @@ export class DataPageComponent {
   linesData: any;
   barsData: any;
 
-  constructor(private http: HttpClient, private messageService: MessageService) {
-    // Chart settings
-    this.doughnutData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          data: [65, 59, 80, 81, 56, 55, 40],
-        },
-      ],
-    }
-    this.linesData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'First Dataset',
-          data: [65, 59, 80, 81, 56, 55, 40],
-          fill: false,
-        },
-        {
-          label: 'Second Dataset',
-          data: [28, 48, 40, 19, 86, 27, 90],
-          fill: false,
-          borderDash: [5, 5],
-        },
-        {
-          label: 'Third Dataset',
-          data: [12, 51, 62, 33, 21, 62, 45],
-          fill: true,
-        }
-      ]
-    }
-    this.barsData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'My First dataset',
-          backgroundColor: '#42A5F5',
-          data: [65, 59, 80, 81, 56, 55, 40]
-        },
-        {
-          label: 'My Second dataset',
-          backgroundColor: '#9CCC65',
-          data: [28, 48, 40, 19, 86, 27, 90]
-        }
-      ]
-    }
-  }
+  constructor(private http: HttpClient, private messageService: MessageService) {}
 
   // Get all the data from the API
   ngOnInit() {
@@ -80,24 +34,84 @@ export class DataPageComponent {
     this.http.get('http://localhost:5004/get-conditions', { headers: headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
+
+        // Warnings
         if (response.warning) {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Alerta',
-            detail: 'Emisiones altas de CO2',
-            sticky: true
-          });
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Aviso',
-            detail: 'Es necesario reducir la producción de CO2',
-            sticky: true
-          });
+          this.showWarnings();
         }
+
+        // Charts
+        this.setDoughnutData(response.ambient.trucksCO2);
+        this.setLinesData(response.ambient.samplesData);
+        this.setBarsData({ short: response.ambient.shortLongStops.short, long: response.ambient.shortLongStops.long });
       },
       (error) => {
         console.error('Error fetching data:', error);
       }
     );
+  }
+
+  // Show warnings
+  private showWarnings() {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Alerta',
+      detail: 'Emisiones altas de CO2',
+      sticky: true
+    });
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Aviso',
+      detail: 'Es necesario reducir la producción de CO2',
+      sticky: true
+    });
+  }
+
+  // Charts data
+  private setDoughnutData(data: any) {
+    this.doughnutData = {
+      labels: data.map((truck: any) => truck.name),
+      datasets: [
+        {
+          data: data.map((truck: any) => truck.totalCO2),
+        },
+      ],
+    }
+  }
+  private setLinesData(data: any) {
+    console.log(data);
+    this.linesData = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+      datasets: [
+        {
+          label: 'Distancia (Cientos de Km)',
+          data: data.map((record: any) => record.distance / 100),
+          fill: true,
+          borderDash: [3, 3],
+        },
+        {
+          label: 'Velocidad Promedio',
+          data: data.map((record: any) => record.speed),
+          fill: false
+        }
+      ]
+    }
+  }
+  private setBarsData({ short, long }: any) {
+    this.barsData = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+      datasets: [
+        {
+          label: 'Paradas Cortas',
+          backgroundColor: '#42A5F5',
+          data: short.map((record: any) => record.count)
+        },
+        {
+          label: 'Paradas largas',
+          backgroundColor: '#9CCC65',
+          data: long.map((record: any) => record.count)
+        }
+      ]
+    }
   }
 }

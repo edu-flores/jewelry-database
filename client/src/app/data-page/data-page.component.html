@@ -7,16 +7,19 @@
   <div class="grid">
     <div class="col-12 lg:col-6">
       <div class="card">
+        <h3 class="text-center mb-2">CO2 por Camión (g)</h3>
         <p-chart type="doughnut" [data]="doughnutData" [options]="{maintainAspectRatio: false}" height="300px"></p-chart>
       </div>
     </div>
     <div class="col-12 lg:col-6">
       <div class="card">
+        <h3 class="text-center mb-2">Registros de Distancia y Velocidad</h3>
         <p-chart type="line" [data]="linesData" [options]="{maintainAspectRatio: false}" height="300px"></p-chart>
       </div>
     </div>
     <div class="col-12">
       <div class="card">
+        <h3 class="text-center mb-2">Número de Paradas Cortas y Paradas Largas</h3>
         <p-chart type="bar" [data]="barsData" [options]="{maintainAspectRatio: false}" height="300px"></p-chart>
       </div>
     </div>
