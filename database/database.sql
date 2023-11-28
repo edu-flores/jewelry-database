@@ -1,3 +1,32 @@
+-- Como recomendación puedes utilizar el siguiente comando para importar la base de datos
+-- completa a tu mariadb local.
+-- Toma en cuenta que debes estar en el directorio raíz del proyecto:
+-- mysql -u root -p < database/database.sql
+-- Te pedirá ingresar tu contraseña de root con la que accedes mysql
+
+-- Después de esto revisa que se haya importado la base de datos correctamente,
+-- accediendo a mysql y entrando a la base de datos de la siguiente manera:
+-- mysql -u root -p
+-- 'Ingresa la contraseña con la que accedes a mysql'
+-- USE jewelry;
+-- SHOW TABLES;
+-- Aquí revisa que esten las siguientes tablas:
+-- - users
+-- - trucks
+-- - routes
+-- - purchase_detail
+-- - product
+-- - purchase
+-- - client
+-- - address
+-- - gps_data
+-- - environmental_data
+-- - samples
+-- - short_stops
+-- - long_stops
+-- En caso de que existan, la base de datos se importo correctamente,
+-- prosiga con las indicaciones del archivo 'README.md'
+
 -- Database
 DROP DATABASE IF EXISTS jewelry;
 CREATE DATABASE jewelry;

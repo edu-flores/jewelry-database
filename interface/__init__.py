@@ -22,4 +22,4 @@ mysql = MySQL(app)
 app.secret_key = secrets.token_hex(16)
 
 # Import all other modules
-from interface import invoice, purchase, routes, users, actions, locations, trucks
+from interface import invoice, purchase, actions
