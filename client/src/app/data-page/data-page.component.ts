@@ -89,13 +89,13 @@ export class DataPageComponent {
       labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       datasets: [
         {
-          label: 'Distancia (Cientos de Km)',
+          label: 'Distancia (Cientos de km)',
           data: data.map((record: any) => record.distance / 100),
           fill: true,
           borderDash: [3, 3],
         },
         {
-          label: 'Velocidad Promedio',
+          label: 'Velocidad Promedio (km/h)',
           data: data.map((record: any) => record.speed),
           fill: false
         }
