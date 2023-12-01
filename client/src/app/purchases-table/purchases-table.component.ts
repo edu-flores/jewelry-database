@@ -32,7 +32,7 @@ export class PurchasesTableComponent {
       'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
     });
 
-    this.http.get<any>('http://localhost:5002/get-purchases', { headers }).subscribe(
+    this.http.get<any>('http://127.0.0.1:5002/get-purchases', { headers }).subscribe(
       (response) => {
         console.log('Data from API:', response);
         this.purchases = response.purchases;

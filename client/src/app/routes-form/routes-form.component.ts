@@ -84,7 +84,7 @@ export class RoutesFormComponent {
 
   ngOnInit() {
     // Call Trucks API service
-    this.http.get('http://localhost:5004/retrieve-trucks', { headers: this.headers }).subscribe(
+    this.http.get('http://127.0.0.1:5004/retrieve-trucks', { headers: this.headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
         this.trucks = response.trucks;
@@ -99,7 +99,7 @@ export class RoutesFormComponent {
   addRoute() {
     this.loading = true;
     this.http
-      .post('http://localhost:5003/add-route', {
+      .post('http://127.0.0.1:5003/add-route', {
         name: this.name,
         distance: this.distance,
         time: this.time,
@@ -124,7 +124,7 @@ export class RoutesFormComponent {
   editRoute() {
     this.loading = true;
     this.http
-      .post('http://localhost:5003/edit-route', {
+      .post('http://127.0.0.1:5003/edit-route', {
         id: this.id,
         name: this.name,
         distance: this.distance,

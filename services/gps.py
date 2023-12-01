@@ -14,7 +14,7 @@ load_dotenv()
 
 # Microservice app
 gps = Flask(__name__)
-cors = CORS(gps, resources={r"/*": {"origins": "http://localhost:4200"}})
+cors = CORS(gps, resources={r"/*": {"origins": "http://127.0.0.1:4200"}})
 
 gps.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT"))
 gps.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
@@ -25,7 +25,7 @@ gps.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
 jwt = JWTManager(gps)
 mysql = MySQL(gps)
-socketio = SocketIO(gps, cors_allowed_origins="http://localhost:4200")
+socketio = SocketIO(gps, cors_allowed_origins="http://127.0.0.1:4200")
 
 # WebSocket
 @socketio.on("connect")
@@ -151,7 +151,7 @@ def get_gps_data():
         cursor.execute("""
             SELECT air_quality, contaminants, latitude, longitude
             FROM gps_data
-            WHERE date > NOW() - INTERVAL 20 SECOND
+            WHERE date > NOW() - INTERVAL 10 SECOND
         """)
         data = cursor.fetchall()
         cursor.close()

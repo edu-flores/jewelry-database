@@ -39,7 +39,7 @@ export class SignUpComponent {
       password: this.password
     };
 
-    this.http.post('http://localhost:5001/new-user', userData).subscribe(
+    this.http.post('http://127.0.0.1:5001/new-user', userData).subscribe(
       (response) => {
         this.message = "Cuenta creada con éxito, inicie sesión";
         this.loading = false;

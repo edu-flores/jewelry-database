@@ -78,7 +78,7 @@ export class TrucksPageComponent {
     this.router.navigate(['trucks-form'], { state: { truck: truck } });
   }
   onDeleteClick(truck: Truck) {
-    this.http.post('http://localhost:5004/delete-truck', { id: truck.id }, { headers: this.headers }).subscribe(
+    this.http.post('http://127.0.0.1:5004/delete-truck', { id: truck.id }, { headers: this.headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
         this.getTrucks();
@@ -99,16 +99,16 @@ export class TrucksPageComponent {
     );
   }
   onJsonClick(truck: Truck) {
-    window.open(`http://localhost:5004/retrieve-json?id=${truck.id}`, '_blank');
+    window.open(`http://127.0.0.1:5004/retrieve-json?id=${truck.id}`, '_blank');
   }
   onXmlClick(truck: Truck) {
-    window.open(`http://localhost:5004/retrieve-xml?id=${truck.id}`, '_blank');
+    window.open(`http://127.0.0.1:5004/retrieve-xml?id=${truck.id}`, '_blank');
   }
 
   // API
   private getTrucks() {
     this.loading = true;
-    this.http.get('http://localhost:5004/retrieve-trucks', { headers: this.headers }).subscribe(
+    this.http.get('http://127.0.0.1:5004/retrieve-trucks', { headers: this.headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
         this.responseData = response;
