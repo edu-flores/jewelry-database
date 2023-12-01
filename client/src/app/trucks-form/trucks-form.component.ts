@@ -70,7 +70,7 @@ export class TrucksFormComponent {
   addTruck() {
     this.loading = true;
     this.http
-      .post('http://localhost:5004/add-truck', {
+      .post('http://127.0.0.1:5004/add-truck', {
         name: this.name,
         totalDistance: this.totalDistance,
         averageTripDistance: this.averageTripDistance,
@@ -94,7 +94,7 @@ export class TrucksFormComponent {
   editTruck() {
     this.loading = true;
     this.http
-      .post('http://localhost:5004/edit-truck', {
+      .post('http://127.0.0.1:5004/edit-truck', {
         id: this.id,
         name: this.name,
         totalDistance: this.totalDistance,

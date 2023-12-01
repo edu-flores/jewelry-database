@@ -16,7 +16,7 @@ load_dotenv()
 
 # Microservice app
 trucks = Flask(__name__)
-cors = CORS(trucks, resources={r"/*": {"origins": "http://localhost:4200"}})
+cors = CORS(trucks, resources={r"/*": {"origins": "http://127.0.0.1:4200"}})
 
 trucks.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT"))
 trucks.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")

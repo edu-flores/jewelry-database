@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class WebsocketService {
-  private socket = io('http://localhost:5002');
+  private socket = io('http://127.0.0.1:5002');
 
   // Emit an update to the GPS API service
   sendUpdate() {

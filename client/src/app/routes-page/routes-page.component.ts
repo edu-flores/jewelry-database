@@ -77,7 +77,7 @@ export class RoutesPageComponent {
     this.router.navigate(['routes-form'], { state: { route: route } });
   }
   onDeleteClick(route: Route) {
-    this.http.post('http://localhost:5003/delete-route', { id: route.id }, { headers: this.headers }).subscribe(
+    this.http.post('http://127.0.0.1:5003/delete-route', { id: route.id }, { headers: this.headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
         this.getRoutes();
@@ -98,16 +98,16 @@ export class RoutesPageComponent {
     );
   }
   onJsonClick(route: Route) {
-    window.open(`http://localhost:5003/retrieve-json?id=${route.id}`, '_blank');
+    window.open(`http://127.0.0.1:5003/retrieve-json?id=${route.id}`, '_blank');
   }
   onXmlClick(route: Route) {
-    window.open(`http://localhost:5003/retrieve-xml?id=${route.id}`, '_blank');
+    window.open(`http://127.0.0.1:5003/retrieve-xml?id=${route.id}`, '_blank');
   }
 
   // API
   private getRoutes() {
     this.loading = true;
-    this.http.get('http://localhost:5003/retrieve-routes', { headers: this.headers }).subscribe(
+    this.http.get('http://127.0.0.1:5003/retrieve-routes', { headers: this.headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
         this.responseData = response;

@@ -34,7 +34,7 @@ export class DataPageComponent {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     });
-    this.http.get('http://localhost:5004/get-conditions', { headers: headers }).subscribe(
+    this.http.get('http://127.0.0.1:5004/get-conditions', { headers: headers }).subscribe(
       (response: any) => {
         console.log('Data from API:', response);
 
