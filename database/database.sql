@@ -426,6 +426,7 @@ BEGIN
     UPDATE purchase SET total = total_price WHERE purchase_id = purchase_id;
 END;
 
+-- Update the map shown in the interface by adding new positions in the database.
 CREATE PROCEDURE UpdateMap()
 BEGIN
     -- Add gps data
