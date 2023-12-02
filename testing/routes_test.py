@@ -20,15 +20,15 @@ class RoutesMicroserviceUser(HttpUser):
             "name": "TestRoute",
             "distance": 1234567,
             "active": 1,
-            "average_speed": 50,
+            "averageSpeed": 50,
             "time": 120,
-            "truck_id": 1
+            "truckId": 1
         }
         response = self.client.post("/add-route", json=data)
         print(f"Response status code for /add-route: {response.status_code}")
 
         if response.status_code == 201:
-            route_id = response.json().get("route_id")
+            route_id = response.json().get("routeId")
             self.new_route_id = route_id
 
     # Simulating editing a route
@@ -40,9 +40,9 @@ class RoutesMicroserviceUser(HttpUser):
             "name": "EditedRoute",
             "distance": 15000,
             "active": 0,
-            "average_speed": 605,
+            "averageSpeed": 605,
             "time": 180,
-            "truck_id": 2
+            "truckId": 2
         }
         response = self.client.post("/edit-route", json=data)
         print(f"Response status code for /edit-route: {response.status_code}")

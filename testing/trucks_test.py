@@ -18,8 +18,8 @@ class TrucksMicroserviceUser(HttpUser):
     def add_truck(self):
         data = {
             "name": "TestTruck",
-            "total_distance": 500,
-            "average_trip_distance": 50,
+            "totalDistance": 500,
+            "averageTripDistance": 50,
             "latitude": 40.7128,
             "longitude": -74.0060
         }
@@ -27,7 +27,7 @@ class TrucksMicroserviceUser(HttpUser):
         print(f"Response status code for /add-truck: {response.status_code}")
 
         if response.status_code == 201:
-            truck_id = response.json().get("truck_id")
+            truck_id = response.json().get("truckId")
             self.new_truck_id = truck_id
 
     # Simulating editing an existing truck
@@ -37,8 +37,8 @@ class TrucksMicroserviceUser(HttpUser):
         data = {
             "id": truck_id,
             "name": "UpdatedTruck",
-            "total_distance": 600,
-            "average_trip_distance": 60,
+            "totalDistance": 600,
+            "averageTripDistance": 60,
             "latitude": 37.7749,
             "longitude": -122.4194
         }

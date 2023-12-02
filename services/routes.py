@@ -91,7 +91,7 @@ def add_route():
 
         response = {
             "message": "Se agregó correctamente la ruta",
-            "route_id": route_id,
+            "routeId": route_id,
             "error": False
         }
 

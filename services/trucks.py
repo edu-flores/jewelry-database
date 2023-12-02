@@ -89,7 +89,7 @@ def add_truck():
 
         response = {
             "message": "Se agregó correctamente el camión",
-            "truck_id": truck_id,
+            "truckId": truck_id,
             "error": False
         }
         return jsonify(response), 201, {"Content-Type": "application/json"}
